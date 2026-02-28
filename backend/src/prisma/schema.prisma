@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              String        @id @default(uuid())
+  email           String        @unique
+  password        String
+  name            String
+  brandName       String?
+  logoUrl         String?
+  isEmailVerified Boolean       @default(false)
+  isDeleted       Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  addresses       Address[]
+  clients         Client[]
+  invoices        Invoice[]
+  discounts       Discount[]
+  integrations    Integration[]
+  categories      Category[]
+}
+
+model Address {
+  id         String   @id @default(uuid())
+  street     String
+  city       String
+  postalCode String
+  country    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Client {
+  id          String    @id @default(uuid())
+  name        String
+  email       String    @unique
+  phone       String?
+  street      String
+  city        String
+  postalCode  String
+  country     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  relatedToId String
+  relatedTo   User      @relation(fields: [relatedToId], references: [id])
+  invoices    Invoice[]
+}
+
+model Invoice {
+  id          String     @id @default(uuid())
+  amount      Float
+  status      String
+  terms       String
+  items       Item[]
+  invoiceDate DateTime
+  dueDate     DateTime
+  description String?
+  discounts   Discount[]
+  billFromId  String
+  billFrom    User       @relation(fields: [billFromId], references: [id])
+  billToId    String
+  billTo      Client     @relation(fields: [billToId], references: [id])
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+}
+
+model Discount {
+  id          String    @id @default(uuid())
+  description String
+  type        String
+  percentage  Float?
+  condition   String?
+  amount      Float?
+  createdById String
+  createdBy   User      @relation(fields: [createdById], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  invoices    Invoice[]
+}
+
+model Item {
+  id        String  @id @default(uuid())
+  name      String
+  quantity  Int
+  price     Float
+  invoiceId String
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  invoices  Invoice[]
+}
+
+model Integration {
+  id        String   @id @default(uuid())
+  type      String
+  name      String
+  data      Json
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
