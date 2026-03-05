@@ -9,7 +9,13 @@ export class AuthController {
   signIn(
     @Request()
     req: {
-      user: { email: string; id: string; brandName: string; logoUrl: string };
+      user: {
+        email: string;
+        id: string;
+        name: string;
+        logoUrl: string;
+        brandName: string;
+      };
     },
   ) {
     // The user will be available in the request object after successful authentication
@@ -23,11 +29,10 @@ export class AuthController {
         email: string;
         name: string;
         password: string;
-        brandName: string;
       };
     },
   ) {
-    const { email, name, password, brandName } = req.body;
-    return await this.authService.signUp(email, name, password, brandName);
+    const { email, name, password } = req.body;
+    return await this.authService.signUp(email, name, password);
   }
 }

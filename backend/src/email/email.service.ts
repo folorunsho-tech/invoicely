@@ -11,13 +11,16 @@ export class EmailService {
       pass: process.env.EMAIL_PASS, // your email password
     },
   });
-  async sendVerificationEmail(email: string, token: string) {
-    const verificationLink = `${process.env.FRONTEND_URL}/auth/verify-email?token=${token}`;
-    await this.transporter.sendMail({
+  async sendVerificationEmail(email: string) {
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const verificationLink = `${process.env.FRONTEND_URL}/auth/verify-email?email=${email}&token=${code}`;
+    const info = await this.transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
       subject: 'Verify Your Email',
-      html: `<p>Please click the following link to verify your email:</p><a href="${verificationLink}">${verificationLink}</a>`,
+      html: `<div><h3>${code} is your verification code.</h3> 
+      <p>Or click the following link to verify your email:<a href="${verificationLink}">${verificationLink}</a></p></div>`,
     });
+    return info;
   }
 }
