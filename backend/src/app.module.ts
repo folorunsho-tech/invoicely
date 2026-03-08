@@ -8,6 +8,8 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { EmailModule } from './email/email.module';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { CacheModule } from '@nestjs/cache-manager';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -17,6 +19,15 @@ import { EmailModule } from './email/email.module';
     AuthModule,
     CategoriesModule,
     EmailModule,
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60000,
+          limit: 10,
+        },
+      ],
+    }),
+    CacheModule.register(),
   ],
   controllers: [AppController],
   providers: [AppService],

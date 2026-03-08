@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-// import { User } from 'src/generated/prisma/client';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import { EmailService } from 'src/email/email.service';
+import generateCode from 'src/lib/generateCode';
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
     private emailService: EmailService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
   async validateUser(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
@@ -60,30 +62,62 @@ export class AuthService {
         // brandName,
       },
     });
-    return await this.emailService.sendVerificationEmail(user.email);
+    const code = generateCode();
+    await this.emailService.sendVerificationEmail(user.email, code);
+    return user;
   }
-  async requestPasswordReset(email: string): Promise<void> {
+  async requestPasswordReset(email: string): Promise<{ is_sent: boolean }> {
     const user = await this.prisma.user.findUnique({
       where: { email },
     });
     if (user) {
-      // Generate a password reset token and send it via email
-      const token = Math.random().toString(36).substr(2); // Simple token generation, consider using a more secure method
-      // Store the token in the database with an expiration time (not implemented here)
-      console.log(`Generated password reset token for ${email}: ${token}`);
-      // Send the token via email using your email service
+      const code = generateCode();
+      await this.emailService.sendResetCode(email, code);
+      await this.cacheManager.set(`password_reset_${email}`, code, 300000); // Store code for 5 minutes
+      return { is_sent: true };
     }
+    return { is_sent: false };
   }
-  // async resetPassword(token: string, newPassword: string): Promise<void> {
-  //   // Validate the token and reset the user's password
-  //   // This is a placeholder implementation, you should implement token validation and password reset logic
-  //   console.log(
-  //     `Resetting password with token: ${token} and new password: ${newPassword}`,
-  //   );
-  // }
-  // async verifyAccount(token: string): Promise<void> {
-  //   // Validate the token and verify the user's account
-  //   // This is a placeholder implementation, you should implement token validation and account verification logic
-  //   console.log(`Verifying account with token: ${token}`);
-  // }
+  async resetPassword(
+    token: string,
+    email: string,
+    newPassword: string,
+  ): Promise<{ is_reset: boolean }> {
+    // Check if the token exists in the cache
+    const code = await this.cacheManager.get<string>(`password_reset_${email}`);
+    if (code === token) {
+      // Remove the token from the cache
+      await this.cacheManager.del(`password_reset_${email}`);
+      const hash = await argon2.hash(newPassword);
+      await this.prisma.user.update({
+        where: { email },
+        data: { password: hash },
+      });
+      return { is_reset: true };
+    }
+    return { is_reset: false };
+  }
+  async verifyEmail(
+    email: string,
+    token: string,
+  ): Promise<{ is_verified: boolean }> {
+    // Check if the token exists in the cache
+    const code = await this.cacheManager.get<string>(
+      `email_verification_${email}`,
+    );
+    if (code === token) {
+      // Remove the token from the cache
+      await this.cacheManager.del(`email_verification_${email}`);
+      const user = await this.prisma.user.update({
+        where: { email },
+        data: { isEmailVerified: true },
+      });
+      return { is_verified: user.isEmailVerified };
+    }
+    return { is_verified: false };
+  }
+  async sendVerificationEmail(email: string) {
+    const code = generateCode();
+    return await this.emailService.sendVerificationEmail(email, code);
+  }
 }

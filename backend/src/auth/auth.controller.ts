@@ -1,4 +1,12 @@
-import { Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 @Controller('auth')
@@ -34,5 +42,15 @@ export class AuthController {
   ) {
     const { email, name, password } = req.body;
     return await this.authService.signUp(email, name, password);
+  }
+  @Post('verify-email')
+  async verifyEmail(
+    @Body() { email, token }: { email: string; token: string },
+  ) {
+    return await this.authService.verifyEmail(email, token);
+  }
+  @Get('send-verification-email')
+  async sendVerificationEmail(@Query('email') email: string) {
+    return await this.authService.sendVerificationEmail(email);
   }
 }
