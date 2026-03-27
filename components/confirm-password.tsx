@@ -5,13 +5,14 @@ import { useState } from "react";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 import { Button } from "./ui/button";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-function PasswordInput({
+function ConfirmPasswordInput({
 	label,
 	description,
 	htmlFor,
 	id,
 	required = false,
 	field,
+	invalid,
 	fieldState,
 	...props
 }: React.ComponentProps<typeof Input> & {
@@ -21,6 +22,7 @@ function PasswordInput({
 	id: string;
 	required?: boolean;
 	field?: any;
+	invalid: any;
 	fieldState: any;
 }) {
 	const [inputRef, setInputRef] = useState("password");
@@ -32,7 +34,7 @@ function PasswordInput({
 					id={id}
 					placeholder='password'
 					type={inputRef}
-					required={required}
+					required={true}
 					aria-invalid={props["aria-invalid"]}
 					{...field}
 				/>
@@ -55,9 +57,12 @@ function PasswordInput({
 				</InputGroupAddon>
 			</InputGroup>
 			<FieldDescription>{description}</FieldDescription>
-			{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+			{invalid ||
+				(fieldState.invalid && (
+					<FieldError errors={[{ message: "Must be the same as password" }]} />
+				))}
 		</Field>
 	);
 }
 
-export default PasswordInput;
+export default ConfirmPasswordInput;

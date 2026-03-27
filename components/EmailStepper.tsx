@@ -1,28 +1,26 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { Card } from "@mantine/core";
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
+	CardDescription,
+	CardContent,
+	CardFooter,
 } from "@/components/ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
+import { Button } from "@/components/ui/button";
 import {
 	InputOTP,
 	InputOTPGroup,
 	InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { RefreshCwIcon } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { RefreshCwIcon } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 import { useInterval, useTimeout } from "@mantine/hooks";
-export default function InputOTPForm() {
-	const router = useRouter();
-	const query = useSearchParams();
-	const redirect = query.get("redirect");
+
+const EmailStepper = ({ moveTo }: { moveTo: (to: number) => void }) => {
 	const [value, setValue] = useState("");
 	const [invalid, setInvalid] = useState<boolean>(false);
 	const [seconds, setSeconds] = useState(0);
@@ -43,19 +41,18 @@ export default function InputOTPForm() {
 			setInvalid(false);
 		}
 		console.log("Submitted OTP code:", value);
-		router.push(redirect ?? "");
 	};
 	useEffect(() => {
 		timeout.start();
 		return timeout.clear;
 	}, []);
 	return (
-		<form className='pt-12 px-2' onSubmit={(e) => handleSubmit(e)}>
-			<Card className='mx-auto max-w-md'>
+		<form onSubmit={() => moveTo(2)}>
+			<Card>
 				<CardHeader>
 					<CardTitle>Verify your email</CardTitle>
 					<CardDescription>
-						Enter the verification code sent to your email address.
+						Enter the verification code sent to your email address:{" "}
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
@@ -106,10 +103,10 @@ export default function InputOTPForm() {
 				<CardFooter>
 					<Field>
 						<Button type='submit' className='w-full cursor-pointer'>
-							Verify Code
+							Verify
 						</Button>
 						<div className='text-sm text-muted-foreground'>
-							Having trouble verifying code?{" "}
+							Having trouble signing in?{" "}
 							<a
 								href='#'
 								className='underline underline-offset-4 transition-colors hover:text-primary'
@@ -122,4 +119,6 @@ export default function InputOTPForm() {
 			</Card>
 		</form>
 	);
-}
+};
+
+export default EmailStepper;
