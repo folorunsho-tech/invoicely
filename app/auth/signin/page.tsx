@@ -21,6 +21,8 @@ import { authClient } from "@/lib/auth-client";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "@/lib/toaster";
+import { useRouter } from "next/navigation";
 const formSchema = z.object({
 	email: z.email("Email is not correct"),
 	password: z
@@ -30,18 +32,33 @@ const formSchema = z.object({
 });
 
 export default function Page() {
-	const { handleSubmit, control } = useForm<z.infer<typeof formSchema>>({
+	const router = useRouter();
+	const { handleSubmit, control, formState } = useForm<
+		z.infer<typeof formSchema>
+	>({
 		resolver: zodResolver(formSchema),
-		mode: "all",
+		mode: "onChange",
 	});
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		console.log(values);
-		// const { data, error } = await authClient.signUp.email({
-		// 	name: values.name, // required
-		// 	email: values.email, // required
-		// 	password: values.password, // required
-		// 	callbackURL: process.env.BETTER_AUTH_URL + "/verify",
-		// });
+		await authClient.signIn.email({
+			email: values.email, // required
+			password: values.password, // required
+			rememberMe: true,
+			// callbackURL: "/app",
+			fetchOptions: {
+				onError(context) {
+					toast(context.error.message, "error");
+				},
+				onSuccess(context) {
+					const isVerified: boolean = context.data?.user?.emailVerified;
+					if (!isVerified) {
+						router.push("/auth/verify");
+					} else {
+						router.push("/app");
+					}
+				},
+			},
+		});
 	};
 	return (
 		<div className='flex min-h-svh w-full items-center justify-center p-6 md:p-10'>
@@ -71,6 +88,7 @@ export default function Page() {
 													required
 													{...field}
 													aria-invalid={fieldState.invalid}
+													disabled={formState.isSubmitting}
 												/>
 												{fieldState.invalid && (
 													<FieldError errors={[fieldState.error]} />
@@ -80,7 +98,6 @@ export default function Page() {
 									/>
 									<Field>
 										<div className='flex items-center'>
-											<FieldLabel htmlFor='password'>Password</FieldLabel>
 											<Link
 												href='/auth/forgot-password'
 												className='ml-auto inline-block text-sm underline-offset-4 hover:underline'
@@ -101,13 +118,20 @@ export default function Page() {
 													data-invalid={fieldState.invalid}
 													aria-invalid={fieldState.invalid}
 													field={field}
+													disabled={formState.isSubmitting}
 													fieldState={fieldState}
 												/>
 											)}
 										/>
 									</Field>
 									<Field>
-										<Button type='submit'>Login</Button>
+										<Button
+											type='submit'
+											disabled={!formState.isValid || formState.isSubmitting}
+											className='cursor-pointer'
+										>
+											Login
+										</Button>
 										{/* <Button variant="outline" type="button">
                   Login with Google
                 </Button> */}

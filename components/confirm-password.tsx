@@ -14,6 +14,7 @@ function ConfirmPasswordInput({
 	field,
 	invalid,
 	fieldState,
+	disabled,
 	...props
 }: React.ComponentProps<typeof Input> & {
 	label?: string;
@@ -22,7 +23,7 @@ function ConfirmPasswordInput({
 	id: string;
 	required?: boolean;
 	field?: any;
-	invalid: any;
+	invalid?: any;
 	fieldState: any;
 }) {
 	const [inputRef, setInputRef] = useState("password");
@@ -37,6 +38,7 @@ function ConfirmPasswordInput({
 					required={true}
 					aria-invalid={props["aria-invalid"]}
 					{...field}
+					disabled={disabled}
 				/>
 				<InputGroupAddon align='inline-end'>
 					<Button
@@ -57,10 +59,9 @@ function ConfirmPasswordInput({
 				</InputGroupAddon>
 			</InputGroup>
 			<FieldDescription>{description}</FieldDescription>
-			{invalid ||
-				(fieldState.invalid && (
-					<FieldError errors={[{ message: "Must be the same as password" }]} />
-				))}
+			{(invalid || fieldState.invalid) && (
+				<FieldError errors={[{ message: "Must be the same as password" }]} />
+			)}
 		</Field>
 	);
 }

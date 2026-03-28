@@ -22,6 +22,8 @@ import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ConfirmPasswordInput from "@/components/confirm-password";
+import toast from "@/lib/toaster";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
 	name: z
@@ -33,26 +35,37 @@ const formSchema = z.object({
 		.string()
 		.min(8, "Password must be at least 8 characters")
 		.max(32, "Password must be at most 32 characters."),
-	confirm_password: z.string("Must be the same as password").min(8),
+	confirm_password: z
+		.string("Must be the same as password")
+		.min(8, "Must be the same as password"),
 });
 export default function Page() {
-	const { handleSubmit, control, getValues, formState } = useForm<
+	const router = useRouter();
+
+	const { handleSubmit, control, formState, watch } = useForm<
 		z.infer<typeof formSchema>
 	>({
 		resolver: zodResolver(formSchema),
-		mode: "all",
+		mode: "onBlur",
 	});
-	const confirm_password = getValues("confirm_password");
-	const password = getValues("password");
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		console.log(values);
-		// const { data, error } = await authClient.signUp.email({
-		// 	name: values.name, // required
-		// 	email: values.email, // required
-		// 	password: values.password, // required
-		// 	callbackURL: process.env.BETTER_AUTH_URL + "/verify",
-		// });
+		const { data, error } = await authClient.signUp.email({
+			name: values.name, // required
+			email: values.email, // required
+			password: values.password, // required
+			fetchOptions: {
+				onError(context) {
+					toast(context.error.message, "error");
+				},
+				onSuccess() {
+					router.push("/auth/verify");
+				},
+			},
+		});
 	};
+	const pass = watch("password");
+	const confirm_password = watch("confirm_password");
+
 	return (
 		<div className='flex min-h-svh w-full items-center justify-center p-6 md:p-10'>
 			<div className='w-full max-w-sm'>
@@ -78,6 +91,7 @@ export default function Page() {
 												id='name'
 												type='text'
 												placeholder='John Doe'
+												disabled={formState.isSubmitting}
 												required
 												aria-invalid={fieldState.invalid}
 											/>
@@ -95,6 +109,7 @@ export default function Page() {
 										<Field data-invalid={fieldState.invalid}>
 											<FieldLabel htmlFor='email'>Email</FieldLabel>
 											<Input
+												disabled={formState.isSubmitting}
 												id='email'
 												type='email'
 												placeholder='m@example.com'
@@ -114,6 +129,7 @@ export default function Page() {
 									rules={{ required: true }}
 									render={({ field, fieldState }) => (
 										<PasswordInput
+											disabled={formState.isSubmitting}
 											htmlFor='password'
 											id='password'
 											required={true}
@@ -130,21 +146,23 @@ export default function Page() {
 									control={control}
 									rules={{
 										required: true,
-										validate: (v, fv) => {
-											return v === fv.password;
-										},
 									}}
 									render={({ field, fieldState }) => (
 										<ConfirmPasswordInput
+											disabled={formState.isSubmitting}
 											htmlFor='confirm-password'
 											id='confirm-password'
 											description='Please confirm your password.'
 											required={true}
 											label='Confirm Password'
-											data-invalid={fieldState.invalid}
-											aria-invalid={fieldState.invalid}
+											data-invalid={
+												fieldState.invalid || pass !== confirm_password
+											}
+											aria-invalid={
+												fieldState.invalid || pass !== confirm_password
+											}
 											field={field}
-											invalid={confirm_password == password}
+											invalid={pass !== confirm_password}
 											fieldState={fieldState}
 										/>
 									)}
@@ -152,7 +170,15 @@ export default function Page() {
 
 								<FieldGroup>
 									<Field>
-										<Button type='submit' disabled={!formState.isValid}>
+										<Button
+											type='submit'
+											className='cursor-pointer'
+											disabled={
+												!formState.isValid ||
+												pass !== confirm_password ||
+												formState.isSubmitting
+											}
+										>
 											Create Account
 										</Button>
 										{/* <Button variant="outline" type="button">

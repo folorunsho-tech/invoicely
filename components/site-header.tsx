@@ -1,3 +1,4 @@
+"use client";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,12 +10,14 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
+import { authClient } from "@/lib/auth-client";
 export function SiteHeader() {
+	const { data: session } = authClient.useSession();
 	const user = {
-		name: "shadcn",
-		email: "m@example.com",
-		avatar: "/avatars/shadcn.jpg",
-		fallback: "SC",
+		name: session?.user.name,
+		email: session?.user.email,
+		avatar: session?.user.image,
+		fallback: session?.user.name.substring(0, 2).toUpperCase(),
 	};
 	return (
 		<header className='flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)'>
@@ -40,7 +43,7 @@ export function SiteHeader() {
 					</DropdownMenu>
 					<div className='flex gap-2 items-center'>
 						<Avatar className='h-8 w-8 rounded-lg grayscale'>
-							<AvatarImage src={user.avatar} alt={user.name} />
+							<AvatarImage src={user.avatar || ""} alt={user.name} />
 							<AvatarFallback className='rounded-lg'>
 								{user.fallback}
 							</AvatarFallback>

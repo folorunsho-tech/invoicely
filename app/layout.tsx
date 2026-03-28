@@ -8,7 +8,7 @@ import {
 	mantineHtmlProps,
 } from "@mantine/core";
 import { cn } from "@/lib/utils";
-
+import { Toaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata = {
@@ -34,6 +34,7 @@ export default function RootLayout({
 				<TooltipProvider>
 					<MantineProvider>{children}</MantineProvider>
 				</TooltipProvider>
+				<Toaster expand visibleToasts={9} position='top-center' />
 			</body>
 		</html>
 	);

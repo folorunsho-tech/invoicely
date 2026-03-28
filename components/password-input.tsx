@@ -13,6 +13,7 @@ function PasswordInput({
 	required = false,
 	field,
 	fieldState,
+	disabled,
 	...props
 }: React.ComponentProps<typeof Input> & {
 	label?: string;
@@ -35,6 +36,7 @@ function PasswordInput({
 					required={required}
 					aria-invalid={props["aria-invalid"]}
 					{...field}
+					disabled={disabled}
 				/>
 				<InputGroupAddon align='inline-end'>
 					<Button

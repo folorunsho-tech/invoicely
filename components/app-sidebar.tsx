@@ -24,6 +24,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const navMain = [
 	{
@@ -54,6 +56,8 @@ const navMain = [
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	const router = useRouter();
+
 	return (
 		<Sidebar collapsible='icon' {...props}>
 			<SidebarHeader>
@@ -80,6 +84,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 					<Button
 						variant='destructive'
 						className='flex justify-between gap-2 items-center cursor-pointer'
+						onClick={async () => {
+							await authClient.signOut({
+								fetchOptions: {
+									onSuccess: () => {
+										router.push("/auth/signin"); // redirect to login page
+									},
+								},
+							});
+						}}
 					>
 						<LogOut className='size-5!' />
 						<span className='text-base font-semibold'>Logout</span>
