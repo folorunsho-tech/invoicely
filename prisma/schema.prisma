@@ -1,0 +1,332 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String       @id
+  name          String
+  email         String
+  emailVerified Boolean      @default(false)
+  image         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  members       Member[]
+  invitations   Invitation[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  activeOrganizationId String?
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Invoice {
+  id              String                @id @default(cuid())
+  invoiceNumber   String                @unique
+  issued_date     DateTime
+  due_date        DateTime
+  project_subject String?
+  total           Decimal               @db.Money
+  currency        String                @default("NGN")
+  status          InvoiceStatus         @default(PENDING)
+  sentAt          DateTime?
+  cancelledAt     DateTime?
+  paidAt          DateTime?
+  is_deleted      Boolean               @default(false)
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  organization    Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId  String
+  category        Category?             @relation(fields: [categoryId], references: [id])
+  categoryId      String?
+  client          Client                @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId        String
+  items           Item[]
+  notifications   invoiceNotification[]
+  payments        Payment[]
+}
+
+model invoiceNotification {
+  id                String                     @id @default(cuid())
+  orgId             String
+  organization      Organization               @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  type              InvoiceNotificationType    @default(INVOICE_SENT)
+  channel           InvoiceNotificationChannel @default(EMAIL)
+  status            NotificationStatus         @default(SENT)
+  lastError         String?
+  recipientEmail    String
+  permanentlyFailed Boolean?
+  sentAt            DateTime?
+  createdAt         DateTime                   @default(now())
+  updatedAt         DateTime                   @updatedAt
+  invoice           Invoice                    @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId         String
+
+  @@index([orgId])
+  @@index([status])
+}
+
+enum InvoiceNotificationType {
+  INVOICE_SENT
+  INVOICE_UPDATED
+  REMINDER_7D
+  REMINDER_3D
+  REMINDER_1D
+  OVERDUE
+  CANCELLATION
+}
+
+enum InvoiceNotificationChannel {
+  EMAIL
+  SMS
+  WHATSAPP
+  TELEGRAM
+}
+
+model InvoiceCounter {
+  id       String @id @default(cuid())
+  year     Int
+  sequence Int
+
+  orgId        String
+  organization Organization @relation(fields: [orgId], references: [id])
+
+  @@unique([orgId, year])
+}
+
+model Payment {
+  id                      String         @id @default(uuid())
+  amount                  Decimal        @db.Money
+  type                    PaymentType    @default(PROVIDER)
+  currency                String         @default("NGN")
+  paid_at                 DateTime?
+  provider_transaction_id String?
+  metadata                Json?
+  status                  PaymentStatus  @default(Pending)
+  gatewayId               String
+  channel                 String?
+  invoiceId               String
+  orgId                   String
+  is_deleted              Boolean        @default(false)
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+  gateway                 PaymentGateway @relation(fields: [gatewayId], references: [id])
+  invoice                 Invoice        @relation(fields: [invoiceId], references: [id])
+  organization            Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+}
+
+enum PaymentType {
+  MANUAL
+  PROVIDER
+}
+
+enum PaymentStatus {
+  Pending
+  Cancelled
+  Successful
+  Failed
+}
+
+// enum PaymentStatus {
+//   SUCCESS
+//   FAILED
+//   CANCELLED
+// }
+
+model Item {
+  id        String   @id @default(uuid())
+  name      String
+  rate      Decimal  @db.Money
+  total     Decimal? @db.Money
+  quantity  Int
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id             String       @id @default(uuid())
+  name           String
+  slug           String?
+  description    String?
+  invoices       Invoice[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+}
+
+model Client {
+  id             String       @id @default(uuid())
+  name           String
+  email          String       @unique
+  phone          String?
+  address        String
+  city           String
+  state          String?
+  postCode       String?
+  country        String
+  is_deleted     Boolean      @default(false)
+  invoices       Invoice[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+}
+
+model PaymentGateway {
+  id              String       @id @default(uuid())
+  provider        String       @unique
+  test_public_key String?
+  test_secret_key String?
+  live_public_key String?
+  live_secret_key String?
+  metadata        Json?
+  is_live         Boolean      @default(false)
+  is_enabled      Boolean      @default(false)
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId  String
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  payments        Payment[]
+}
+
+model Organization {
+  id                   String                @id
+  name                 String
+  slug                 String
+  logo                 String?
+  code                 String                @unique // e.g. "ACME"
+  currency             String                @default("NGN")
+  email                String
+  phone                String?
+  address              String
+  city                 String
+  state                String?
+  postCode             String?
+  country              String
+  createdAt            DateTime
+  metadata             String?
+  invoices             Invoice[]
+  categories           Category[]
+  clients              Client[]
+  paymentGateways      PaymentGateway[]
+  members              Member[]
+  invitations          Invitation[]
+  invoiceCounters      InvoiceCounter[]
+  invoiceNotifications invoiceNotification[]
+  payments             Payment[]
+
+  currencyPos    String @default("left")
+  currencySymbol String
+
+  @@unique([slug])
+  @@index([code, country])
+  @@map("organization")
+}
+
+model Member {
+  id             String       @id
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String       @default("member")
+  createdAt      DateTime
+
+  @@index([organizationId])
+  @@index([userId])
+  @@map("member")
+}
+
+model Invitation {
+  id             String       @id
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String?
+  status         String       @default("pending")
+  expiresAt      DateTime
+  createdAt      DateTime     @default(now())
+  inviterId      String
+  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([email])
+  @@map("invitation")
+}
+
+enum InvoiceStatus {
+  PENDING   @map("pending")
+  DRAFT     @map("draft")
+  OVERDUE   @map("overdue")
+  PAID      @map("paid")
+  CANCELLED @map("cancelled")
+}
+
+enum NotificationStatus {
+  // PENDING   @map("pending")
+  // CANCELLED @map("cancelled")
+  SENT   @map("sent")
+  FAILED @map("failed")
+}
