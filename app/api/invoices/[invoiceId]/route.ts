@@ -29,9 +29,15 @@ export async function GET(
 				include: {
 					items: true,
 					client: true,
-					payments: true,
+					payments: {
+						include: {
+							gateway: true,
+							organization: true,
+						},
+					},
 					organization: true,
 					notifications: true,
+					receipts: true,
 				},
 			});
 			if (found) {

@@ -23,6 +23,7 @@
     "@paystack/inline-js": "^2.23.1",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
+    "@redis/client": "^6.1.0",
     "@tanstack/match-sorter-utils": "^8.19.4",
     "@tanstack/react-query": "^5.101.0",
     "@tanstack/react-table": "^8.21.3",

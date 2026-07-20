@@ -57,6 +57,7 @@ export const ModelName = {
   Verification: 'Verification',
   Invoice: 'Invoice',
   invoiceNotification: 'invoiceNotification',
+  invoiceReciept: 'invoiceReciept',
   InvoiceCounter: 'InvoiceCounter',
   Payment: 'Payment',
   Item: 'Item',
@@ -182,6 +183,18 @@ export const InvoiceNotificationScalarFieldEnum = {
 } as const
 
 export type InvoiceNotificationScalarFieldEnum = (typeof InvoiceNotificationScalarFieldEnum)[keyof typeof InvoiceNotificationScalarFieldEnum]
+
+
+export const InvoiceRecieptScalarFieldEnum = {
+  id: 'id',
+  paymentId: 'paymentId',
+  orgId: 'orgId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  invoiceId: 'invoiceId'
+} as const
+
+export type InvoiceRecieptScalarFieldEnum = (typeof InvoiceRecieptScalarFieldEnum)[keyof typeof InvoiceRecieptScalarFieldEnum]
 
 
 export const InvoiceCounterScalarFieldEnum = {

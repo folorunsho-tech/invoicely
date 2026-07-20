@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { client } from "@/lib/redis";
 import { NextRequest, NextResponse } from "next/server";
 
 const api = "https://api.paystack.co/transaction/initialize";
@@ -41,10 +42,9 @@ export async function POST(request: NextRequest) {
 		});
 		if (invoice) {
 			const is_live = invoice.organization.paymentGateways[0]?.is_live;
-			const gatewayId = invoice.organization.paymentGateways[0]?.id;
 			const liveSecretKey =
 				invoice.organization.paymentGateways[0]?.live_secret_key;
-			if (is_live) {
+			if (process.env.NODE_ENV === "production") {
 				const paystackRes = await fetch(api, {
 					method: "POST",
 					body: JSON.stringify({
@@ -57,22 +57,25 @@ export async function POST(request: NextRequest) {
 						"Content-Type": "application/json",
 					},
 				});
-				const res = await paystackRes.json();
+				const res: {
+					status: boolean;
+					message: string;
+					data: {
+						authorization_url: string;
+						access_code: string;
+						reference: string;
+					};
+				} = await paystackRes.json();
 				if (res?.status) {
-					const payment = await prisma.payment.create({
-						data: {
-							invoiceId: invoice.id,
-							gatewayId,
-							orgId: invoice.organizationId,
-							metadata: res?.data,
-							amount: invoice.total,
-						},
-					});
-
+					await (
+						await client
+					).set(`paystackRef:${res.data.reference}`, res.data.access_code);
+					const reference = await (
+						await client
+					).get(`paystackRef:${res.data.reference}`);
 					return NextResponse.json(
 						{
-							access_code: res?.data?.access_code || null,
-							payment,
+							reference,
 							message: res?.message,
 							status: res?.status,
 						},
@@ -84,8 +87,7 @@ export async function POST(request: NextRequest) {
 				} else {
 					return NextResponse.json(
 						{
-							access_code: res?.data?.access_code || null,
-							payment: null,
+							reference: null,
 							message: res?.message,
 							status: res?.status,
 						},
@@ -111,22 +113,26 @@ export async function POST(request: NextRequest) {
 						"Content-Type": "application/json",
 					},
 				});
-				const res = await paystackRes.json();
-				if (res?.status) {
-					const payment = await prisma.payment.create({
-						data: {
-							invoiceId: invoice.id,
-							gatewayId,
-							orgId: invoice.organizationId,
-							metadata: res?.data,
-							amount: invoice.total,
-						},
-					});
 
+				const res: {
+					status: boolean;
+					message: string;
+					data: {
+						authorization_url: string;
+						access_code: string;
+						reference: string;
+					};
+				} = await paystackRes.json();
+				if (res?.status) {
+					await (
+						await client
+					).set(`paystackRef:${res.data.reference}`, res.data.access_code);
+					const reference = await (
+						await client
+					).get(`paystackRef:${res.data.reference}`);
 					return NextResponse.json(
 						{
-							access_code: res?.data?.access_code || null,
-							payment,
+							reference,
 							message: res?.message,
 							status: res?.status,
 						},
@@ -138,8 +144,7 @@ export async function POST(request: NextRequest) {
 				} else {
 					return NextResponse.json(
 						{
-							access_code: res?.data?.access_code || null,
-							payment: null,
+							reference: null,
 							message: res?.message,
 							status: res?.status,
 						},

@@ -28,9 +28,31 @@ export async function queueInvoiceSend(
 			attempts: 3,
 			backoff: { type: "exponential", delay: 5000 },
 			jobId: `send-invoice-${invoiceId}`,
+			removeOnComplete: true,
+			removeOnFail: true,
 		},
 	);
 }
+export async function queueInvoiceReciept(
+	organizationId: string,
+	receiptId: string,
+) {
+	return await invoiceQueue.add(
+		"send-invoice-receipt",
+		{
+			receiptId,
+			organizationId,
+		},
+		{
+			attempts: 3,
+			backoff: { type: "exponential", delay: 5000 },
+			jobId: `send-invoice-receipt-${receiptId}`,
+			removeOnComplete: true,
+			removeOnFail: true,
+		},
+	);
+}
+
 export async function queueInvoiceUpdateSend(
 	organizationId: string,
 	invoiceId: string,

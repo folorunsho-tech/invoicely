@@ -28,12 +28,18 @@ export async function GET(
 								},
 							},
 							category: true,
+							organization: {
+								select: {
+									slug: true,
+									currencySymbol: true,
+								},
+							},
 						},
 					},
-
 					organization: {
 						select: {
 							slug: true,
+							currencySymbol: true,
 						},
 					},
 				},

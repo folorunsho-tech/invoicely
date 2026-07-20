@@ -111,12 +111,6 @@ export async function POST(request: NextRequest) {
 			});
 			if (status !== "DRAFT") {
 				await queueInvoiceSend(invoice.organizationId, invoice.id);
-				const reminders = generateReminders(
-					invoice.due_date,
-					invoice.id,
-					invoice.organizationId,
-				);
-				await queueInvoiceReminders(reminders);
 			}
 			if (invoice) {
 				return NextResponse.json(invoice, {

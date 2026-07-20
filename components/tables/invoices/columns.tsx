@@ -159,7 +159,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Items' />
 		),
-		cell: ({ row }) => row.original._count.items,
+		cell: ({ row }) => row.original._count?.items,
 	},
 	{
 		id: "actions",

@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { auth } from "@/lib/auth";
 import { getSession, hasPermission } from "@/lib/authlibs";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
-import { PaymentType } from "@/generated/prisma/enums";
+import { PaymentStatus, PaymentType } from "@/generated/prisma/enums";
+import { queueInvoiceReciept } from "@/lib/queue";
 
 export async function GET(request: NextRequest) {
 	const data = await getSession();
@@ -67,7 +66,10 @@ export async function POST(request: NextRequest) {
 		paid_at,
 		provider_transaction_id,
 		metadata,
-		gatewayId,
+		channel,
+		status,
+		currency,
+		orgId,
 		invoiceId,
 	}: {
 		type: PaymentType;
@@ -75,63 +77,92 @@ export async function POST(request: NextRequest) {
 		paid_at: Date | string;
 		provider_transaction_id: string;
 		metadata: any;
-		gatewayId: string;
 		invoiceId: string;
+		channel: string;
+		status: PaymentStatus;
+		currency: string;
+		orgId: string;
 	} = await request.json();
-	const data = await getSession();
-	const orgId = String(data?.session.activeOrganizationId);
 	const isPermitted = await hasPermission({
 		payment: ["create"],
 	});
 	if (isPermitted.success) {
-		const org = await auth.api.getFullOrganization({
-			query: {
-				organizationId: orgId,
+		const isPaymentExist = await prisma.payment.findFirst({
+			where: {
+				invoiceId,
 			},
-			// This endpoint requires session cookies.
-			headers: await headers(),
 		});
-		try {
-			const payment = await prisma.payment.create({
-				data: {
-					orgId,
-					type,
-					amount,
-					currency: org?.currency || "NGN",
-					paid_at,
-					provider_transaction_id,
-					metadata,
-					gatewayId,
-					invoiceId,
-				},
-				include: {
-					gateway: {
-						select: {
-							provider: true,
-						},
+		if (!isPaymentExist) {
+			try {
+				const gateway = await prisma.paymentGateway.findFirst({
+					where: {
+						provider: "Manual",
+						organizationId: orgId,
 					},
-					invoice: {
-						include: {
-							client: true,
-						},
-					},
-				},
-			});
-			if (payment) {
-				return NextResponse.json(payment, {
-					status: 201,
-					statusText: "payment added successfuly",
 				});
-			} else {
-				return NextResponse.json(null, {
-					statusText: "error adding payment",
+				const payment = await prisma.payment.create({
+					data: {
+						orgId,
+						type,
+						amount,
+						currency: currency || "NGN",
+						paid_at: new Date(paid_at) || null,
+						provider_transaction_id,
+						metadata,
+						gatewayId: gateway?.id || "",
+						invoiceId,
+						channel,
+						status,
+						receipts: {
+							create: { invoiceId, orgId },
+						},
+					},
+					include: {
+						gateway: {
+							select: {
+								provider: true,
+							},
+						},
+						invoice: {
+							include: {
+								client: true,
+							},
+						},
+						receipts: true,
+					},
+				});
+				const invPiad = await prisma.invoice.update({
+					where: {
+						id: payment.invoiceId,
+						organizationId: payment.orgId,
+					},
+					data: {
+						status: "PAID",
+					},
+				});
+				const receipt = payment.receipts[0];
+				if (invPiad) {
+					await queueInvoiceReciept(payment.orgId, receipt.id);
+					return NextResponse.json(payment, {
+						status: 201,
+						statusText: "payment added successfuly",
+					});
+				} else {
+					return NextResponse.json(null, {
+						statusText: "error adding payment",
+					});
+				}
+			} catch (error) {
+				console.log(error);
+				return NextResponse.json(error, {
+					status: 500,
+					statusText: "Internal Server Error",
 				});
 			}
-		} catch (error) {
-			console.log(error);
-			return NextResponse.json(error, {
-				status: 500,
-				statusText: "Internal Server Error",
+		} else {
+			return NextResponse.json(null, {
+				status: 400,
+				statusText: "Payment already exist for this invoice",
 			});
 		}
 	} else {

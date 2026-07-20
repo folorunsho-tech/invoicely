@@ -27,6 +27,8 @@ export default function RootLayout({
 			lang='en'
 			className={cn("h-full", "antialiased", "font-sans", inter.variable)}
 		>
+			<title>Invoicely</title>
+
 			<body>
 				<TooltipProvider>
 					<MantineProvider theme={theme}>

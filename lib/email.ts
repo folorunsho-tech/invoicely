@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { invoice as Invoice } from "./types";
+import { invoice as Invoice, Reciept } from "./types";
 import nodemailer from "nodemailer";
 import {
 	invoiceCancellationTemplate,
+	invoiceReceiptTemplate,
 	invoiceReminder1DayTemplate,
 	invoiceReminder3DayTemplate,
 	invoiceSentTemplate,
@@ -80,6 +81,27 @@ export const sendInvoiceEmail = async ({
 		from: invoice?.organization?.name,
 	});
 };
+
+export const sendRecieptEmail = async ({
+	to,
+	receipt,
+}: {
+	to: string | any;
+	receipt: Reciept;
+}) => {
+	const { subject, html } = invoiceReceiptTemplate({
+		receipt: receipt,
+		clientName: receipt.invoice?.client?.name,
+		companyName: receipt.invoice?.organization?.name,
+	});
+	return await sendEmail({
+		to,
+		subject,
+		html,
+		from: receipt.invoice?.organization?.name,
+	});
+};
+
 export const sendInvoiceUpdatedEmail = async ({
 	to,
 	invoice,

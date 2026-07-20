@@ -3,6 +3,16 @@ import toast from "../toaster";
 
 const apiUrl = process.env.API_URL || "http://localhost:3000/api/";
 const url = `invoices`;
+export const getInvoicesSimple = async () => {
+	const response = await fetch(apiUrl + url + "/simple", {
+		method: "GET",
+	});
+	if (!response.ok) {
+		throw new Error(`HTTP error! Status: ${response.status}`);
+	}
+	const data = await response.json();
+	return data;
+};
 export const getInvoices = async () => {
 	const response = await fetch(apiUrl + url, {
 		method: "GET",

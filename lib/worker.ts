@@ -5,6 +5,7 @@ import {
 	sendCancellationEmail,
 	sendReminderEmail,
 	sendInvoiceUpdatedEmail,
+	sendRecieptEmail,
 } from "./email";
 import { prisma } from "./prisma";
 import { redisConnection } from "./queue";
@@ -95,6 +96,94 @@ async function handleSendInvoice(job: Job) {
 		throw err; // re-throw so BullMQ retries the job
 	}
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function handleSendReciept(job: Job) {
+	const { receiptId, organizationId } = job.data;
+
+	const receipt = await prisma.invoiceReciept.findUnique({
+		where: { id: receiptId, orgId: organizationId },
+		include: {
+			invoice: {
+				include: {
+					client: true,
+					organization: true,
+					items: true,
+				},
+			},
+		},
+	});
+
+	if (!receipt) throw new Error(`Receipt ${receiptId} not found`);
+
+	if (receipt.invoice.status !== "PAID") {
+		console.log(
+			`[send-invoice-reciept] Invoice ${receipt.invoiceId} is not paid — skipping`,
+		);
+		return;
+	}
+
+	// Idempotency — skip if already successfully sent
+	const alreadySent = await prisma.invoiceNotification.findFirst({
+		where: {
+			invoiceId: receipt.invoiceId,
+			orgId: organizationId,
+			type: "INVOICE_RECIEPT_SENT",
+			status: "SENT",
+		},
+	});
+	if (alreadySent) return;
+
+	try {
+		const { success, error }: { success: boolean; error: string } =
+			await sendRecieptEmail({
+				to: receipt.invoice.client.email,
+				receipt,
+			});
+
+		if (success) {
+			// ✅ Success row
+			await prisma.invoiceNotification.create({
+				data: {
+					invoiceId: receipt.invoiceId,
+					orgId: organizationId,
+					type: "INVOICE_RECIEPT_SENT",
+					recipientEmail: receipt.invoice.client.email,
+					status: "SENT",
+					sentAt: new Date(),
+				},
+			});
+
+			console.log(
+				`[send-invoice-receipt] Invoice receipt email for invoice ${receipt.invoiceId} sent to ${receipt.invoice.client.email}`,
+			);
+		}
+		if (error) {
+			console.log(
+				`[send-invoice-receipt] Invoice receipt email for invoice ${receipt.invoiceId} failed to send to ${receipt.invoice.client.email}; Reason: ${error}`,
+			);
+			throw new Error(error);
+		}
+	} catch (err: any) {
+		// ❌ Failure row — still persisted
+		await prisma.invoiceNotification.create({
+			data: {
+				invoiceId: receipt.invoiceId,
+				orgId: organizationId,
+				type: "INVOICE_RECIEPT_SENT",
+				recipientEmail: receipt.invoice.client.email,
+				status: "FAILED",
+				lastError: err.message,
+			},
+		});
+
+		throw err; // re-throw so BullMQ retries the job
+	}
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 async function handleUpdateInvoice(job: Job) {
 	const { invoiceId, organizationId } = job.data;
 
@@ -331,6 +420,8 @@ const worker = new Worker(
 		switch (job.name) {
 			case "send-invoice":
 				return handleSendInvoice(job);
+			case "send-invoice-receipt":
+				return handleSendReciept(job);
 			case "send-invoice-update":
 				return handleUpdateInvoice(job);
 			case "send-cancellation":

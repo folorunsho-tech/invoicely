@@ -16,7 +16,8 @@ export const InvoiceNotificationType = {
   REMINDER_3D: 'REMINDER_3D',
   REMINDER_1D: 'REMINDER_1D',
   OVERDUE: 'OVERDUE',
-  CANCELLATION: 'CANCELLATION'
+  CANCELLATION: 'CANCELLATION',
+  INVOICE_RECIEPT_SENT: 'INVOICE_RECIEPT_SENT'
 } as const
 
 export type InvoiceNotificationType = (typeof InvoiceNotificationType)[keyof typeof InvoiceNotificationType]

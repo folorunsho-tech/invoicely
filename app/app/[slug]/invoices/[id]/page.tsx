@@ -5,6 +5,7 @@ import {
 	InvoiceStatus,
 	Item,
 	Organization,
+	Payment,
 } from "@/generated/prisma/client";
 import { NumberFormatter } from "@mantine/core";
 import { Button } from "@/components/ui/button";
@@ -29,9 +30,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { ArrowLeft, Check, LoaderIcon, Pencil } from "lucide-react";
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
 import { InvoiceNotification } from "@/lib/types";
 import DeleteModal from "@/components/tables/modals/DeleteModal";
+import { rcolumns } from "@/components/tables/payments/columns";
+import { schema } from "@/components/tables/payments/schema";
+import { RenderTable } from "@/components/tables/RenderTable";
 type Invoice = {
 	issued_date: Date;
 	due_date: Date;
@@ -43,6 +46,7 @@ type Invoice = {
 	invoiceNumber: string;
 	notifications: InvoiceNotification[];
 	status: InvoiceStatus;
+	payments: Payment[];
 };
 const Page = () => {
 	const { id, slug }: { id: string; slug: string } = useParams();
@@ -91,8 +95,8 @@ const Page = () => {
 			return "text-sm font-semibold outline-blue-500 border-blue-500 text-blue-500";
 	};
 	return (
-		<main className='flex gap-4 items-start flex-col sm:flex-row'>
-			<section className='text-sm flex flex-col sm:w-3/6 gap-4'>
+		<main className='flex flex-col gap-6'>
+			<section className='text-sm flex flex-col gap-4'>
 				<div className='flex justify-between items-start'>
 					<Button asChild>
 						<Link
@@ -271,10 +275,18 @@ const Page = () => {
 						</TableFooter>
 					</Table>
 				</div>
+				<section className='flex flex-col gap-4'>
+					<Label className='text-xl'>Payments</Label>
+					<RenderTable
+						data={invoice?.payments || []}
+						columns={rcolumns}
+						schema={schema}
+						queryKey='payments'
+					/>
+				</section>
 			</section>
-			<Separator orientation='vertical' className='hidden sm:block' />
-			<Separator className='sm:hidden' />
-			<section className='flex flex-col gap-4 items-start sm:w-3/6 max-w-full'>
+
+			<section className='flex flex-col gap-4 items-start max-w-full'>
 				<Label className='text-lg'>Notifications</Label>
 				<Table className='rounded-b-xl overflow-auto'>
 					<TableHeader className='bg-muted'>

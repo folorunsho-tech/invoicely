@@ -1,7 +1,4 @@
-import {
-	PaymentCreateInput,
-	PaymentUpdateInput,
-} from "@/generated/prisma/models";
+import { PaymentUpdateInput } from "@/generated/prisma/models";
 import toast from "../toaster";
 
 const apiUrl = process.env.API_URL || "http://localhost:3000/api/";
@@ -105,7 +102,8 @@ export const restorePayments = async (ids: { id: string }[]) => {
 
 	return data;
 };
-export const postPayment = async (data: PaymentCreateInput) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const postPayment = async (data: any) => {
 	const options = {
 		method: "POST",
 		headers: {
@@ -158,25 +156,9 @@ export const initTransaction = async (invoiceId: string) => {
 	};
 	const response = await fetch(apiUrl + `${url}/init`, options);
 	const res = await response.json();
-	if (!response.ok) {
-		console.log("init tnx func: ", res);
-		throw new Error(`HTTP error! Status: ${response.status}`);
-	}
-	return res;
-};
-export const isInvoicePaid = async (invoiceId: string) => {
-	const options = {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-		},
-	};
-	const response = await fetch(apiUrl + `${url}/is-paid/${invoiceId}`, options);
-	const res = await response.json();
-	if (!response.ok) {
-		// toast(response.statusText, "error");
-		throw new Error(`HTTP error! Status: ${response.status}`);
-	}
-	// toast(response.statusText, "success");
+	// if (!response.ok) {
+	// 	// console.log("init tnx func: ", res);
+	// 	throw new Error(`HTTP error! Status: ${response.status}`);
+	// }
 	return res;
 };

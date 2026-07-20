@@ -183,53 +183,6 @@ export function RenderTable({
 					</Table>
 				</div>
 				<div className='flex items-center justify-between px-4'>
-					<div className='hidden flex-1 text-sm text-muted-foreground lg:flex'>
-						{table.getFilteredSelectedRowModel().rows.length} of{" "}
-						{table.getFilteredRowModel().rows.length} row(s) selected.
-						{/* {table.getFilteredSelectedRowModel().rows.length && (
-							<form
-								className='flex items-center gap-4'
-								onSubmit={async (e) => {
-									e.preventDefault();
-									const data = table
-										.getFilteredSelectedRowModel()
-										.rows.map((r) => r.original);
-									const ids = data.map((d: any) => ({
-										id: d?.id,
-									}));
-									if (bulkActionSelect == "permdelete") {
-										await mutation.mutateAsync(ids);
-									}
-								}}
-							>
-								<Select
-									value={bulkActionSelect}
-									onValueChange={(value) => {
-										setBulkAction(value);
-									}}
-								>
-									<SelectTrigger size='sm' id='bulkaction'>
-										<SelectValue placeholder={bulkActionSelect} />
-									</SelectTrigger>
-									<SelectContent side='top'>
-										<SelectGroup>
-											<SelectItem value='bulkaction'>Bulk Action</SelectItem>
-											<SelectItem value='permdelete'>
-												Permanently delete
-											</SelectItem>
-										</SelectGroup>
-									</SelectContent>
-								</Select>
-								<Button
-									variant='default'
-									disabled={bulkActionSelect == "bulkaction"}
-									className='cursor-pointer'
-								>
-									Apply
-								</Button>
-							</form>
-						)} */}
-					</div>
 					<div className='flex w-full items-center gap-8 lg:w-fit'>
 						<div className='hidden items-center gap-2 lg:flex'>
 							<Label htmlFor='rows-per-page' className='text-sm font-medium'>

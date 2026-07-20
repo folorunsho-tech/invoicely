@@ -103,6 +103,7 @@ model Invoice {
   items           Item[]
   notifications   invoiceNotification[]
   payments        Payment[]
+  receipts        invoiceReciept[]
 }
 
 model invoiceNotification {
@@ -125,6 +126,22 @@ model invoiceNotification {
   @@index([status])
 }
 
+model invoiceReciept {
+  id           String       @id @default(cuid())
+  paymentId    String
+  payment      Payment      @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  orgId        String
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  invoice      Invoice      @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId    String
+
+  @@index([orgId])
+  @@index([invoiceId])
+  @@index([paymentId])
+}
+
 enum InvoiceNotificationType {
   INVOICE_SENT
   INVOICE_UPDATED
@@ -133,6 +150,7 @@ enum InvoiceNotificationType {
   REMINDER_1D
   OVERDUE
   CANCELLATION
+  INVOICE_RECIEPT_SENT
 }
 
 enum InvoiceNotificationChannel {
@@ -154,24 +172,25 @@ model InvoiceCounter {
 }
 
 model Payment {
-  id                      String         @id @default(uuid())
-  amount                  Decimal        @db.Money
-  type                    PaymentType    @default(PROVIDER)
-  currency                String         @default("NGN")
+  id                      String           @id @default(uuid())
+  amount                  Decimal          @db.Money
+  type                    PaymentType      @default(PROVIDER)
+  currency                String           @default("NGN")
   paid_at                 DateTime?
   provider_transaction_id String?
   metadata                Json?
-  status                  PaymentStatus  @default(Pending)
+  status                  PaymentStatus    @default(Pending)
   gatewayId               String
   channel                 String?
   invoiceId               String
   orgId                   String
-  is_deleted              Boolean        @default(false)
-  createdAt               DateTime       @default(now())
-  updatedAt               DateTime       @updatedAt
-  gateway                 PaymentGateway @relation(fields: [gatewayId], references: [id])
-  invoice                 Invoice        @relation(fields: [invoiceId], references: [id])
-  organization            Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  is_deleted              Boolean          @default(false)
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+  gateway                 PaymentGateway   @relation(fields: [gatewayId], references: [id])
+  invoice                 Invoice          @relation(fields: [invoiceId], references: [id])
+  organization            Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  receipts                invoiceReciept[]
 }
 
 enum PaymentType {
@@ -185,12 +204,6 @@ enum PaymentStatus {
   Successful
   Failed
 }
-
-// enum PaymentStatus {
-//   SUCCESS
-//   FAILED
-//   CANCELLED
-// }
 
 model Item {
   id        String   @id @default(uuid())
@@ -277,8 +290,9 @@ model Organization {
   invoiceNotifications invoiceNotification[]
   payments             Payment[]
 
-  currencyPos    String @default("left")
-  currencySymbol String
+  currencyPos     String           @default("left")
+  currencySymbol  String
+  invoiceReciepts invoiceReciept[]
 
   @@unique([slug])
   @@index([code, country])

@@ -72,6 +72,11 @@ export type Invoice = Prisma.InvoiceModel
  */
 export type invoiceNotification = Prisma.invoiceNotificationModel
 /**
+ * Model invoiceReciept
+ * 
+ */
+export type invoiceReciept = Prisma.invoiceRecieptModel
+/**
  * Model InvoiceCounter
  * 
  */

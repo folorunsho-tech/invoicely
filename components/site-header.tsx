@@ -112,9 +112,11 @@ export function SiteHeader() {
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align='end'>
 								<DropdownMenuGroup>
-									<DropdownMenuItem>
-										<UserCog />
-										Account
+									<DropdownMenuItem asChild className='cursor-pointer'>
+										<Link href='/app/accounts'>
+											<UserCog />
+											Account
+										</Link>
 									</DropdownMenuItem>
 								</DropdownMenuGroup>
 								<DropdownMenuSeparator />

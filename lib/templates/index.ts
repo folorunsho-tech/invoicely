@@ -1,4 +1,4 @@
-import { invoice } from "../types";
+import { invoice, Reciept } from "../types";
 import { baseLayout } from "./base";
 import {
 	invoiceSummary,
@@ -6,8 +6,48 @@ import {
 	ctaButton,
 	formatCurrency,
 	formatDate,
+	invoiceRSummary,
+	invoiceRMeta,
 } from "./helper";
 
+// ─── 1. Invoice Receipt Sent ──────────────────────────────────────────────────────────
+
+export function invoiceReceiptTemplate({
+	receipt,
+	clientName,
+	companyName,
+}: {
+	receipt: Reciept;
+	clientName: string;
+	companyName: string;
+}) {
+	const content = `
+    <h1 style="margin:0 0 6px;font-size:22px;font-weight:700;color:#111827;letter-spacing:-0.3px;">
+      ${companyName}
+    </h1>
+    <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">
+      Hi ${clientName}, 
+    </p>
+    <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">
+     You have made a successful payment for ${receipt.invoice.invoiceNumber}. Your payment details are
+    </p>
+    <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">
+     Details:
+    </p>
+    ${invoiceRMeta(receipt)}
+    ${invoiceRSummary(receipt)}
+
+  `;
+
+	return {
+		subject: `Receipt for invoice #${receipt.invoice.invoiceNumber}.`,
+		html: baseLayout({
+			previewText: `Receipt for invoice #${receipt.invoice.invoiceNumber}.`,
+			content,
+			companyName,
+		}),
+	};
+}
 // ─── 1. Invoice Sent ──────────────────────────────────────────────────────────
 
 export function invoiceSentTemplate({

@@ -7,7 +7,6 @@ export const schema = z.object({
 	project_subject: z.string(),
 	total: z.number(),
 	currency: z.string(),
-
 	status: z.enum(["PENDING", "DRAFT", "OVERDUE", "PAID", "CANCELLED"]),
 	_count: z.object({
 		items: z.number(),

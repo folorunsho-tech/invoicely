@@ -390,6 +390,7 @@ export const ModelName = {
   Verification: 'Verification',
   Invoice: 'Invoice',
   invoiceNotification: 'invoiceNotification',
+  invoiceReciept: 'invoiceReciept',
   InvoiceCounter: 'InvoiceCounter',
   Payment: 'Payment',
   Item: 'Item',
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "invoice" | "invoiceNotification" | "invoiceCounter" | "payment" | "item" | "category" | "client" | "paymentGateway" | "organization" | "member" | "invitation"
+    modelProps: "user" | "session" | "account" | "verification" | "invoice" | "invoiceNotification" | "invoiceReciept" | "invoiceCounter" | "payment" | "item" | "category" | "client" | "paymentGateway" | "organization" | "member" | "invitation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -859,6 +860,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.invoiceNotificationCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.InvoiceNotificationCountAggregateOutputType> | number
+        }
+      }
+    }
+    invoiceReciept: {
+      payload: Prisma.$invoiceRecieptPayload<ExtArgs>
+      fields: Prisma.invoiceRecieptFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.invoiceRecieptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$invoiceRecieptPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.invoiceRecieptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$invoiceRecieptPayload>
+        }
+        findFirst: {
+          args: Prisma.invoiceRecieptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$invoiceRecieptPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.invoiceRecieptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$invoiceRecieptPayload>
+        }
+        findMany: {
+          args: Prisma.invoiceRecieptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$invoiceRecieptPayload>[]
+        }
+        create: {
+          args: Prisma.invoiceRecieptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$invoiceRecieptPayload>
+        }
+        createMany: {
+          args: Prisma.invoiceRecieptCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.invoiceRecieptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$invoiceRecieptPayload>[]
+        }
+        delete: {
+          args: Prisma.invoiceRecieptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$invoiceRecieptPayload>
+        }
+        update: {
+          args: Prisma.invoiceRecieptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$invoiceRecieptPayload>
+        }
+        deleteMany: {
+          args: Prisma.invoiceRecieptDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.invoiceRecieptUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.invoiceRecieptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$invoiceRecieptPayload>[]
+        }
+        upsert: {
+          args: Prisma.invoiceRecieptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$invoiceRecieptPayload>
+        }
+        aggregate: {
+          args: Prisma.InvoiceRecieptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInvoiceReciept>
+        }
+        groupBy: {
+          args: Prisma.invoiceRecieptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InvoiceRecieptGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.invoiceRecieptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InvoiceRecieptCountAggregateOutputType> | number
         }
       }
     }
@@ -1667,6 +1742,18 @@ export const InvoiceNotificationScalarFieldEnum = {
 export type InvoiceNotificationScalarFieldEnum = (typeof InvoiceNotificationScalarFieldEnum)[keyof typeof InvoiceNotificationScalarFieldEnum]
 
 
+export const InvoiceRecieptScalarFieldEnum = {
+  id: 'id',
+  paymentId: 'paymentId',
+  orgId: 'orgId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  invoiceId: 'invoiceId'
+} as const
+
+export type InvoiceRecieptScalarFieldEnum = (typeof InvoiceRecieptScalarFieldEnum)[keyof typeof InvoiceRecieptScalarFieldEnum]
+
+
 export const InvoiceCounterScalarFieldEnum = {
   id: 'id',
   year: 'year',
@@ -2147,6 +2234,7 @@ export type GlobalOmitConfig = {
   verification?: Prisma.VerificationOmit
   invoice?: Prisma.InvoiceOmit
   invoiceNotification?: Prisma.invoiceNotificationOmit
+  invoiceReciept?: Prisma.invoiceRecieptOmit
   invoiceCounter?: Prisma.InvoiceCounterOmit
   payment?: Prisma.PaymentOmit
   item?: Prisma.ItemOmit

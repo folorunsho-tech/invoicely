@@ -108,7 +108,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Invoices' />
 		),
-		cell: ({ row }) => row.original._count.invoices,
+		cell: ({ row }) => row.original._count?.invoices,
 	},
 	{
 		id: "actions",
@@ -127,14 +127,14 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 				<DropdownMenuContent align='end' className='w-32 cursor-pointer'>
 					<DropdownMenuItem asChild className='cursor-pointer'>
 						<Link
-							href={`/app/${row.original.organization.slug}/clients/${row.original.id}`}
+							href={`/app/${row.original.organization?.slug}/clients/${row.original.id}`}
 						>
 							View
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild className='cursor-pointer'>
 						<Link
-							href={`/app/${row.original.organization.slug}/clients/${row.original.id}/update`}
+							href={`/app/${row.original.organization?.slug}/clients/${row.original.id}/update`}
 						>
 							Edit
 						</Link>
