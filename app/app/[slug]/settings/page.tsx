@@ -90,6 +90,7 @@ const Page = () => {
 				postCode: activeOrganization?.postCode,
 			});
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [activeOrganization]);
 	return (
 		<main className='p-4'>

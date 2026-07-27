@@ -28,8 +28,18 @@ export async function GET(
 					invoice: {
 						include: {
 							client: true,
+							items: true,
+							organization: {
+								select: {
+									currencySymbol: true,
+								},
+							},
 						},
 					},
+					organization: {
+						select: { slug: true },
+					},
+					receipts: true,
 				},
 			});
 			if (found) {
@@ -63,7 +73,8 @@ export async function PATCH(
 ) {
 	const { paymentId } = await params;
 	const data = await getSession();
-	const body = await request.json();
+	const { status, paid_at, provider_transaction_id, channel, metadata } =
+		await request.json();
 
 	const isPermitted = await hasPermission({
 		payment: ["update"],
@@ -75,7 +86,18 @@ export async function PATCH(
 					id: paymentId,
 					orgId: String(data?.session.activeOrganizationId),
 				},
-				data: body,
+				data: {
+					status,
+					paid_at: new Date(paid_at),
+					provider_transaction_id,
+					channel,
+					metadata: JSON.stringify(metadata),
+					invoice: {
+						update: {
+							paidAt: new Date(paid_at),
+						},
+					},
+				},
 				include: {
 					gateway: {
 						select: {
@@ -85,7 +107,11 @@ export async function PATCH(
 					invoice: {
 						include: {
 							client: true,
+							items: true,
 						},
+					},
+					organization: {
+						select: { slug: true },
 					},
 				},
 			});

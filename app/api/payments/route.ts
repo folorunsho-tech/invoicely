@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
 						type,
 						amount,
 						currency: currency || "NGN",
-						paid_at: new Date(paid_at) || null,
+						paid_at: new Date(paid_at),
 						provider_transaction_id,
 						metadata,
 						gatewayId: gateway?.id || "",
@@ -138,6 +138,7 @@ export async function POST(request: NextRequest) {
 					},
 					data: {
 						status: "PAID",
+						paidAt: new Date(paid_at),
 					},
 				});
 				const receipt = payment.receipts[0];

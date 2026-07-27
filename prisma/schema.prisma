@@ -80,50 +80,42 @@ model Verification {
 }
 
 model Invoice {
-  id              String                @id @default(cuid())
-  invoiceNumber   String                @unique
+  id              String           @id @default(cuid())
+  invoiceNumber   String           @unique
   issued_date     DateTime
   due_date        DateTime
   project_subject String?
-  total           Decimal               @db.Money
-  currency        String                @default("NGN")
-  status          InvoiceStatus         @default(PENDING)
+  total           Decimal          @db.Money
+  currency        String           @default("NGN")
+  status          InvoiceStatus    @default(PENDING)
   sentAt          DateTime?
   cancelledAt     DateTime?
   paidAt          DateTime?
-  is_deleted      Boolean               @default(false)
-  createdAt       DateTime              @default(now())
-  updatedAt       DateTime              @updatedAt
-  organization    Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  is_deleted      Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId  String
-  category        Category?             @relation(fields: [categoryId], references: [id])
+  category        Category?        @relation(fields: [categoryId], references: [id])
   categoryId      String?
-  client          Client                @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  client          Client           @relation(fields: [clientId], references: [id], onDelete: Cascade)
   clientId        String
   items           Item[]
-  notifications   invoiceNotification[]
   payments        Payment[]
   receipts        invoiceReciept[]
 }
 
-model invoiceNotification {
-  id                String                     @id @default(cuid())
-  orgId             String
-  organization      Organization               @relation(fields: [orgId], references: [id], onDelete: Cascade)
-  type              InvoiceNotificationType    @default(INVOICE_SENT)
-  channel           InvoiceNotificationChannel @default(EMAIL)
-  status            NotificationStatus         @default(SENT)
-  lastError         String?
-  recipientEmail    String
-  permanentlyFailed Boolean?
-  sentAt            DateTime?
-  createdAt         DateTime                   @default(now())
-  updatedAt         DateTime                   @updatedAt
-  invoice           Invoice                    @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
-  invoiceId         String
-
-  @@index([orgId])
-  @@index([status])
+model Notification {
+  id             String        @id @default(uuid())
+  title          String
+  description    String
+  category       String        @default("general")
+  type           String        @default("info")
+  link           String?
+  status         String        @default("unread")
+  createdAt      DateTime      @default(now())
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
 }
 
 model invoiceReciept {
@@ -174,7 +166,7 @@ model InvoiceCounter {
 model Payment {
   id                      String           @id @default(uuid())
   amount                  Decimal          @db.Money
-  type                    PaymentType      @default(PROVIDER)
+  type                    PaymentType      @default(MANUAL)
   currency                String           @default("NGN")
   paid_at                 DateTime?
   provider_transaction_id String?
@@ -265,30 +257,30 @@ model PaymentGateway {
 }
 
 model Organization {
-  id                   String                @id
-  name                 String
-  slug                 String
-  logo                 String?
-  code                 String                @unique // e.g. "ACME"
-  currency             String                @default("NGN")
-  email                String
-  phone                String?
-  address              String
-  city                 String
-  state                String?
-  postCode             String?
-  country              String
-  createdAt            DateTime
-  metadata             String?
-  invoices             Invoice[]
-  categories           Category[]
-  clients              Client[]
-  paymentGateways      PaymentGateway[]
-  members              Member[]
-  invitations          Invitation[]
-  invoiceCounters      InvoiceCounter[]
-  invoiceNotifications invoiceNotification[]
-  payments             Payment[]
+  id              String           @id
+  name            String
+  slug            String
+  logo            String?
+  code            String           @unique // e.g. "ACME"
+  currency        String           @default("NGN")
+  email           String
+  phone           String?
+  address         String
+  city            String
+  state           String?
+  postCode        String?
+  country         String
+  createdAt       DateTime
+  metadata        String?
+  invoices        Invoice[]
+  categories      Category[]
+  clients         Client[]
+  paymentGateways PaymentGateway[]
+  members         Member[]
+  invitations     Invitation[]
+  invoiceCounters InvoiceCounter[]
+  notifications   Notification[]
+  payments        Payment[]
 
   currencyPos     String           @default("left")
   currencySymbol  String
@@ -336,11 +328,4 @@ enum InvoiceStatus {
   OVERDUE   @map("overdue")
   PAID      @map("paid")
   CANCELLED @map("cancelled")
-}
-
-enum NotificationStatus {
-  // PENDING   @map("pending")
-  // CANCELLED @map("cancelled")
-  SENT   @map("sent")
-  FAILED @map("failed")
 }

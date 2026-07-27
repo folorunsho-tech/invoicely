@@ -113,7 +113,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		cell: ({ row }) => format(row.original.due_date, "dd/MM/yyyy"),
 	},
 	{
-		accessorKey: "client",
+		accessorKey: "client.name",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Client' />
 		),
@@ -127,7 +127,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		cell: ({ row }) => row.original.project_subject,
 	},
 	{
-		accessorKey: "category",
+		accessorKey: "category.name",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Category' />
 		),
@@ -265,7 +265,7 @@ export const rcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 		cell: ({ row }) => row.original.project_subject,
 	},
 	{
-		accessorKey: "category",
+		accessorKey: "category.name",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Category' />
 		),
@@ -404,7 +404,7 @@ export const tcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 		cell: ({ row }) => row.original?.project_subject,
 	},
 	{
-		accessorKey: "category",
+		accessorKey: "category.name",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Category' />
 		),

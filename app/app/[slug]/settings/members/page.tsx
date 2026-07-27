@@ -1,7 +1,37 @@
-import React from "react";
+"use client";
+import DataCards from "@/components/data-cards";
+import { DataTable } from "@/components/tables/members/Table";
+import { getOrgMembers } from "@/lib/queries/members";
+import { NumberFormatter } from "@mantine/core";
+import { useQuery } from "@tanstack/react-query";
+import { columns } from "@/components/tables/members/columns";
+import { useParams } from "next/navigation";
 
-const page = () => {
-	return <div>page</div>;
+const Page = () => {
+	const { slug }: { slug: string } = useParams();
+	const members = useQuery({
+		queryKey: ["members"],
+		queryFn: async () => {
+			return await getOrgMembers(slug);
+		},
+	});
+	return (
+		<main className='flex flex-col gap-4'>
+			<div className='@container/main flex flex-1 flex-col gap-2'>
+				<div className='flex flex-col gap-4 md:gap-6'>
+					<DataCards
+						cards={[
+							{
+								description: "Total members",
+								title: <NumberFormatter value={members.data?.total || 0} />,
+							},
+						]}
+					/>
+				</div>
+			</div>
+			<DataTable data={members.data?.members || []} columns={columns} />
+		</main>
+	);
 };
 
-export default page;
+export default Page;

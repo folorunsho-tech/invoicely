@@ -143,7 +143,7 @@ export function DataTable<TData, TValue>({
 				<DataTablePagination
 					table={table}
 					bulkTrashFn={bulkTrashFn}
-					queryKey='clients'
+					queryKey='invoices'
 					showTrashAction={true}
 				/>
 			</div>

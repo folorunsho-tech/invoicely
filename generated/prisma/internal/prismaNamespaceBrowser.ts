@@ -56,7 +56,7 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Invoice: 'Invoice',
-  invoiceNotification: 'invoiceNotification',
+  Notification: 'Notification',
   invoiceReciept: 'invoiceReciept',
   InvoiceCounter: 'InvoiceCounter',
   Payment: 'Payment',
@@ -167,22 +167,19 @@ export const InvoiceScalarFieldEnum = {
 export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
 
 
-export const InvoiceNotificationScalarFieldEnum = {
+export const NotificationScalarFieldEnum = {
   id: 'id',
-  orgId: 'orgId',
+  title: 'title',
+  description: 'description',
+  category: 'category',
   type: 'type',
-  channel: 'channel',
+  link: 'link',
   status: 'status',
-  lastError: 'lastError',
-  recipientEmail: 'recipientEmail',
-  permanentlyFailed: 'permanentlyFailed',
-  sentAt: 'sentAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  invoiceId: 'invoiceId'
+  organizationId: 'organizationId'
 } as const
 
-export type InvoiceNotificationScalarFieldEnum = (typeof InvoiceNotificationScalarFieldEnum)[keyof typeof InvoiceNotificationScalarFieldEnum]
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const InvoiceRecieptScalarFieldEnum = {

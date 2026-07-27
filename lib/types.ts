@@ -5,11 +5,13 @@ import {
 	Organization,
 	invoiceNotification,
 	invoiceReciept,
+	Category,
 } from "./../generated/prisma/client";
 type invoiceData = {
 	client: Client;
 	items: Item[];
 	organization: Organization;
+	category?: Category;
 };
 type invoiceRData = {
 	client: Client;

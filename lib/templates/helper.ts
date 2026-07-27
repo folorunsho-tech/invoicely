@@ -193,7 +193,7 @@ export function invoiceRMeta(receipt: Reciept) {
       </tr>
       <tr>
         <td style="font-size:14px;font-weight:600;color:#111827;">#${receipt.invoice.invoiceNumber}</td>
-        <td style="font-size:14px;font-weight:600;color:#111827;text-align:right;">${formatDate(receipt.invoice.paidAt || "")}</td>
+        <td style="font-size:14px;font-weight:600;color:#111827;text-align:right;">${formatDate(receipt.invoice?.paidAt || "")}</td>
       </tr>
     
       <tr><td colspan="2" style="padding-top:12px;"></td></tr>

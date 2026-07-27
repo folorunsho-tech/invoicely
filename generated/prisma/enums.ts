@@ -60,11 +60,3 @@ export const InvoiceStatus = {
 } as const
 
 export type InvoiceStatus = (typeof InvoiceStatus)[keyof typeof InvoiceStatus]
-
-
-export const NotificationStatus = {
-  SENT: 'SENT',
-  FAILED: 'FAILED'
-} as const
-
-export type NotificationStatus = (typeof NotificationStatus)[keyof typeof NotificationStatus]

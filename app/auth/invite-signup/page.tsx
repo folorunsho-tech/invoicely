@@ -1,0 +1,194 @@
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import {
+	Field,
+	FieldDescription,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import PasswordInput from "@/components/password-input";
+import { authClient } from "@/lib/auth-client";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ConfirmPasswordInput from "@/components/confirm-password";
+import toast from "@/lib/toaster";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getInvitation } from "@/lib/queries/invitations";
+
+const formSchema = z
+	.object({
+		name: z
+			.string()
+			.min(3, "Name must be at least 3 characters.")
+			.max(32, "Name must be at most 32 characters."),
+		password: z
+			.string()
+			.min(8, "Password must be at least 8 characters")
+			.max(32, "Password must be at most 32 characters."),
+		confirm_password: z
+			.string()
+			.min(8, "Password must be at least 8 characters"),
+	})
+	.refine((data) => data.password === data.confirm_password, {
+		path: ["confirm_password"],
+		message: "Passwords must match",
+	});
+export default function Page() {
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const id = searchParams.get("id");
+	const { handleSubmit, control, formState } = useForm<
+		z.infer<typeof formSchema>
+	>({
+		resolver: zodResolver(formSchema),
+		// mode: "onBlur",
+	});
+	const invitation = useQuery({
+		queryKey: [`invitation-${id}`],
+		queryFn: async () => {
+			return await getInvitation(String(id));
+		},
+	});
+	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+		await authClient.signUp.email({
+			name: values.name, // required
+			email: invitation.data?.email, // required
+			password: values.password, // required
+			fetchOptions: {
+				onError(context) {
+					toast(context.error.message, "error");
+				},
+				async onSuccess() {
+					await authClient.emailOtp.sendVerificationOtp({
+						email: invitation.data?.email,
+						type: "email-verification",
+					});
+					router.push(`/auth/invite-verify?id=${id}`);
+				},
+			},
+		});
+	};
+
+	return (
+		<div className='flex min-h-svh w-full items-center justify-center p-6 md:p-10'>
+			<div className='w-full max-w-sm'>
+				<Card>
+					<CardHeader>
+						<CardTitle>Create an account</CardTitle>
+						<CardDescription>
+							Enter your information below to create your account
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<form onSubmit={handleSubmit(onSubmit)}>
+							<FieldGroup>
+								<Controller
+									name='name'
+									control={control}
+									rules={{ required: true }}
+									render={({ field, fieldState }) => (
+										<Field data-invalid={fieldState.invalid}>
+											<FieldLabel htmlFor='name'>Full Name</FieldLabel>
+											<Input
+												{...field}
+												id='name'
+												type='text'
+												placeholder='John Doe'
+												disabled={formState.isSubmitting}
+												required
+												aria-invalid={fieldState.invalid}
+											/>
+											{fieldState.invalid && (
+												<FieldError errors={[fieldState.error]} />
+											)}
+										</Field>
+									)}
+								/>
+								<Field>
+									<FieldLabel htmlFor='email'>Email</FieldLabel>
+									<Input
+										disabled={true}
+										id='email'
+										type='email'
+										placeholder='m@example.com'
+										value={invitation.data?.email}
+									/>
+								</Field>
+								<Controller
+									name='password'
+									control={control}
+									rules={{ required: true }}
+									render={({ field, fieldState }) => (
+										<PasswordInput
+											disabled={formState.isSubmitting}
+											htmlFor='password'
+											id='password'
+											required={true}
+											label='Password'
+											data-invalid={fieldState.invalid}
+											aria-invalid={fieldState.invalid}
+											field={field}
+											fieldState={fieldState}
+										/>
+									)}
+								/>
+								<Controller
+									name='confirm_password'
+									control={control}
+									rules={{
+										required: true,
+									}}
+									render={({ field, fieldState }) => (
+										<ConfirmPasswordInput
+											disabled={formState.isSubmitting}
+											htmlFor='confirm-password'
+											id='confirm-password'
+											description='Please confirm your password.'
+											required={true}
+											label='Confirm Password'
+											data-invalid={fieldState.invalid}
+											aria-invalid={fieldState.invalid}
+											field={field}
+											fieldState={fieldState}
+										/>
+									)}
+								/>
+
+								<FieldGroup>
+									<Field>
+										<Button
+											type='submit'
+											className='cursor-pointer'
+											disabled={!formState.isValid || formState.isSubmitting}
+										>
+											Create Account
+										</Button>
+										{/* <Button variant="outline" type="button">
+                  Sign up with Google
+                </Button> */}
+										<FieldDescription className='px-6 text-center'>
+											Already have an account?{" "}
+											<Link href='/auth/signin'>Sign in</Link>
+										</FieldDescription>
+									</Field>
+								</FieldGroup>
+							</FieldGroup>
+						</form>
+					</CardContent>
+				</Card>
+			</div>
+		</div>
+	);
+}

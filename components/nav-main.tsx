@@ -18,6 +18,7 @@ export function NavMain({
 		title: string;
 		url: string;
 		icon?: React.ReactNode;
+		visible: boolean;
 	}[];
 }) {
 	const pathname = usePathname();
@@ -40,24 +41,28 @@ export function NavMain({
 					</SidebarMenuItem>
 				</SidebarMenu> */}
 				<SidebarMenu>
-					{items.map((item) => (
-						<SidebarMenuItem key={item.title}>
-							<SidebarMenuButton
-								tooltip={item.title}
-								asChild
-								isActive={
-									pathname == item.url ||
-									pathname.includes(item.title.toLocaleLowerCase())
-								}
-								className='data-active:bg-primary data-active:text-gray-50 transition duration-200 ease-in hover:bg-primary hover:text-gray-50'
-							>
-								<Link href={item.url}>
-									{item.icon}
-									<span>{item.title}</span>
-								</Link>
-							</SidebarMenuButton>
-						</SidebarMenuItem>
-					))}
+					{items.map((item) => {
+						return (
+							item.visible && (
+								<SidebarMenuItem key={item.title}>
+									<SidebarMenuButton
+										tooltip={item.title}
+										asChild
+										isActive={
+											pathname == item.url ||
+											pathname.includes(item.title.toLocaleLowerCase())
+										}
+										className='data-active:bg-primary data-active:text-gray-50 transition duration-200 ease-in hover:bg-primary hover:text-gray-50'
+									>
+										<Link href={item.url}>
+											{item.icon}
+											<span>{item.title}</span>
+										</Link>
+									</SidebarMenuButton>
+								</SidebarMenuItem>
+							)
+						);
+					})}
 				</SidebarMenu>
 			</SidebarGroupContent>
 		</SidebarGroup>

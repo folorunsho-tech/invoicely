@@ -77,11 +77,7 @@ const Page = () => {
 		const iTotal = Number(curr.rate) * curr.quantity;
 		return prev + iTotal;
 	}, 0);
-	const getStatusColor = (status: string) => {
-		if (status == "FAILED")
-			return "outline-red-500 border-red-500 text-red-500";
-		return "outline-green-500 border-green-500 text-green-500";
-	};
+
 	const getInvStatus = (status: InvoiceStatus) => {
 		if (status == "CANCELLED")
 			return "text-sm font-semibold outline-red-500 border-red-500 text-red-500";
@@ -284,53 +280,6 @@ const Page = () => {
 						queryKey='payments'
 					/>
 				</section>
-			</section>
-
-			<section className='flex flex-col gap-4 items-start max-w-full'>
-				<Label className='text-lg'>Notifications</Label>
-				<Table className='rounded-b-xl overflow-auto'>
-					<TableHeader className='bg-muted'>
-						<TableRow>
-							<TableHead>Type</TableHead>
-							<TableHead>Channel</TableHead>
-							<TableHead>Sent At</TableHead>
-							<TableHead>Status</TableHead>
-							<TableHead>Last Error</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{invoice?.notifications?.length ? (
-							<>
-								{invoice?.notifications?.map((item) => (
-									<TableRow
-										key={item.id}
-										className='relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80'
-									>
-										<TableCell>{item.type}</TableCell>
-										<TableCell>{item.channel}</TableCell>
-										<TableCell>
-											{item?.sentAt
-												? format(item?.sentAt, "dd/MM/yyyy, p")
-												: ""}
-										</TableCell>
-										<TableCell className={getStatusColor(item.status)}>
-											{item.status}
-										</TableCell>
-										<TableCell className='text-red-500'>
-											{item.lastError}
-										</TableCell>
-									</TableRow>
-								))}
-							</>
-						) : (
-							<TableRow>
-								<TableCell colSpan={5} className='h-24 text-center'>
-									No notifications sent yet.
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
 			</section>
 		</main>
 	);

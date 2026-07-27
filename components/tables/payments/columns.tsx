@@ -184,7 +184,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 					<DropdownMenuItem
 						asChild
 						className='cursor-pointer'
-						disabled={row.original.type !== "PROVIDER"}
+						disabled={row.original.type !== "MANUAL"}
 					>
 						<Link
 							href={`/app/${row.original.organization.slug}/payments/${row.original.id}/update`}

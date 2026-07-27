@@ -3,11 +3,10 @@ import { getSession, hasPermission } from "@/lib/authlibs";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import {
-	queueInvoiceReminders,
 	queueInvoiceUpdateSend,
 	removeJobsFromInvoiceQueue,
 } from "@/lib/queue";
-import { generateReminders } from "@/lib/generateReminders";
+// import { generateReminders } from "@/lib/generateReminders";
 
 export async function GET(
 	request: NextRequest,
@@ -36,7 +35,7 @@ export async function GET(
 						},
 					},
 					organization: true,
-					notifications: true,
+
 					receipts: true,
 				},
 			});
@@ -148,12 +147,12 @@ export async function PATCH(
 					String(data?.session.activeOrganizationId),
 					invoiceId,
 				);
-				const reminders = generateReminders(
-					updated.due_date,
-					invoiceId,
-					String(data?.session.activeOrganizationId),
-				);
-				await queueInvoiceReminders(reminders);
+				// const reminders = generateReminders(
+				// 	updated.due_date,
+				// 	invoiceId,
+				// 	String(data?.session.activeOrganizationId),
+				// );
+				// await queueInvoiceReminders(reminders);
 			}
 			if (updated) {
 				return NextResponse.json(updated, {

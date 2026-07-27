@@ -1,4 +1,5 @@
-import { PaymentUpdateInput } from "@/generated/prisma/models";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import toast from "../toaster";
 
 const apiUrl = process.env.API_URL || "http://localhost:3000/api/";
@@ -102,7 +103,6 @@ export const restorePayments = async (ids: { id: string }[]) => {
 
 	return data;
 };
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const postPayment = async (data: any) => {
 	const options = {
 		method: "POST",
@@ -125,7 +125,7 @@ export const updatePayment = async ({
 	data,
 	id,
 }: {
-	data: PaymentUpdateInput;
+	data: any;
 	id: string;
 }) => {
 	const options = {
@@ -160,5 +160,25 @@ export const initTransaction = async (invoiceId: string) => {
 	// 	// console.log("init tnx func: ", res);
 	// 	throw new Error(`HTTP error! Status: ${response.status}`);
 	// }
+	return res;
+};
+export const sendReceipt = async (paymentId: string) => {
+	const options = {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ paymentId }),
+	};
+	const response = await fetch(
+		apiUrl + `${url}/${paymentId}/send-receipt`,
+		options,
+	);
+	const res = await response.json();
+	if (!response.ok) {
+		toast(response.statusText, "error");
+		throw new Error(`HTTP error! Status: ${response.status}`);
+	}
+	toast(response.statusText, "success");
 	return res;
 };

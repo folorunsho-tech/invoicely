@@ -27,7 +27,7 @@ export async function GET() {
 						},
 					},
 					client: true,
-					notifications: true,
+
 					organization: {
 						select: {
 							slug: true,

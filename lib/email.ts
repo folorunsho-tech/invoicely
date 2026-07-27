@@ -10,6 +10,7 @@ import {
 	invoiceUpdatedTemplate,
 } from "./templates";
 import { InvoiceNotificationType } from "@/generated/prisma/enums";
+import { invitationTemplate } from "./templates/invitation";
 
 export const transporter = nodemailer.createTransport({
 	host: process.env.SMTP_HOST,
@@ -28,7 +29,7 @@ export async function sendEmail(options: {
 }) {
 	try {
 		const info = await transporter.sendMail({
-			from: `${options.from}@${process.env.SMTP_FROM}`,
+			from: `${options.from} <${process.env.SMTP_FROM}>`,
 			to: options.to,
 			subject: options.subject,
 			html: options.html,
@@ -57,10 +58,11 @@ export async function sendEmail(options: {
 		}
 	}
 }
-const APP_URL = process.env.APP_URL || "http://invoicely.tacheyon.com";
+const APP_URL = process.env.APP_URL || "https://invoicely.tacheyon.com";
 function paymentUrl(invoice: Invoice) {
 	return `${APP_URL}/invoice/${invoice.id}/pay`;
 }
+
 export const sendInvoiceEmail = async ({
 	to,
 	invoice,
@@ -98,7 +100,7 @@ export const sendRecieptEmail = async ({
 		to,
 		subject,
 		html,
-		from: receipt.invoice?.organization?.name,
+		from: `Receipt-${receipt.invoice?.organization?.name}`,
 	});
 };
 
@@ -122,6 +124,7 @@ export const sendInvoiceUpdatedEmail = async ({
 		from: invoice?.organization?.name,
 	});
 };
+
 export const sendCancellationEmail = async ({
 	to,
 	invoice,
@@ -141,6 +144,7 @@ export const sendCancellationEmail = async ({
 		from: invoice?.organization?.name,
 	});
 };
+
 export const sendReminderEmail = async ({
 	to,
 	invoice,
@@ -167,5 +171,37 @@ export const sendReminderEmail = async ({
 		subject,
 		html,
 		from: invoice?.organization?.name,
+	});
+};
+
+export const sendOrganizationInvitation = async ({
+	email,
+	invitedByUsername,
+	// invitedByEmail,
+	inviteLink,
+	expiresIn,
+	companyName,
+	role,
+}: {
+	email: string;
+	invitedByUsername: string;
+	// invitedByEmail: string;
+	inviteLink: string;
+	expiresIn: number;
+	companyName: string;
+	role: string;
+}) => {
+	const { subject, html } = invitationTemplate({
+		inviterName: invitedByUsername,
+		companyName,
+		inviteUrl: inviteLink,
+		expiresInDays: expiresIn,
+		role,
+	});
+	return await sendEmail({
+		to: email,
+		subject,
+		html,
+		from: companyName,
 	});
 };

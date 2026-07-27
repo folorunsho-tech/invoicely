@@ -6,12 +6,6 @@ export const redisConnection = {
 };
 const invoiceQueue = new Queue("invoice-queue", {
 	connection: redisConnection,
-	defaultJobOptions: {
-		attempts: 3,
-		backoff: { type: "exponential", delay: 5000 },
-		removeOnComplete: { count: 100 },
-		removeOnFail: { count: 100 },
-	},
 });
 
 export async function queueInvoiceSend(
@@ -26,8 +20,27 @@ export async function queueInvoiceSend(
 		},
 		{
 			attempts: 3,
-			backoff: { type: "exponential", delay: 5000 },
+			backoff: { type: "exponential", delay: 1000 },
 			jobId: `send-invoice-${invoiceId}`,
+			removeOnComplete: true,
+			removeOnFail: true,
+		},
+	);
+}
+export async function queueInvoiceResend(
+	organizationId: string,
+	invoiceId: string,
+) {
+	return await invoiceQueue.add(
+		"resend-invoice",
+		{
+			invoiceId,
+			organizationId,
+		},
+		{
+			attempts: 3,
+			backoff: { type: "exponential", delay: 1000 },
+			jobId: `resend-invoice-${invoiceId}`,
 			removeOnComplete: true,
 			removeOnFail: true,
 		},
@@ -45,7 +58,7 @@ export async function queueInvoiceReciept(
 		},
 		{
 			attempts: 3,
-			backoff: { type: "exponential", delay: 5000 },
+			backoff: { type: "exponential", delay: 1000 },
 			jobId: `send-invoice-receipt-${receiptId}`,
 			removeOnComplete: true,
 			removeOnFail: true,
@@ -65,7 +78,7 @@ export async function queueInvoiceUpdateSend(
 		},
 		{
 			attempts: 3,
-			backoff: { type: "exponential", delay: 5000 },
+			backoff: { type: "exponential", delay: 3000 },
 			jobId: `send-invoice-update-${invoiceId}`,
 			removeOnComplete: true,
 			removeOnFail: true,
@@ -85,7 +98,7 @@ export async function queueInvoiceCancellation(
 		},
 		{
 			attempts: 5,
-			backoff: { type: "exponential", delay: 2000 },
+			backoff: { type: "exponential", delay: 1000 },
 			removeOnComplete: true,
 			removeOnFail: true,
 		},

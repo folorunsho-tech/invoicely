@@ -17,6 +17,7 @@ type PermissionSchema = {
 	category?: OneOrMore<CrudPermission>;
 	payment?: OneOrMore<CrudPermission>;
 	settings?: OneOrMore<CrudPermission>;
+	notifications?: OneOrMore<"read" | "delete" | "update">;
 	report?: OneOrMore<"read">;
 	organization?: OneOrMore<"update" | "delete">;
 	member?: OneOrMore<"create" | "update" | "delete">;

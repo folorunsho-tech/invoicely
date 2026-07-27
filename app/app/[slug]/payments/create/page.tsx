@@ -303,7 +303,7 @@ const Page = () => {
 												onChange={(d) => {
 													setPaidAt(d);
 												}}
-												required
+												required={true}
 												disabled={formState.isSubmitting}
 											/>
 										</Field>

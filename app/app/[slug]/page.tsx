@@ -1,4 +1,5 @@
 import { ChartAreaInteractive } from "@/components/chart-area-interactive";
+import { ChartBarInteractive } from "@/components/chart-bar-interactive";
 import { SectionCards } from "@/components/section-cards";
 const page = () => {
 	return (
@@ -8,6 +9,7 @@ const page = () => {
 					<SectionCards />
 					<div className='px-4 lg:px-6'>
 						<ChartAreaInteractive />
+						<ChartBarInteractive />
 					</div>
 				</div>
 			</div>

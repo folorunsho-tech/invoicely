@@ -1,13 +1,12 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserCog, Bell, CommandIcon, LogOut } from "lucide-react";
+import { UserCog, CommandIcon, LogOut } from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuGroup,
 	DropdownMenuItem,
-	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -46,16 +45,6 @@ export function HomeHeader({ pageTitle }: { pageTitle?: string }) {
 				</div>
 
 				<div className='flex items-center gap-4'>
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant='outline'>
-								<Bell />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent className='w-60' align='center'>
-							<DropdownMenuLabel>Notifications</DropdownMenuLabel>
-						</DropdownMenuContent>
-					</DropdownMenu>
 					<div className='flex gap-2 items-center'>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
@@ -66,9 +55,7 @@ export function HomeHeader({ pageTitle }: { pageTitle?: string }) {
 								>
 									<Avatar className='h-8 w-8 rounded-lg grayscale'>
 										<AvatarImage src={user.avatar || ""} alt={user.name} />
-										<AvatarFallback className='rounded-lg'>
-											{user.fallback}
-										</AvatarFallback>
+										<AvatarFallback>{user.fallback}</AvatarFallback>
 									</Avatar>
 								</Button>
 							</DropdownMenuTrigger>

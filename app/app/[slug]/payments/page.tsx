@@ -11,14 +11,15 @@ import { authClient } from "@/lib/auth-client";
 const Page = () => {
 	const { data: org } = authClient.useActiveOrganization();
 	const res = useQuery({
-		queryKey: ["clients"],
+		queryKey: ["payments"],
 		queryFn: async () => {
 			return await getPayments();
 		},
 	});
 	const payments: any[] = res.data;
-	const total = payments?.reduce((prev, curr) => {
-		return prev + Number(curr.amount);
+	const succesful = payments?.filter((p) => p?.status == "Successful");
+	const total = succesful?.reduce((prev, curr) => {
+		return prev + Number(curr?.amount);
 	}, 0);
 	return (
 		<main className='flex flex-col gap-4'>

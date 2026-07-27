@@ -80,7 +80,7 @@ export function invoiceSentTemplate({
 
     <p style="margin:0;font-size:13px;color:#9ca3af;line-height:1.6;">
       Payment is due by <strong style="color:#374151;">${formatDate(invoice.due_date)}</strong>.
-      If you have questions about this invoice, reply to this email.
+      If you have questions about this invoice, contact support.
     </p>
   `;
 
@@ -125,7 +125,7 @@ export function invoiceUpdatedTemplate({
 
     <p style="margin:0;font-size:13px;color:#9ca3af;line-height:1.6;">
       Payment is due by <strong style="color:#374151;">${formatDate(invoice.due_date)}</strong>.
-      If you have questions about this invoice, reply to this email.
+      If you have questions about this invoice, contact support.
     </p>
   `;
 
@@ -174,7 +174,7 @@ export function invoiceCancellationTemplate({
 
 
     <p style="margin:24px 0 0;font-size:13px;color:#9ca3af;line-height:1.6;">
-      If you believe this is a mistake or have questions, please reply to this email.
+      If you believe this is a mistake or have questions, contact support.
     </p>
   `;
 

@@ -13,6 +13,7 @@ const statement = {
 	payment: ["read", "create", "update", "delete"],
 	settings: ["read", "create", "update", "delete"],
 	analytics: ["read"],
+	notifications: ["read", "update", "delete"],
 } as const;
 export const ac = createAccessControl(statement);
 
@@ -24,6 +25,7 @@ export const owner = ac.newRole({
 	analytics: ["read"],
 	category: ["read", "create", "update", "delete"],
 	settings: ["read", "create", "update", "delete"],
+	notifications: ["read", "update", "delete"],
 });
 export const admin = ac.newRole({
 	...adminAc.statements,
@@ -33,6 +35,7 @@ export const admin = ac.newRole({
 	analytics: ["read"],
 	category: ["read", "create", "update", "delete"],
 	settings: ["read", "create", "update", "delete"],
+	notifications: ["read", "update", "delete"],
 });
 export const member = ac.newRole({
 	...memberAc.statements,
@@ -41,6 +44,7 @@ export const member = ac.newRole({
 	analytics: ["read"],
 	category: ["read"],
 	payment: ["read"],
+	notifications: ["read"],
 });
 export const editor = ac.newRole({
 	...memberAc.statements,
@@ -49,4 +53,5 @@ export const editor = ac.newRole({
 	payment: ["read", "create", "update"],
 	category: ["read", "create", "update"],
 	analytics: ["read"],
+	notifications: ["read", "update", "delete"],
 });

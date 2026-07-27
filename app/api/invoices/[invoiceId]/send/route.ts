@@ -1,6 +1,6 @@
 import { getSession, hasPermission } from "@/lib/authlibs";
-import { sendInvoiceEmail } from "@/lib/email";
 import { prisma } from "@/lib/prisma";
+import { queueInvoiceResend } from "@/lib/queue";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
@@ -24,31 +24,27 @@ export async function POST(
 					client: true,
 					organization: true,
 					items: true,
-					notifications: true,
 				},
 			});
-			const response = await sendInvoiceEmail({
-				to: invoice?.client.email,
-				invoice,
-			});
-
-			if (response.success) {
-				await prisma.invoiceNotification.create({
-					data: {
-						invoiceId,
-						orgId: String(data?.session.activeOrganizationId),
-						recipientEmail: String(invoice?.client?.email),
-						sentAt: new Date(),
+			if (invoice) {
+				await queueInvoiceResend(
+					String(data?.session.activeOrganizationId),
+					invoice.id,
+				);
+				return NextResponse.json(
+					{ success: true, message: "invoice queued for sending" },
+					{
+						status: 200,
+						statusText: "invoice sent successfully",
 					},
-				});
-				return NextResponse.json(response, {
-					status: 200,
-					statusText: "invoice sent successfully",
-				});
+				);
 			} else {
-				return NextResponse.json(response, {
-					statusText: "error sending invoice",
-				});
+				return NextResponse.json(
+					{ success: false, message: "error queueing invoice for sending" },
+					{
+						statusText: "error sending invoice",
+					},
+				);
 			}
 		} catch (error) {
 			console.log(error);

@@ -2,19 +2,41 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "@better-auth/prisma-adapter";
 import { prisma } from "./prisma";
 import { emailOTP } from "better-auth/plugins";
-import { transporter } from "./email";
+import { transporter, sendOrganizationInvitation } from "./email";
 import { organization } from "better-auth/plugins";
 import { ac, owner, admin, member, editor } from "@/lib/permissions";
 export const auth = betterAuth({
 	database: prismaAdapter(prisma, { provider: "postgresql" }),
 	baseURL: process.env.BETTER_AUTH_URL,
-	emailAndPassword: { enabled: true },
+	emailAndPassword: {
+		enabled: true,
+		sendResetPassword: async ({ user, url }) => {
+			void transporter.sendMail({
+				to: user.email,
+				subject: "Reset your password",
+				text: `Click the link to reset your password: ${url}`,
+				from: process.env.SMTP_FROM,
+			});
+		},
+	},
 	advanced: {
 		cookiePrefix: "invoicely",
 	},
 
 	plugins: [
 		organization({
+			async sendInvitationEmail(data) {
+				const inviteLink = `${process.env.APP_URL}/accept-invitation/${data.id}`;
+				sendOrganizationInvitation({
+					email: data.email,
+					invitedByUsername: data.inviter.user.name,
+					// invitedByEmail: data.inviter.user.email,
+					inviteLink,
+					expiresIn: 2,
+					companyName: data.organization.name,
+					role: data.role,
+				});
+			},
 			schema: {
 				organization: {
 					additionalFields: {

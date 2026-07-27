@@ -27,19 +27,16 @@ export default function InputOTPForm() {
 	const [value, setValue] = useState("");
 	const [invalid, setInvalid] = useState<boolean>(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [seconds, setSeconds] = useState(0);
-	const interval = useInterval(() => setSeconds((s) => s + 1), 1000, {
+	const [seconds, setSeconds] = useState(60);
+	const interval = useInterval(() => setSeconds((s) => s - 1), 1000, {
 		autoInvoke: true,
 	});
-	// const timeout = useTimeout(() => {
-	// 	interval.stop();
-	// 	setSeconds(0);
-	// }, 60000);
 
 	useEffect(() => {
-		if (seconds >= 60) {
+		if (seconds == 0) {
 			interval.stop();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [seconds]);
 	const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -96,7 +93,7 @@ export default function InputOTPForm() {
 								size='xs'
 								type='button'
 								onClick={async () => {
-									setSeconds(0);
+									setSeconds(60);
 									interval.start();
 									// timeout.start();
 									await authClient.sendVerificationEmail({

@@ -43,10 +43,10 @@ export type Verification = Prisma.VerificationModel
  */
 export type Invoice = Prisma.InvoiceModel
 /**
- * Model invoiceNotification
+ * Model Notification
  * 
  */
-export type invoiceNotification = Prisma.invoiceNotificationModel
+export type Notification = Prisma.NotificationModel
 /**
  * Model invoiceReciept
  * 

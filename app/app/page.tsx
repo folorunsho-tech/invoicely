@@ -20,7 +20,6 @@ import { authClient } from "@/lib/auth-client";
 const Page = () => {
 	const { data: organizations } = authClient.useListOrganizations();
 	const router = useRouter();
-
 	return (
 		<>
 			<HomeHeader />
