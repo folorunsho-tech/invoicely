@@ -20,11 +20,6 @@ export async function GET(
 					orgId: String(data?.session.activeOrganizationId),
 				},
 				include: {
-					gateway: {
-						select: {
-							provider: true,
-						},
-					},
 					invoice: {
 						include: {
 							client: true,
@@ -99,11 +94,6 @@ export async function PATCH(
 					},
 				},
 				include: {
-					gateway: {
-						select: {
-							provider: true,
-						},
-					},
 					invoice: {
 						include: {
 							client: true,

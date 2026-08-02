@@ -30,8 +30,23 @@ export async function GET(
 					client: true,
 					payments: {
 						include: {
-							gateway: true,
-							organization: true,
+							organization: {
+								select: {
+									slug: true,
+									currencySymbol: true,
+								},
+							},
+							invoice: {
+								select: {
+									invoiceNumber: true,
+									client: {
+										select: {
+											name: true,
+											email: true,
+										},
+									},
+								},
+							},
 						},
 					},
 					organization: true,

@@ -26,18 +26,7 @@ export default function SetingsLayout({
 						<Link href={`/app/${slug}/settings`}>Profile</Link>
 					</NavigationMenuLink>
 				</NavigationMenuItem>
-				<NavigationMenuItem>
-					<NavigationMenuLink
-						asChild
-						active={
-							nav == `/app/${slug}/settings/payments` ||
-							nav.includes(`/app/${slug}/settings/payments`)
-						}
-						className='data-active:border-b-2 data-active:border-purple-500 rounded-none'
-					>
-						<Link href={`/app/${slug}/settings/payments`}>Payments</Link>
-					</NavigationMenuLink>
-				</NavigationMenuItem>
+
 				<NavigationMenuItem>
 					<NavigationMenuLink
 						asChild
@@ -56,7 +45,7 @@ export default function SetingsLayout({
 						<Link href={`/app/${slug}/settings/members`}>Members</Link>
 					</NavigationMenuLink>
 				</NavigationMenuItem>
-				<NavigationMenuItem>
+				{/* <NavigationMenuItem>
 					<NavigationMenuLink
 						asChild
 						active={nav == `/app/${slug}/settings/email`}
@@ -64,7 +53,7 @@ export default function SetingsLayout({
 					>
 						<Link href={`/app/${slug}/settings/email`}>Email</Link>
 					</NavigationMenuLink>
-				</NavigationMenuItem>
+				</NavigationMenuItem> */}
 			</NavigationMenu>
 			{children}
 		</main>

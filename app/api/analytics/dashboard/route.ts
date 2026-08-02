@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getSession, hasPermission } from "@/lib/authlibs";
 
 export const GET = async () => {
@@ -24,7 +24,7 @@ export const GET = async () => {
 			const revenue = await prisma.payment.findMany({
 				where: {
 					orgId: organizationId,
-					status: "Successful",
+					status: "success",
 				},
 				select: {
 					amount: true,
@@ -33,27 +33,18 @@ export const GET = async () => {
 			const revSum = revenue?.reduce((prev, next) => {
 				return prev + Number(next.amount);
 			}, 0);
-			if (clients && invoices && revenue) {
-				return NextResponse.json(
-					{
-						clients,
-						invoices,
-						revenue: revSum,
-					},
-					{
-						status: 200,
-						statusText: "Request successful",
-					},
-				);
-			} else {
-				return NextResponse.json(
-					{ clients, invoices, revenue: revSum },
-					{
-						status: 400,
-						statusText: "Error getting dashboard data",
-					},
-				);
-			}
+
+			return NextResponse.json(
+				{
+					clients,
+					invoices,
+					revenue: revSum,
+				},
+				{
+					status: 200,
+					statusText: "Request successful",
+				},
+			);
 		} catch (error) {
 			console.log(error);
 			return NextResponse.json(error, {

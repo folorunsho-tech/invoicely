@@ -25,6 +25,7 @@ export const auth = betterAuth({
 
 	plugins: [
 		organization({
+			allowUserToCreateOrganization: false,
 			async sendInvitationEmail(data) {
 				const inviteLink = `${process.env.APP_URL}/accept-invitation/${data.id}`;
 				sendOrganizationInvitation({

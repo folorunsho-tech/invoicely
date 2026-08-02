@@ -17,24 +17,16 @@ import { Button } from "./ui/button";
 import { authClient } from "@/lib/auth-client";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-	getNotifications,
-	markNotification,
-} from "@/lib/queries/notifications";
-import { Notification } from "@/generated/prisma/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { markNotification } from "@/lib/queries/notifications";
+
 import { Label } from "./ui/label";
 import { FieldDescription } from "./ui/field";
+import { useNotifications } from "@/hooks/use-notifications";
 export function SiteHeader() {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 
-	const res = useQuery({
-		queryKey: ["unread-notifications"],
-		queryFn: async () => {
-			return await getNotifications();
-		},
-	});
 	const mutation = useMutation({
 		mutationFn: markNotification,
 		onSuccess: () => {
@@ -51,13 +43,8 @@ export function SiteHeader() {
 		avatar: session?.user.image,
 		fallback: session?.user.name.substring(0, 2).toUpperCase(),
 	};
-	const notifications: Notification[] = res?.data;
-	const getNotColor = (not: Notification) => {
-		if (not.type == "error" || not.type == "cancelled")
-			return "text-xs text-red-500";
-		if (not.type == "success") return "text-xs text-green-500";
-		if (not.type == "info") return "text-xs text-orange-500";
-	};
+	const { notifications, markOneRead } = useNotifications();
+
 	return (
 		<header className='flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)'>
 			<div className='flex w-full items-center justify-between gap-1 px-4 lg:gap-2 lg:px-6'>
@@ -101,7 +88,7 @@ export function SiteHeader() {
 										</DropdownMenuCheckboxItem>
 									))}
 								</DropdownMenuGroup>
-								<DropdownMenuSeparator />
+								{/* <DropdownMenuSeparator />
 								<DropdownMenuGroup>
 									<DropdownMenuItem asChild className='cursor-pointer'>
 										<Link href='/app'>All Businesess</Link>
@@ -111,7 +98,7 @@ export function SiteHeader() {
 									<DropdownMenuItem asChild className='cursor-pointer'>
 										<Link href='/app/new-business'>+ New Business</Link>
 									</DropdownMenuItem>
-								</DropdownMenuGroup>
+								</DropdownMenuGroup> */}
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
@@ -124,7 +111,7 @@ export function SiteHeader() {
 								<Bell />
 								{notifications?.length > 0 && (
 									<span className='absolute border-2 -top-2 right-0 bg-red-500 px-1.5 py-0.5 z-50 text-xs rounded-full text-gray-50'>
-										2
+										{notifications?.length}
 									</span>
 								)}
 							</Button>
@@ -132,7 +119,7 @@ export function SiteHeader() {
 						<DropdownMenuContent className='w-60' align='center'>
 							<DropdownMenuLabel>Notifications</DropdownMenuLabel>
 							<DropdownMenuSeparator />
-							<DropdownMenuGroup>
+							<DropdownMenuGroup className='overflow-y-auto max-h-60 w-60'>
 								{notifications?.length > 0 &&
 									notifications?.map((not) => (
 										<DropdownMenuItem
@@ -140,6 +127,7 @@ export function SiteHeader() {
 											asChild
 											className='cursor-pointer '
 											onClick={async () => {
+												markOneRead(not.id);
 												mutation.mutate({ id: not.id });
 											}}
 										>
@@ -147,7 +135,7 @@ export function SiteHeader() {
 												className='flex flex-col gap-1 '
 												href={not.link ? `/app/${slug}/${not.link}` : "#"}
 											>
-												<Label className={getNotColor(not)}>{not.title}</Label>
+												<Label className='text-xs'>{not.title}</Label>
 												<FieldDescription className='text-xs'>
 													{not.description}
 												</FieldDescription>
@@ -162,8 +150,11 @@ export function SiteHeader() {
 							</DropdownMenuGroup>
 							<DropdownMenuSeparator />
 							{notifications?.length > 0 && (
-								<DropdownMenuGroup className='cursor-pointer justify-center flex'>
-									<DropdownMenuItem className='cursor-pointer'>
+								<DropdownMenuGroup>
+									<DropdownMenuItem
+										asChild
+										className='cursor-pointer flex justify-center'
+									>
 										<Link href={`/app/${slug}/notifications`}>View All</Link>
 									</DropdownMenuItem>
 								</DropdownMenuGroup>

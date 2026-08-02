@@ -20,7 +20,7 @@ export async function queueInvoiceSend(
 		},
 		{
 			attempts: 3,
-			backoff: { type: "exponential", delay: 1000 },
+			backoff: { type: "exponential" },
 			jobId: `send-invoice-${invoiceId}`,
 			removeOnComplete: true,
 			removeOnFail: true,
@@ -58,7 +58,7 @@ export async function queueInvoiceReciept(
 		},
 		{
 			attempts: 3,
-			backoff: { type: "exponential", delay: 1000 },
+			backoff: { type: "exponential" },
 			jobId: `send-invoice-receipt-${receiptId}`,
 			removeOnComplete: true,
 			removeOnFail: true,
@@ -78,7 +78,7 @@ export async function queueInvoiceUpdateSend(
 		},
 		{
 			attempts: 3,
-			backoff: { type: "exponential", delay: 3000 },
+			backoff: { type: "exponential" },
 			jobId: `send-invoice-update-${invoiceId}`,
 			removeOnComplete: true,
 			removeOnFail: true,
@@ -98,7 +98,27 @@ export async function queueInvoiceCancellation(
 		},
 		{
 			attempts: 5,
-			backoff: { type: "exponential", delay: 1000 },
+			backoff: { type: "exponential" },
+			jobId: `send-cancellation-${invoiceId}`,
+			removeOnComplete: true,
+			removeOnFail: true,
+		},
+	);
+}
+export async function queueInvoicePayment(
+	organizationId: string,
+	paymentId: string,
+) {
+	return await invoiceQueue.add(
+		"send-invoice-payment",
+		{
+			paymentId,
+			organizationId,
+		},
+		{
+			attempts: 5,
+			backoff: { type: "exponential" },
+			jobId: `send-invoice-payment-${paymentId}`,
 			removeOnComplete: true,
 			removeOnFail: true,
 		},

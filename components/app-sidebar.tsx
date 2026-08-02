@@ -20,7 +20,7 @@ import {
 	Group,
 	Settings,
 	BanknoteArrowDown,
-	ChartColumn,
+	// ChartColumn,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -59,12 +59,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			visible: true,
 			icon: <BanknoteArrowDown />,
 		},
-		{
-			title: "Analytics",
-			url: `/app/${slug}/analytics`,
-			icon: <ChartColumn />,
-			visible: true,
-		},
+		// {
+		// 	title: "Analytics",
+		// 	url: `/app/${slug}/analytics`,
+		// 	icon: <ChartColumn />,
+		// 	visible: true,
+		// },
 		{
 			title: "Categories",
 			url: `/app/${slug}/categories`,

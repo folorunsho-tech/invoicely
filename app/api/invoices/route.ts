@@ -1,11 +1,10 @@
 import { InvoiceStatus } from "@/generated/prisma/enums";
 import { getSession, hasPermission } from "@/lib/authlibs";
-import { generateReminders } from "@/lib/generateReminders";
 import { generateInvoiceNumber } from "@/lib/invoiceNumberGen";
 import { prisma } from "@/lib/prisma";
-import { queueInvoiceReminders, queueInvoiceSend } from "@/lib/queue";
+import { queueInvoiceSend } from "@/lib/queue";
 import { NextRequest, NextResponse } from "next/server";
-export async function GET() {
+export async function GET(request: NextRequest) {
 	const data = await getSession();
 	const isPermitted = await hasPermission({
 		invoice: ["read"],
@@ -27,7 +26,6 @@ export async function GET() {
 						},
 					},
 					client: true,
-
 					organization: {
 						select: {
 							slug: true,

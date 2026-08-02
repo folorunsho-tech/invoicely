@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { HomeHeader } from "@/components/home-header";
 import { SearchIcon } from "lucide-react";
@@ -6,7 +7,7 @@ import {
 	InputGroupAddon,
 	InputGroupInput,
 } from "@/components/ui/input-group";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardDescription,
@@ -14,12 +15,24 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+// import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { authClient } from "@/lib/auth-client";
+import { useEffect } from "react";
 const Page = () => {
 	const { data: organizations } = authClient.useListOrganizations();
 	const router = useRouter();
+	const setActiveOrg = async () => {
+		if (organizations) {
+			const { data } = await authClient.organization.setActive({
+				organizationId: organizations[0]?.id,
+			});
+			router.push(`/app/${data?.slug}`);
+		}
+	};
+	useEffect(() => {
+		setActiveOrg();
+	}, [organizations]);
 	return (
 		<>
 			<HomeHeader />
@@ -32,21 +45,16 @@ const Page = () => {
 							<SearchIcon />
 						</InputGroupAddon>
 					</InputGroup>
-					<Button size='sm' asChild className='cursor-pointer'>
+					{/* <Button size='sm' asChild className='cursor-pointer'>
 						<Link href='/app/new-business'>+ New Business</Link>
-					</Button>
+					</Button> */}
 				</section>
 				<section>
 					{organizations?.map((org) => {
 						return (
 							<Card
 								key={org.id}
-								onClick={async () => {
-									const { data } = await authClient.organization.setActive({
-										organizationId: org?.id,
-									});
-									router.push(`/app/${data?.slug}`);
-								}}
+								onClick={setActiveOrg}
 								size='sm'
 								className='w-full max-w-sm cursor-pointer'
 							>

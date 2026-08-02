@@ -1,7 +1,7 @@
-import { createClient } from "@redis/client";
+import { createClient } from "redis";
 
-export const client = createClient({
+const init = createClient({
 	// url: process.env.REDIS_URL,
-})
-	.on("error", (err) => console.log("Redis Client Error", err))
-	.connect();
+}).on("error", (err) => console.log("Redis Client Error", err));
+
+export const client = await init.connect();

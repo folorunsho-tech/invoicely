@@ -1,17 +1,8 @@
+import { initTnx } from "@/lib/paykit";
 import { prisma } from "@/lib/prisma";
-import { client } from "@/lib/redis";
+import { queueInvoicePayment, queueInvoiceReciept } from "@/lib/queue";
 import { NextRequest, NextResponse } from "next/server";
 
-const api = "https://api.paystack.co/transaction/initialize";
-const channels = [
-	"card",
-	"bank",
-	"ussd",
-	"qr",
-	"mobile_money",
-	"bank_transfer",
-];
-// const callback = "http://localhost/invoice/status/";
 export async function POST(request: NextRequest) {
 	const { invoiceId }: { invoiceId: string } = await request.json();
 	try {
@@ -27,135 +18,65 @@ export async function POST(request: NextRequest) {
 				client: {
 					select: {
 						email: true,
+						name: true,
+						address: true,
+						country: true,
+						state: true,
 					},
 				},
-				organization: {
-					select: {
-						paymentGateways: {
-							where: {
-								provider: "Paystack",
-							},
-						},
-					},
-				},
+				currency: true,
+				status: true,
 			},
 		});
-		if (invoice) {
-			const is_live = invoice.organization.paymentGateways[0]?.is_live;
-			const liveSecretKey =
-				invoice.organization.paymentGateways[0]?.live_secret_key;
-			if (process.env.NODE_ENV === "production") {
-				const paystackRes = await fetch(api, {
-					method: "POST",
-					body: JSON.stringify({
-						email: invoice?.client.email,
-						amount: Number(invoice?.total),
-						channels,
-					}),
-					headers: {
-						Authorization: `Bearer ${liveSecretKey}`,
-						"Content-Type": "application/json",
+		if (invoice && invoice?.status !== "PAID") {
+			const res = await initTnx({
+				amount: Number(invoice.total),
+				email: invoice.client.email,
+				invoiceId: invoice.id,
+				currency: invoice.currency,
+			});
+			if (res) {
+				const payment = await prisma.payment.create({
+					data: {
+						invoiceId,
+						reference: res.reference,
+						accessCode: res.accessCode,
+						orgId: invoice.organizationId,
+						amount: invoice.total,
+						provider: res.provider,
 					},
 				});
-				const res: {
-					status: boolean;
-					message: string;
+				const receipt = await prisma.invoiceReciept.create({
 					data: {
-						authorization_url: string;
-						access_code: string;
-						reference: string;
-					};
-				} = await paystackRes.json();
-				if (res?.status) {
-					await (
-						await client
-					).set(`paystackRef:${res.data.reference}`, res.data.access_code);
-					const reference = await (
-						await client
-					).get(`paystackRef:${res.data.reference}`);
-					return NextResponse.json(
-						{
-							reference,
-							message: res?.message,
-							status: res?.status,
-						},
-						{
-							status: 201,
-							statusText: "Transaction initialized",
-						},
-					);
-				} else {
-					return NextResponse.json(
-						{
-							reference: null,
-							message: res?.message,
-							status: res?.status,
-						},
-						{
-							status: 400,
-							statusText: "Transaction failed to initialise",
-						},
-					);
-				}
-			} else if (!is_live) {
-				const testSecretKey =
-					invoice.organization.paymentGateways[0]?.test_secret_key;
-				const paystackRes = await fetch(api, {
-					method: "POST",
-					body: JSON.stringify({
-						email: invoice?.client.email,
-						amount: invoice?.total,
-						channels,
-						// callback_url: callback + invoice.id,
-					}),
-					headers: {
-						Authorization: `Bearer ${testSecretKey}`,
-						"Content-Type": "application/json",
+						invoiceId,
+						paymentId: payment.id,
+						orgId: payment.orgId,
 					},
 				});
-
-				const res: {
-					status: boolean;
-					message: string;
-					data: {
-						authorization_url: string;
-						access_code: string;
-						reference: string;
-					};
-				} = await paystackRes.json();
-				if (res?.status) {
-					await (
-						await client
-					).set(`paystackRef:${res.data.reference}`, res.data.access_code);
-					const reference = await (
-						await client
-					).get(`paystackRef:${res.data.reference}`);
-					return NextResponse.json(
-						{
-							reference,
-							message: res?.message,
-							status: res?.status,
-						},
-						{
-							status: 201,
-							statusText: "Transaction initialized",
-						},
-					);
-				} else {
-					return NextResponse.json(
-						{
-							reference: null,
-							message: res?.message,
-							status: res?.status,
-						},
-						{
-							status: 400,
-							statusText: "Transaction failed to initialise",
-						},
-					);
-				}
+				await queueInvoicePayment(payment.orgId, payment.id);
+				await queueInvoiceReciept(receipt.orgId, receipt.id);
+				return NextResponse.json(
+					{
+						success: true,
+						error: null,
+						payment,
+						redirectUrl: res.authorizationUrl,
+					},
+					{
+						status: 200,
+						statusText: "Invoice has been paid",
+					},
+				);
 			}
-		} else {
+		} else if (invoice?.status == "PAID") {
+			return NextResponse.json(
+				{ success: true, error: null },
+				{
+					status: 200,
+					statusText: "Invoice has been paid",
+				},
+			);
+		} else if (!invoice) {
 			return NextResponse.json(
 				{ success: false, error: "Invoice does not exist" },
 				{

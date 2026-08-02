@@ -1,7 +1,6 @@
 import { z } from "zod";
 export const schema = z.object({
 	id: z.string(),
-	type: z.string(),
 	amount: z.string(),
 	provider_transaction_id: z.string().nullable(),
 	status: z.string(),
@@ -15,9 +14,7 @@ export const schema = z.object({
 			email: z.email(),
 		}),
 	}),
-	gateway: z.object({
-		provider: z.string(),
-	}),
+	provider: z.string(),
 	organization: z.object({
 		slug: z.string(),
 		currencySymbol: z.string(),

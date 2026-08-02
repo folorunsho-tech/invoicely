@@ -156,11 +156,11 @@ export const initTransaction = async (invoiceId: string) => {
 	};
 	const response = await fetch(apiUrl + `${url}/init`, options);
 	const res = await response.json();
-	// if (!response.ok) {
-	// 	// console.log("init tnx func: ", res);
-	// 	throw new Error(`HTTP error! Status: ${response.status}`);
-	// }
-	return res;
+	if (!response.ok) {
+		// console.log("init tnx func: ", res);
+		throw new Error(`HTTP error! Status: ${response.status}`);
+	}
+	return { ...res, status: response.status, message: response.statusText };
 };
 export const sendReceipt = async (paymentId: string) => {
 	const options = {
@@ -179,6 +179,30 @@ export const sendReceipt = async (paymentId: string) => {
 		toast(response.statusText, "error");
 		throw new Error(`HTTP error! Status: ${response.status}`);
 	}
+	toast(response.statusText, "success");
+	return res;
+};
+
+export const verifyPayment = async ({
+	reference,
+	tnxId,
+}: {
+	reference: string;
+	tnxId: string;
+}) => {
+	const options = {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ reference, tnxId }),
+	};
+	const response = await fetch(apiUrl + `${url}/verify`, options);
+	if (!response.ok) {
+		toast(response.statusText, "error");
+		throw new Error(`HTTP error! Status: ${response.status}`);
+	}
+	const res = await response.json();
 	toast(response.statusText, "success");
 	return res;
 };

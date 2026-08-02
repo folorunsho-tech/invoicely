@@ -20,32 +20,32 @@ import { Badge } from "@/components/ui/badge";
 
 const getStatusBadge = (status: string) => {
 	switch (status) {
-		case "Pending":
+		case "pending":
 			return (
 				<Badge variant='outline' className='text-yellow-500 border-yellow-500'>
 					Pending
 				</Badge>
 			);
 
-		case "Failed":
+		case "failed":
 			return (
 				<Badge variant='outline' className='text-red-500 border-red-500'>
 					Failed
 				</Badge>
 			);
-		case "Successful":
+		case "success":
 			return (
 				<Badge variant='outline' className='text-green-500 border-green-500'>
 					Successful
 				</Badge>
 			);
-		case "Cancelled":
+		case "abandoned":
 			return (
 				<Badge
 					variant='outline'
 					className='text-destructive border-destructive'
 				>
-					Cancelled
+					Abandoned
 				</Badge>
 			);
 	}
@@ -118,7 +118,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Provider' />
 		),
-		cell: ({ row }) => row.original.gateway.provider,
+		cell: ({ row }) => row.original.provider,
 	},
 	{
 		accessorKey: "provider_reference",
@@ -181,17 +181,15 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 							View
 						</Link>
 					</DropdownMenuItem>
-					<DropdownMenuItem
-						asChild
-						className='cursor-pointer'
-						disabled={row.original.type !== "MANUAL"}
-					>
-						<Link
-							href={`/app/${row.original.organization.slug}/payments/${row.original.id}/update`}
-						>
-							Edit
-						</Link>
-					</DropdownMenuItem>
+					{row.original.provider == "manual" && (
+						<DropdownMenuItem asChild className='cursor-pointer'>
+							<Link
+								href={`/app/${row.original.organization.slug}/payments/${row.original.id}/update`}
+							>
+								Edit
+							</Link>
+						</DropdownMenuItem>
+					)}
 				</DropdownMenuContent>
 			</DropdownMenu>
 		),
@@ -215,34 +213,13 @@ export const rcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 		),
 		cell: ({ row }) => format(row.original.paid_at, "Pp") || null,
 	},
-	{
-		accessorKey: "client_name",
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Client Name' />
-		),
-		cell: ({ row }) => (
-			<p className='max-w-[45ch] truncate'>
-				{row.original.invoice?.client?.name}
-			</p>
-		),
-	},
-	{
-		accessorKey: "client_email",
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Client Email' />
-		),
-		cell: ({ row }) => (
-			<p className='max-w-[45ch] truncate'>
-				{row.original.invoice?.client?.email}
-			</p>
-		),
-	},
+
 	{
 		accessorKey: "provider",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Provider' />
 		),
-		cell: ({ row }) => row.original.gateway.provider,
+		cell: ({ row }) => row.original.provider,
 	},
 	{
 		accessorKey: "provider_reference",
@@ -305,17 +282,15 @@ export const rcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 							View
 						</Link>
 					</DropdownMenuItem>
-					<DropdownMenuItem
-						asChild
-						className='cursor-pointer'
-						disabled={row.original.type !== "PROVIDER"}
-					>
-						<Link
-							href={`/app/${row.original.organization.slug}/payments/${row.original.id}/update`}
-						>
-							Edit
-						</Link>
-					</DropdownMenuItem>
+					{row.original.provider == "manual" && (
+						<DropdownMenuItem asChild className='cursor-pointer'>
+							<Link
+								href={`/app/${row.original.organization.slug}/payments/${row.original.id}/update`}
+							>
+								Edit
+							</Link>
+						</DropdownMenuItem>
+					)}
 				</DropdownMenuContent>
 			</DropdownMenu>
 		),

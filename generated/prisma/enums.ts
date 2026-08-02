@@ -33,22 +33,14 @@ export const InvoiceNotificationChannel = {
 export type InvoiceNotificationChannel = (typeof InvoiceNotificationChannel)[keyof typeof InvoiceNotificationChannel]
 
 
-export const PaymentType = {
-  MANUAL: 'MANUAL',
-  PROVIDER: 'PROVIDER'
+export const PaymentProvider = {
+  manual: 'manual',
+  paystack: 'paystack',
+  flutterwave: 'flutterwave',
+  mock: 'mock'
 } as const
 
-export type PaymentType = (typeof PaymentType)[keyof typeof PaymentType]
-
-
-export const PaymentStatus = {
-  Pending: 'Pending',
-  Cancelled: 'Cancelled',
-  Successful: 'Successful',
-  Failed: 'Failed'
-} as const
-
-export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+export type PaymentProvider = (typeof PaymentProvider)[keyof typeof PaymentProvider]
 
 
 export const InvoiceStatus = {

@@ -78,11 +78,6 @@ export type Category = Prisma.CategoryModel
  */
 export type Client = Prisma.ClientModel
 /**
- * Model PaymentGateway
- * 
- */
-export type PaymentGateway = Prisma.PaymentGatewayModel
-/**
  * Model Organization
  * 
  */

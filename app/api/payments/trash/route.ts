@@ -10,18 +10,13 @@ export async function GET(request: NextRequest) {
 		try {
 			const trashed = await prisma.payment.findMany({
 				where: {
-					organizationId: String(data?.session.activeOrganizationId),
+					orgId: String(data?.session.activeOrganizationId),
 					is_deleted: true,
 				},
 				orderBy: {
 					updatedAt: "desc",
 				},
 				include: {
-					_count: {
-						select: {
-							items: true,
-						},
-					},
 					organization: {
 						select: {
 							slug: true,

@@ -68,3 +68,20 @@ export const markNotification = async ({ id }: { id: string }) => {
 		statusText: response.statusText,
 	};
 };
+export const markAllNotifications = async (ids: { id: string }[]) => {
+	const response = await fetch(apiUrl + `${url}`, {
+		method: "PATCH",
+		body: JSON.stringify(ids),
+	});
+	if (!response.ok) {
+		toast(response.statusText, "error");
+		throw new Error(`HTTP error! Status: ${response.status}`);
+	}
+	const data = await response.json();
+
+	return {
+		success: response.status == 200,
+		data,
+		statusText: response.statusText,
+	};
+};

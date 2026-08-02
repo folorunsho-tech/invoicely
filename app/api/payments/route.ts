@@ -2,7 +2,6 @@
 import { getSession, hasPermission } from "@/lib/authlibs";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { PaymentStatus, PaymentType } from "@/generated/prisma/enums";
 import { queueInvoiceReciept } from "@/lib/queue";
 
 export async function GET(request: NextRequest) {
@@ -22,14 +21,10 @@ export async function GET(request: NextRequest) {
 					updatedAt: "desc",
 				},
 				include: {
-					gateway: {
-						select: {
-							provider: true,
-						},
-					},
 					organization: {
 						select: {
 							slug: true,
+							currencySymbol: true,
 						},
 					},
 					invoice: {
@@ -61,7 +56,6 @@ export async function GET(request: NextRequest) {
 }
 export async function POST(request: NextRequest) {
 	const {
-		type,
 		amount,
 		paid_at,
 		provider_transaction_id,
@@ -72,14 +66,13 @@ export async function POST(request: NextRequest) {
 		orgId,
 		invoiceId,
 	}: {
-		type: PaymentType;
 		amount: number;
 		paid_at: Date | string;
 		provider_transaction_id: string;
 		metadata: any;
 		invoiceId: string;
 		channel: string;
-		status: PaymentStatus;
+		status: string;
 		currency: string;
 		orgId: string;
 	} = await request.json();
@@ -90,39 +83,28 @@ export async function POST(request: NextRequest) {
 		const isPaymentExist = await prisma.payment.findFirst({
 			where: {
 				invoiceId,
+				status: "Successful",
 			},
 		});
 		if (!isPaymentExist) {
 			try {
-				const gateway = await prisma.paymentGateway.findFirst({
-					where: {
-						provider: "Manual",
-						organizationId: orgId,
-					},
-				});
 				const payment = await prisma.payment.create({
 					data: {
 						orgId,
-						type,
 						amount,
 						currency: currency || "NGN",
 						paid_at: new Date(paid_at),
 						provider_transaction_id,
 						metadata,
-						gatewayId: gateway?.id || "",
 						invoiceId,
 						channel,
 						status,
+						reference: "",
 						receipts: {
 							create: { invoiceId, orgId },
 						},
 					},
 					include: {
-						gateway: {
-							select: {
-								provider: true,
-							},
-						},
 						invoice: {
 							include: {
 								client: true,

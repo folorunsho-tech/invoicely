@@ -13,7 +13,7 @@ export async function PATCH(request: NextRequest) {
 		try {
 			const trashed = await prisma.payment.updateMany({
 				where: {
-					organizationId: String(data?.session.activeOrganizationId),
+					orgId: String(data?.session.activeOrganizationId),
 					id: {
 						in: toTrash,
 					},

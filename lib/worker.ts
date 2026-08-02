@@ -9,9 +9,15 @@ import {
 } from "./email";
 import { prisma } from "./prisma";
 import { redisConnection } from "./queue";
+import { createClient } from "redis";
+
+const init = createClient({
+	// url: process.env.REDIS_URL,
+}).on("error", (err) => console.log("Redis Client Error", err));
+
+const client = await init.connect();
 
 // ─── Handlers ────────────────────────────────────────────────────────────────
-
 async function handleSendInvoice(job: Job) {
 	const { invoiceId, organizationId } = job.data;
 
@@ -44,8 +50,8 @@ async function handleSendInvoice(job: Job) {
 		where: {
 			title: `Invoice ${invoice.invoiceNumber} Sent`,
 			organizationId: organizationId,
-			category: "invoice",
-			type: "success",
+			type: "invoice.sent",
+			for: invoiceId,
 		},
 	});
 	if (alreadySent) return;
@@ -59,16 +65,21 @@ async function handleSendInvoice(job: Job) {
 
 		if (success) {
 			// ✅ Success row
-			await prisma.notification.create({
+			const notification = await prisma.notification.create({
 				data: {
-					title: `Invoice ${invoice.invoiceNumber} Sent`,
-					description: `Invoice ${invoice.invoiceNumber} Sent successfuly to ${invoice.client.email}`,
+					type: "invoice.sent",
+					for: invoiceId,
+					title: `Invoice #${invoice.invoiceNumber} Sent`,
+					description: `Invoice #${invoice.invoiceNumber} was sent to ${invoice.client.name}`,
+					timestamp: new Date(),
 					organizationId: organizationId,
-					category: "invoice",
-					type: "success",
 					link: `/invoices/${invoice.id}`,
 				},
 			});
+			await client.publish(
+				`notifications:${organizationId}`,
+				JSON.stringify(notification),
+			);
 
 			console.log(
 				`[send-invoice] Invoice email for invoice ${invoiceId} sent to ${invoice.client.email}`,
@@ -82,20 +93,28 @@ async function handleSendInvoice(job: Job) {
 		}
 	} catch (err: any) {
 		// ❌ Failure row — still persisted
-		await prisma.notification.create({
+
+		const notification = await prisma.notification.create({
 			data: {
-				title: `Invoice ${invoice.invoiceNumber} fail to send`,
-				description: `Error - Invoice ${invoice.invoiceNumber} failed to send to ${invoice.client.email}`,
+				type: "invoice.failed",
+				for: invoiceId,
+				title: `Invoice ${invoice.invoiceNumber} failed to send`,
+				description: `Invoice #${invoice.invoiceNumber} failed to send to ${invoice.client.name}`,
+				timestamp: new Date(),
 				organizationId: organizationId,
-				category: "invoice",
-				type: "error",
 				link: `/invoices/${invoice.id}`,
 			},
 		});
 
+		await client.publish(
+			`notifications:${organizationId}`,
+			JSON.stringify(notification),
+		);
+
 		throw err; // re-throw so BullMQ retries the job
 	}
 }
+
 async function handleResendInvoice(job: Job) {
 	const { invoiceId, organizationId } = job.data;
 
@@ -117,7 +136,7 @@ async function handleResendInvoice(job: Job) {
 		console.log(`[send-invoice] Invoice ${invoiceId} is draft — skipping`);
 		return;
 	}
-
+	// const client = await init.connect();
 	try {
 		const { success, error }: { success: boolean; error: string } =
 			await sendInvoiceEmail({
@@ -127,40 +146,51 @@ async function handleResendInvoice(job: Job) {
 
 		if (success) {
 			// ✅ Success row
-			await prisma.notification.create({
+			const notification = await prisma.notification.create({
 				data: {
-					title: `Invoice ${invoice.invoiceNumber} Sent`,
-					description: `Invoice ${invoice.invoiceNumber} Sent successfuly to ${invoice.client.email}`,
+					type: "invoice.sent",
+					for: invoiceId,
+					title: `Invoice #${invoice.invoiceNumber} Sent`,
+					description: `Invoice #${invoice.invoiceNumber} was sent to ${invoice.client.name}`,
+					timestamp: new Date(),
 					organizationId: organizationId,
-					category: "invoice",
-					type: "success",
 					link: `/invoices/${invoice.id}`,
 				},
 			});
+			await client.publish(
+				`notifications:${organizationId}`,
+				JSON.stringify(notification),
+			);
 
 			console.log(
-				`[send-invoice] Invoice email for invoice ${invoiceId} sent to ${invoice.client.email}`,
+				`[resend-invoice] Invoice email for invoice ${invoiceId} sent to ${invoice.client.email}`,
 			);
 		}
 		if (error) {
 			console.log(
-				`[send-invoice] Invoice email for invoice ${invoiceId} failed to send to ${invoice.client.email}; Reason: ${error}`,
+				`[resend-invoice] Invoice email for invoice ${invoiceId} failed to send to ${invoice.client.email}; Reason: ${error}`,
 			);
 			throw new Error(error);
 		}
 	} catch (err: any) {
 		// ❌ Failure row — still persisted
-		await prisma.notification.create({
+
+		const notification = await prisma.notification.create({
 			data: {
-				title: `Invoice ${invoice.invoiceNumber} fail to send`,
-				description: `Error - Invoice ${invoice.invoiceNumber} failed to send to ${invoice.client.email}`,
+				type: "invoice.failed",
+				for: invoiceId,
+				title: `Invoice ${invoice.invoiceNumber} failed to send`,
+				description: `Invoice #${invoice.invoiceNumber} failed to send to ${invoice.client.name}`,
+				timestamp: new Date(),
 				organizationId: organizationId,
-				category: "invoice",
-				type: "error",
 				link: `/invoices/${invoice.id}`,
 			},
 		});
 
+		await client.publish(
+			`notifications:${organizationId}`,
+			JSON.stringify(notification),
+		);
 		throw err; // re-throw so BullMQ retries the job
 	}
 }
@@ -191,7 +221,7 @@ async function handleSendReciept(job: Job) {
 		);
 		return;
 	}
-
+	// const client = await init.connect();
 	try {
 		const { success, error }: { success: boolean; error: string } =
 			await sendRecieptEmail({
@@ -201,15 +231,21 @@ async function handleSendReciept(job: Job) {
 
 		if (success) {
 			// ✅ Success row
-			await prisma.notification.create({
+			const notification = await prisma.notification.create({
 				data: {
+					type: "receipt.sent",
+					for: receiptId,
 					title: `Receipt for ${receipt.invoice.invoiceNumber} payment Sent`,
-					description: `Receipt for ${receipt.invoice.invoiceNumber} payment Sent successfuly to ${receipt.invoice.client.email}`,
+					description: `Receipt for ${receipt.invoice.invoiceNumber} payment Sent successfuly to ${receipt.invoice.client.name}`,
+					timestamp: new Date(),
 					organizationId: organizationId,
-					category: "receipt",
-					type: "success",
+					link: null,
 				},
 			});
+			await client.publish(
+				`notifications:${organizationId}`,
+				JSON.stringify(notification),
+			);
 
 			console.log(
 				`[send-invoice-receipt] Invoice receipt email for invoice ${receipt.invoiceId} sent to ${receipt.invoice.client.email}`,
@@ -223,16 +259,95 @@ async function handleSendReciept(job: Job) {
 		}
 	} catch (err: any) {
 		// ❌ Failure row — still persisted
-		await prisma.notification.create({
+
+		const notification = await prisma.notification.create({
 			data: {
+				type: "receipt.failed",
+				for: receiptId,
 				title: `Receipt for ${receipt.invoice.invoiceNumber} payment failed to Sent`,
-				description: `Receipt for ${receipt.invoice.invoiceNumber} payment failed to be sent to ${receipt.invoice.client.email}`,
+				description: `Receipt for ${receipt.invoice.invoiceNumber} payment failed to be sent to ${receipt.invoice.client.name}`,
+				timestamp: new Date(),
 				organizationId: organizationId,
-				category: "receipt",
-				type: "error",
+				link: null,
 			},
 		});
 
+		await client.publish(
+			`notifications:${organizationId}`,
+			JSON.stringify(notification),
+		);
+
+		throw err; // re-throw so BullMQ retries the job
+	}
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function handleSendPayment(job: Job) {
+	const { paymentId, organizationId } = job.data;
+
+	const payment = await prisma.payment.findUnique({
+		where: { id: paymentId, orgId: organizationId },
+		include: {
+			invoice: {
+				include: {
+					client: {
+						select: {
+							name: true,
+							email: true,
+						},
+					},
+				},
+			},
+		},
+	});
+
+	if (!payment) throw new Error(`payment ${paymentId} not found`);
+
+	if (payment.invoice.status !== "PAID") {
+		console.log(
+			`[send-invoice-payment] Invoice ${payment.invoiceId} is not paid — skipping`,
+		);
+		return;
+	}
+	// const client = await init.connect();
+	try {
+		const notification = await prisma.notification.create({
+			data: {
+				type: `payment.${payment.status}`,
+				for: paymentId,
+				title: `Payment for ${payment.invoice.invoiceNumber} received`,
+				description: `Payment for ${payment.invoice.invoiceNumber} received successfuly from ${payment.invoice.client.name}`,
+				timestamp: new Date(),
+				organizationId: organizationId,
+				link: `/payments/${payment.id}`,
+			},
+		});
+		await client.publish(
+			`notifications:${organizationId}`,
+			JSON.stringify(notification),
+		);
+		console.log(
+			`[send-invoice-payment] Notification for payment for invoice ${payment.invoiceId} published`,
+		);
+	} catch (err: any) {
+		// ❌ Failure row — still persisted
+
+		const notification = await prisma.notification.create({
+			data: {
+				type: `payment.${payment.status}`,
+				for: paymentId,
+				title: `Payment for ${payment.invoice.invoiceNumber} ${payment.status}`,
+				description: `Payment for ${payment.invoice.invoiceNumber} ${payment.status}`,
+				timestamp: new Date(),
+				organizationId: organizationId,
+				link: `/payments/${payment.id}`,
+			},
+		});
+		await client.publish(
+			`notifications:${organizationId}`,
+			JSON.stringify(notification),
+		);
 		throw err; // re-throw so BullMQ retries the job
 	}
 }
@@ -271,7 +386,7 @@ async function handleUpdateInvoice(job: Job) {
 		);
 		return;
 	}
-
+	// const client = await init.connect();
 	try {
 		const { success, error }: { success: boolean; error: string } =
 			await sendInvoiceUpdatedEmail({
@@ -281,17 +396,22 @@ async function handleUpdateInvoice(job: Job) {
 
 		if (success) {
 			// ✅ Success row
-			await prisma.notification.create({
+
+			const notification = await prisma.notification.create({
 				data: {
+					type: "invoice.update",
+					for: invoiceId,
 					title: `Invoice update for ${invoice.invoiceNumber} Sent`,
-					description: `Invoice update for ${invoice.invoiceNumber} Sent successfuly to ${invoice.client.email}`,
+					description: `Invoice update for #${invoice.invoiceNumber} was sent to ${invoice.client.name}`,
+					timestamp: new Date(),
 					organizationId: organizationId,
-					category: "invoice",
-					type: "success",
 					link: `/invoices/${invoice.id}`,
 				},
 			});
-
+			await client.publish(
+				`notifications:${organizationId}`,
+				JSON.stringify(notification),
+			);
 			console.log(
 				`[send-invoice-update] Invoice email for invoice ${invoiceId} sent to ${invoice.client.email}`,
 			);
@@ -304,17 +424,22 @@ async function handleUpdateInvoice(job: Job) {
 		}
 	} catch (err: any) {
 		// ❌ Failure row — still persisted
-		await prisma.notification.create({
+
+		const notification = await prisma.notification.create({
 			data: {
+				type: "invoice.update",
+				for: invoiceId,
 				title: `Invoice update for ${invoice.invoiceNumber} failed to send`,
-				description: `Error - Invoice update for ${invoice.invoiceNumber} failed to send to ${invoice.client.email}`,
+				description: `Invoice update for ${invoice.invoiceNumber} failed to send to ${invoice.client.name}`,
+				timestamp: new Date(),
 				organizationId: organizationId,
-				category: "invoice",
-				type: "error",
 				link: `/invoices/${invoice.id}`,
 			},
 		});
-
+		await client.publish(
+			`notifications:${organizationId}`,
+			JSON.stringify(notification),
+		);
 		throw err; // re-throw so BullMQ retries the job
 	}
 }
@@ -340,17 +465,7 @@ async function handleSendCancellation(job: Job) {
 	}
 
 	// Idempotency — skip if already successfully sent
-	const alreadySent = await prisma.notification.findFirst({
-		where: {
-			title: `Invoice ${invoice.invoiceNumber} cancellation Sent`,
-			organizationId: organizationId,
-			category: "invoice",
-			type: "success",
-		},
-	});
-
-	if (alreadySent) return;
-
+	// const client = await init.connect();
 	try {
 		const { success, error } = await sendCancellationEmail({
 			to: invoice.client.email,
@@ -362,17 +477,22 @@ async function handleSendCancellation(job: Job) {
 				where: { id: invoiceId, organizationId: organizationId },
 				data: { status: "CANCELLED", cancelledAt: new Date() },
 			});
-			await prisma.notification.create({
+
+			const notification = await prisma.notification.create({
 				data: {
-					title: `Invoice ${invoice.invoiceNumber} cancellation Sent`,
-					description: `Invoice cancellation for ${invoice.invoiceNumber} Sent successfuly to ${invoice.client.email}`,
+					type: "invoice.cancelled",
+					for: invoiceId,
+					title: `Invoice ${invoice.invoiceNumber} cancellation sent`,
+					description: `Invoice cancellation for ${invoice.invoiceNumber} sent successfuly to ${invoice.client.name}`,
+					timestamp: new Date(),
 					organizationId: organizationId,
-					category: "invoice",
-					type: "success",
 					link: `/invoices/${invoice.id}`,
 				},
 			});
-
+			await client.publish(
+				`notifications:${organizationId}`,
+				JSON.stringify(notification),
+			);
 			console.log(
 				`[send-cancellation] Cancellation email for invoice ${invoiceId} sent to ${invoice.client.email}`,
 			);
@@ -385,16 +505,21 @@ async function handleSendCancellation(job: Job) {
 		}
 	} catch (err: any) {
 		// ❌ Failure row — still persisted
-		await prisma.notification.create({
+		const notification = await prisma.notification.create({
 			data: {
+				type: "invoice.cancelled",
+				for: invoiceId,
 				title: `Invoice cancellation for ${invoice.invoiceNumber} failed to send`,
-				description: `Error - Invoice cancellation for ${invoice.invoiceNumber} failed to send to ${invoice.client.email}`,
+				description: `Invoice cancellation for ${invoice.invoiceNumber} failed to send to ${invoice.client.name}`,
+				timestamp: new Date(),
 				organizationId: organizationId,
-				category: "invoice",
-				type: "error",
 				link: `/invoices/${invoice.id}`,
 			},
 		});
+		await client.publish(
+			`notifications:${organizationId}`,
+			JSON.stringify(notification),
+		);
 
 		throw err; // re-throw so BullMQ retries the job
 	}
@@ -477,6 +602,8 @@ const worker = new Worker(
 		switch (job.name) {
 			case "send-invoice":
 				return handleSendInvoice(job);
+			case "send-invoice-payment":
+				return handleSendPayment(job);
 			case "send-invoice-receipt":
 				return handleSendReciept(job);
 			case "send-invoice-update":

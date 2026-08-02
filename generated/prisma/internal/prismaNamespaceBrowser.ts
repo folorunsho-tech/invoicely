@@ -63,7 +63,6 @@ export const ModelName = {
   Item: 'Item',
   Category: 'Category',
   Client: 'Client',
-  PaymentGateway: 'PaymentGateway',
   Organization: 'Organization',
   Member: 'Member',
   Invitation: 'Invitation'
@@ -170,11 +169,12 @@ export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeo
 export const NotificationScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  for: 'for',
   description: 'description',
-  category: 'category',
   type: 'type',
   link: 'link',
   status: 'status',
+  timestamp: 'timestamp',
   createdAt: 'createdAt',
   organizationId: 'organizationId'
 } as const
@@ -207,19 +207,21 @@ export type InvoiceCounterScalarFieldEnum = (typeof InvoiceCounterScalarFieldEnu
 export const PaymentScalarFieldEnum = {
   id: 'id',
   amount: 'amount',
-  type: 'type',
   currency: 'currency',
   paid_at: 'paid_at',
   provider_transaction_id: 'provider_transaction_id',
   metadata: 'metadata',
   status: 'status',
-  gatewayId: 'gatewayId',
+  reference: 'reference',
+  accessCode: 'accessCode',
+  message: 'message',
   channel: 'channel',
   invoiceId: 'invoiceId',
   orgId: 'orgId',
   is_deleted: 'is_deleted',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  provider: 'provider'
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
@@ -269,24 +271,6 @@ export const ClientScalarFieldEnum = {
 } as const
 
 export type ClientScalarFieldEnum = (typeof ClientScalarFieldEnum)[keyof typeof ClientScalarFieldEnum]
-
-
-export const PaymentGatewayScalarFieldEnum = {
-  id: 'id',
-  provider: 'provider',
-  test_public_key: 'test_public_key',
-  test_secret_key: 'test_secret_key',
-  live_public_key: 'live_public_key',
-  live_secret_key: 'live_secret_key',
-  metadata: 'metadata',
-  is_live: 'is_live',
-  is_enabled: 'is_enabled',
-  organizationId: 'organizationId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type PaymentGatewayScalarFieldEnum = (typeof PaymentGatewayScalarFieldEnum)[keyof typeof PaymentGatewayScalarFieldEnum]
 
 
 export const OrganizationScalarFieldEnum = {

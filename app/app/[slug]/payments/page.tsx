@@ -17,7 +17,7 @@ const Page = () => {
 		},
 	});
 	const payments: any[] = res.data;
-	const succesful = payments?.filter((p) => p?.status == "Successful");
+	const succesful = payments?.filter((p) => p?.status == "success");
 	const total = succesful?.reduce((prev, curr) => {
 		return prev + Number(curr?.amount);
 	}, 0);

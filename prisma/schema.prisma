@@ -108,11 +108,12 @@ model Invoice {
 model Notification {
   id             String        @id @default(uuid())
   title          String
+  for            String
   description    String
-  category       String        @default("general")
-  type           String        @default("info")
+  type           String
   link           String?
   status         String        @default("unread")
+  timestamp      DateTime
   createdAt      DateTime      @default(now())
   organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId String?
@@ -166,35 +167,31 @@ model InvoiceCounter {
 model Payment {
   id                      String           @id @default(uuid())
   amount                  Decimal          @db.Money
-  type                    PaymentType      @default(MANUAL)
   currency                String           @default("NGN")
   paid_at                 DateTime?
   provider_transaction_id String?
   metadata                Json?
-  status                  PaymentStatus    @default(Pending)
-  gatewayId               String
+  status                  String           @default("pending")
+  reference               String           @unique
+  accessCode              String?
+  message                 String?
   channel                 String?
   invoiceId               String
   orgId                   String
   is_deleted              Boolean          @default(false)
   createdAt               DateTime         @default(now())
   updatedAt               DateTime         @updatedAt
-  gateway                 PaymentGateway   @relation(fields: [gatewayId], references: [id])
-  invoice                 Invoice          @relation(fields: [invoiceId], references: [id])
+  provider                PaymentProvider  @default(manual)
+  invoice                 Invoice          @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   organization            Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
   receipts                invoiceReciept[]
 }
 
-enum PaymentType {
-  MANUAL
-  PROVIDER
-}
-
-enum PaymentStatus {
-  Pending
-  Cancelled
-  Successful
-  Failed
+enum PaymentProvider {
+  manual
+  paystack
+  flutterwave
+  mock
 }
 
 model Item {
@@ -239,23 +236,6 @@ model Client {
   organizationId String
 }
 
-model PaymentGateway {
-  id              String       @id @default(uuid())
-  provider        String       @unique
-  test_public_key String?
-  test_secret_key String?
-  live_public_key String?
-  live_secret_key String?
-  metadata        Json?
-  is_live         Boolean      @default(false)
-  is_enabled      Boolean      @default(false)
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId  String
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  payments        Payment[]
-}
-
 model Organization {
   id              String           @id
   name            String
@@ -275,7 +255,6 @@ model Organization {
   invoices        Invoice[]
   categories      Category[]
   clients         Client[]
-  paymentGateways PaymentGateway[]
   members         Member[]
   invitations     Invitation[]
   invoiceCounters InvoiceCounter[]

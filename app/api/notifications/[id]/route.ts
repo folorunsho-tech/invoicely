@@ -1,11 +1,11 @@
-import { getSession, hasPermission } from "@/lib/authlibs";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { getSession, hasPermission } from "@/lib/authlibs";
 
-export async function PATCH(
+export const PATCH = async (
 	request: NextRequest,
 	{ params }: { params: Promise<{ id: string }> },
-) {
+) => {
 	const { id } = await params;
 	const data = await getSession();
 	const isPermitted = await hasPermission({
@@ -13,23 +13,24 @@ export async function PATCH(
 	});
 	if (isPermitted.success) {
 		try {
-			const updated = await prisma.notification.update({
+			const notification = await prisma.notification.update({
 				where: {
-					id,
 					organizationId: String(data?.session.activeOrganizationId),
+					id,
 				},
 				data: {
 					status: "read",
 				},
 			});
-			if (updated) {
-				return NextResponse.json(updated, {
+			if (notification) {
+				return NextResponse.json(notification, {
 					status: 200,
 					statusText: "Notification marked as read",
 				});
 			} else {
-				return NextResponse.json(null, {
-					statusText: "error marking notification",
+				return NextResponse.json(notification, {
+					status: 400,
+					statusText: "Error marking notification as read",
 				});
 			}
 		} catch (error) {
@@ -45,11 +46,12 @@ export async function PATCH(
 			statusText: "You are not allowed to update notification",
 		});
 	}
-}
-export async function DELETE(
+};
+
+export const DELETE = async (
 	request: NextRequest,
 	{ params }: { params: Promise<{ id: string }> },
-) {
+) => {
 	const { id } = await params;
 	const data = await getSession();
 	const isPermitted = await hasPermission({
@@ -57,20 +59,21 @@ export async function DELETE(
 	});
 	if (isPermitted.success) {
 		try {
-			const deleted = await prisma.notification.delete({
+			const notification = await prisma.notification.delete({
 				where: {
-					id,
 					organizationId: String(data?.session.activeOrganizationId),
+					id,
 				},
 			});
-			if (deleted) {
-				return NextResponse.json(deleted, {
+			if (notification) {
+				return NextResponse.json(notification, {
 					status: 200,
-					statusText: "Notification deleted successfully",
+					statusText: "Notification deleted",
 				});
 			} else {
-				return NextResponse.json(null, {
-					statusText: "error deleting notification",
+				return NextResponse.json(notification, {
+					status: 400,
+					statusText: "Error deleting notification",
 				});
 			}
 		} catch (error) {
@@ -86,4 +89,4 @@ export async function DELETE(
 			statusText: "You are not allowed to delete notification",
 		});
 	}
-}
+};

@@ -18,7 +18,7 @@ export async function PATCH(
 			const trashed = await prisma.payment.update({
 				where: {
 					id: paymentId,
-					organizationId: String(data?.session.activeOrganizationId),
+					orgId: String(data?.session.activeOrganizationId),
 				},
 				data: {
 					is_deleted,

@@ -151,7 +151,7 @@ const Page = () => {
 					)}
 					<div className='flex gap-2 items-center'>
 						<Label className='text-md'>Payment provider: </Label>
-						<span>{payment.data?.gateway?.provider}</span>
+						<span>{payment.data?.provider}</span>
 					</div>
 				</CardContent>
 			</Card>
