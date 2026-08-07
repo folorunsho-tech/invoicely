@@ -1,5 +1,7 @@
 import { verifyTnx } from "@/lib/paykit";
 import { prisma } from "@/lib/prisma";
+import { decrypt } from "@/lib/utils";
+import { createFallbackClient } from "@siyegs/pay-kit";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -8,16 +10,13 @@ export async function POST(request: NextRequest) {
 	const payment = await prisma.payment.findUnique({
 		where: {
 			reference,
-			OR: [
-				{
-					provider: {
-						not: "manual",
-					},
+		},
+		include: {
+			gateway: {
+				select: {
+					provider: true,
 				},
-				{
-					provider: "mock",
-				},
-			],
+			},
 		},
 	});
 	try {
@@ -40,7 +39,40 @@ export async function POST(request: NextRequest) {
 			);
 		}
 		if (payment) {
-			const result = await verifyTnx(reference, payment.provider);
+			const providers = await prisma.gateway.findMany({
+				where: {
+					orgId: String(payment.orgId),
+					provider: {
+						not: "manual",
+					},
+				},
+				select: {
+					provider: true,
+					secretKey: true,
+					webhookSecret: true,
+					id: true,
+				},
+			});
+			const flutterwave = providers.find(
+				(provider) => provider.provider === "flutterwave",
+			);
+			const paystack = providers.find(
+				(provider) => provider.provider === "paystack",
+			);
+			const pay = createFallbackClient({
+				providers: [
+					{
+						provider: "flutterwave",
+						secretKey: decrypt(flutterwave?.secretKey || ""),
+						webhookSecret: decrypt(flutterwave?.webhookSecret || ""),
+					},
+					{
+						provider: "paystack",
+						secretKey: decrypt(paystack?.secretKey || ""),
+					},
+				],
+			});
+			const result = await verifyTnx(reference, payment.gateway.provider, pay);
 
 			if (result.status === "success") {
 				const payment = await prisma.payment.update({

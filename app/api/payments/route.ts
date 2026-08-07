@@ -32,6 +32,11 @@ export async function GET(request: NextRequest) {
 							client: true,
 						},
 					},
+					gateway: {
+						select: {
+							provider: true,
+						},
+					},
 				},
 			});
 			if (payments) {
@@ -72,21 +77,27 @@ export async function POST(request: NextRequest) {
 		metadata: any;
 		invoiceId: string;
 		channel: string;
-		status: string;
+		status: "success" | "failed" | "pending" | "abandoned" | "cancelled";
 		currency: string;
 		orgId: string;
 	} = await request.json();
 	const isPermitted = await hasPermission({
 		payment: ["create"],
 	});
+	const manualGateway = await prisma.gateway.findFirst({
+		where: {
+			orgId,
+			provider: "manual",
+		},
+	});
 	if (isPermitted.success) {
 		const isPaymentExist = await prisma.payment.findFirst({
 			where: {
 				invoiceId,
-				status: "Successful",
+				status: "success",
 			},
 		});
-		if (!isPaymentExist) {
+		if (!isPaymentExist && manualGateway) {
 			try {
 				const payment = await prisma.payment.create({
 					data: {
@@ -103,6 +114,7 @@ export async function POST(request: NextRequest) {
 						receipts: {
 							create: { invoiceId, orgId },
 						},
+						gatwayId: manualGateway?.id,
 					},
 					include: {
 						invoice: {
@@ -142,7 +154,7 @@ export async function POST(request: NextRequest) {
 					statusText: "Internal Server Error",
 				});
 			}
-		} else {
+		} else if (isPaymentExist) {
 			return NextResponse.json(null, {
 				status: 400,
 				statusText: "Payment already exist for this invoice",

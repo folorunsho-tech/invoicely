@@ -8,6 +8,7 @@ import { ac, owner, admin, member, editor } from "@/lib/permissions";
 export const auth = betterAuth({
 	database: prismaAdapter(prisma, { provider: "postgresql" }),
 	baseURL: process.env.BETTER_AUTH_URL,
+	appName: "inovicely",
 	emailAndPassword: {
 		enabled: true,
 		sendResetPassword: async ({ user, url }) => {
@@ -25,7 +26,20 @@ export const auth = betterAuth({
 
 	plugins: [
 		organization({
-			allowUserToCreateOrganization: false,
+			// allowUserToCreateOrganization: false,
+			organizationHooks: {
+				afterCreateOrganization: async ({ organization }) => {
+					// Run custom logic after organization is created
+					// e.g., create default resources, send notifications
+					await prisma.gateway.create({
+						data: {
+							orgId: organization.id,
+							provider: "manual",
+							rank: 0,
+						},
+					});
+				},
+			},
 			async sendInvitationEmail(data) {
 				const inviteLink = `${process.env.APP_URL}/accept-invitation/${data.id}`;
 				sendOrganizationInvitation({

@@ -58,13 +58,12 @@ export default function InputOTPForm() {
 						});
 						interval.stop();
 						setIsSubmitting(false);
-						router.push("/app");
+						router.push("/new-business");
 					},
 					onError(context) {
 						setInvalid(true);
 						setIsSubmitting(false);
 						toast(context.error.message, "error");
-						console.log(data);
 					},
 					onRequest() {
 						setIsSubmitting(true);

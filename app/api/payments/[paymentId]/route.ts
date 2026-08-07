@@ -35,6 +35,11 @@ export async function GET(
 						select: { slug: true },
 					},
 					receipts: true,
+					gateway: {
+						select: {
+							provider: true,
+						},
+					},
 				},
 			});
 			if (found) {

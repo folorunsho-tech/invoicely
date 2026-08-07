@@ -14,7 +14,7 @@ export const GET = async (request: NextRequest) => {
 					organizationId: String(data?.session.activeOrganizationId),
 				},
 				orderBy: {
-					createdAt: "desc",
+					timestamp: "desc",
 				},
 			});
 			if (notifications) {

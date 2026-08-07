@@ -19,7 +19,7 @@ export const PATCH = async (
 					id,
 				},
 				data: {
-					status: "read",
+					isRead: true,
 				},
 			});
 			if (notification) {

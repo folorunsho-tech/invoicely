@@ -31,7 +31,7 @@ export function SiteHeader() {
 		mutationFn: markNotification,
 		onSuccess: () => {
 			// Invalidate and refetch
-			queryClient.invalidateQueries({ queryKey: ["unread-notifications"] });
+			queryClient.invalidateQueries({ queryKey: ["notifications"] });
 		},
 	});
 	const { slug }: { slug: string } = useParams();

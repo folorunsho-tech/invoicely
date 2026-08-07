@@ -45,13 +45,13 @@ const Page = () => {
 		return prev + iTotal;
 	}, 0);
 	const getPayStatus = (status: string) => {
-		if (status == "Failed")
+		if (status == "failed")
 			return "text-sm font-semibold outline-red-500 border-red-500 text-red-500";
-		if (status == "Canceled")
+		if (status == "canceled")
 			return "text-sm font-semibold outline-red-500 border-red-500 text-red-500";
-		if (status == "Pending")
+		if (status == "pending")
 			return "text-sm font-semibold outline-orange-500 border-orange-500 text-orange-500";
-		if (status == "Successful")
+		if (status == "success")
 			return "text-sm font-semibold outline-green-500 border-green-500 text-green-500";
 	};
 	const getInvStatus = (status: InvoiceStatus) => {
@@ -66,6 +66,9 @@ const Page = () => {
 		if (status == "OVERDUE")
 			return "text-sm font-semibold outline-blue-500 border-blue-500 text-blue-500";
 	};
+	const metadata = payment?.data?.metadata
+		? JSON.parse(JSON.parse(payment.data?.metadata))
+		: null;
 	return (
 		<main className='space-y-6'>
 			<div className='flex justify-between items-start'>
@@ -133,11 +136,11 @@ const Page = () => {
 						<div className='flex gap-2 items-center'>
 							<div className='flex gap-3 items-center'>
 								<Label className='text-md'>Crypto chain: </Label>
-								<span>{payment.data?.metadata?.chain}</span>
+								<span>{metadata?.chain}</span>
 							</div>
 							<div className='flex gap-3 items-center'>
 								<Label className='text-md'>Coin amount: </Label>
-								<span>{payment.data?.metadata?.coinAmount}</span>
+								<span>{metadata?.coinAmount}</span>
 							</div>
 						</div>
 					)}
@@ -145,13 +148,13 @@ const Page = () => {
 						<div className='flex gap-2 items-center'>
 							<div className='flex gap-3 items-center'>
 								<Label className='text-md'>Bank: </Label>
-								<span>{payment.data?.metadata?.bank}</span>
+								<span>{metadata?.bank}</span>
 							</div>
 						</div>
 					)}
 					<div className='flex gap-2 items-center'>
 						<Label className='text-md'>Payment provider: </Label>
-						<span>{payment.data?.provider}</span>
+						<span>{payment.data?.gateway?.provider}</span>
 					</div>
 				</CardContent>
 			</Card>

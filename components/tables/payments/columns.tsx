@@ -118,7 +118,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Provider' />
 		),
-		cell: ({ row }) => row.original.provider,
+		cell: ({ row }) => row.original.gateway.provider,
 	},
 	{
 		accessorKey: "provider_reference",
@@ -181,7 +181,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 							View
 						</Link>
 					</DropdownMenuItem>
-					{row.original.provider == "manual" && (
+					{row.original.gateway.provider == "manual" && (
 						<DropdownMenuItem asChild className='cursor-pointer'>
 							<Link
 								href={`/app/${row.original.organization.slug}/payments/${row.original.id}/update`}
@@ -219,7 +219,7 @@ export const rcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Provider' />
 		),
-		cell: ({ row }) => row.original.provider,
+		cell: ({ row }) => row.original.gateway.provider,
 	},
 	{
 		accessorKey: "provider_reference",
@@ -282,7 +282,7 @@ export const rcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 							View
 						</Link>
 					</DropdownMenuItem>
-					{row.original.provider == "manual" && (
+					{row.original.gateway.provider == "manual" && (
 						<DropdownMenuItem asChild className='cursor-pointer'>
 							<Link
 								href={`/app/${row.original.organization.slug}/payments/${row.original.id}/update`}

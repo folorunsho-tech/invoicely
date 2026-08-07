@@ -6,7 +6,6 @@ export const schema = z.object({
 	status: z.string(),
 	channel: z.string(),
 	paid_at: z.date(),
-
 	invoice: z.object({
 		invoiceNumber: z.string(),
 		client: z.object({
@@ -14,7 +13,9 @@ export const schema = z.object({
 			email: z.email(),
 		}),
 	}),
-	provider: z.string(),
+	gateway: z.object({
+		provider: z.string(),
+	}),
 	organization: z.object({
 		slug: z.string(),
 		currencySymbol: z.string(),

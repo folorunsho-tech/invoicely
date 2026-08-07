@@ -3,7 +3,6 @@ import {
 	Client,
 	Item,
 	Organization,
-	invoiceNotification,
 	invoiceReciept,
 	Category,
 } from "./../generated/prisma/client";
@@ -18,12 +17,9 @@ type invoiceRData = {
 	items: Item[];
 	organization: Organization;
 };
-type InvoiceNotificationData = {
-	invoice: Invoice;
-};
+
 export type invoice = Invoice & invoiceData;
 export type invoiceR = Invoice & invoiceRData;
-export type InvoiceNotification = invoiceNotification & InvoiceNotificationData;
 export type Reciept = invoiceReciept & {
 	// organization?: Organization;
 	invoice: invoiceR;

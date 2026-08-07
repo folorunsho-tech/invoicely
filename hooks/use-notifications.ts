@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getNotifications } from "@/lib/queries/notifications";
+import { Notification } from "@/generated/prisma/client";
 export function useNotifications() {
 	const res = useQuery({
 		queryKey: ["notifications"],
@@ -11,22 +12,11 @@ export function useNotifications() {
 			return await getNotifications();
 		},
 	});
-	const [notifications, setNotifications] = useState<
-		{
-			type: string;
-			id: string;
-			for: string;
-			title: string;
-			description: string;
-			timestamp: string;
-			organizationId: string;
-			link: string | null;
-			status: string;
-		}[]
-	>([]);
+	const [notifications, setNotifications] = useState<Notification[]>([]);
 	useEffect(() => {
 		// eslint-disable-next-line react-hooks/set-state-in-effect
 		setNotifications(res.data);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [res.isLoading]);
 	useEffect(() => {
 		const es = new EventSource("/api/notifications/stream");
@@ -45,7 +35,7 @@ export function useNotifications() {
 	}, []);
 	function markOneRead(id: string) {
 		setNotifications((prev) =>
-			prev.map((n) => (n.id === id ? { ...n, status: "read" } : n)),
+			prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
 		);
 	}
 	function deleteOne(id: string) {

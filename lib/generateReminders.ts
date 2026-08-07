@@ -1,4 +1,3 @@
-import { InvoiceNotificationType } from "@/generated/prisma/enums";
 import { sub } from "date-fns";
 export const generateReminders = (
 	due_date: string | Date,
@@ -6,7 +5,7 @@ export const generateReminders = (
 	organizationId: string,
 ): {
 	invoiceId: string;
-	reminderType: InvoiceNotificationType;
+	reminderType: string;
 	organizationId: string;
 	delay?: number;
 }[] => {

@@ -106,17 +106,28 @@ model Invoice {
 }
 
 model Notification {
-  id             String        @id @default(uuid())
+  id             String               @id @default(uuid())
   title          String
   for            String
   description    String
   type           String
   link           String?
-  status         String        @default("unread")
+  isRead         Boolean              @default(false)
+  channel        NotificationChannel? @default(email)
   timestamp      DateTime
-  createdAt      DateTime      @default(now())
-  organization   Organization? @relation(fields: [organizationId], references: [id])
-  organizationId String?
+  readAt         DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  organization   Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+
+  @@index([organizationId])
+}
+
+enum NotificationChannel {
+  email
+  sms
+  whatsapp
+  telegram
 }
 
 model invoiceReciept {
@@ -133,24 +144,6 @@ model invoiceReciept {
   @@index([orgId])
   @@index([invoiceId])
   @@index([paymentId])
-}
-
-enum InvoiceNotificationType {
-  INVOICE_SENT
-  INVOICE_UPDATED
-  REMINDER_7D
-  REMINDER_3D
-  REMINDER_1D
-  OVERDUE
-  CANCELLATION
-  INVOICE_RECIEPT_SENT
-}
-
-enum InvoiceNotificationChannel {
-  EMAIL
-  SMS
-  WHATSAPP
-  TELEGRAM
 }
 
 model InvoiceCounter {
@@ -181,17 +174,37 @@ model Payment {
   is_deleted              Boolean          @default(false)
   createdAt               DateTime         @default(now())
   updatedAt               DateTime         @updatedAt
-  provider                PaymentProvider  @default(manual)
+  gatwayId                String
+  gateway                 Gateway          @relation(fields: [gatwayId], references: [id], onDelete: Cascade)
   invoice                 Invoice          @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   organization            Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
   receipts                invoiceReciept[]
 }
 
-enum PaymentProvider {
-  manual
+enum GatewayProvider {
+  stripe
   paystack
   flutterwave
-  mock
+  manual
+}
+
+model Gateway {
+  id            String          @id @default(uuid())
+  provider      GatewayProvider
+  isActive      Boolean         @default(true)
+  description   String?
+  publicKey     String?
+  secretKey     String?
+  webhookSecret String?
+  rank          Int
+  orgId         String
+  organization  Organization    @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  payments      Payment[]
+
+  @@unique([orgId, provider])
+  @@index([orgId])
 }
 
 model Item {
@@ -264,6 +277,7 @@ model Organization {
   currencyPos     String           @default("left")
   currencySymbol  String
   invoiceReciepts invoiceReciept[]
+  gateways        Gateway[]
 
   @@unique([slug])
   @@index([code, country])

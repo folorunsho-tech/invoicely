@@ -106,6 +106,9 @@ const Page = () => {
 	};
 	useEffect(() => {
 		if (payment) {
+			const metadata = payment?.metadata
+				? JSON.parse(JSON.parse(payment.metadata))
+				: null;
 			setValues({
 				invoiceId: invoice?.id,
 				status: payment?.status,
@@ -115,13 +118,13 @@ const Page = () => {
 			setPaidAt(new Date(payment?.paid_at));
 			setTNXId(payment?.provider_transaction_id);
 			if (payment?.channel == "Cryptocurrency") {
-				setChain(payment?.metadata?.chain);
-				setCoinAmount(payment?.metadata?.coinAmount);
+				setChain(metadata?.chain);
+				setCoinAmount(metadata?.coinAmount);
 			} else if (payment?.channel == "Bank Transfer") {
-				setBank(payment?.metadata?.bank);
+				setBank(metadata?.bank);
 			}
 		}
-	}, [paymentRes.isLoading]);
+	}, [paymentRes.isFetching]);
 	return (
 		<main className='space-y-6'>
 			<section className='flex items-center justify-between'>
@@ -253,6 +256,7 @@ const Page = () => {
 												onChange={(v) => {
 													setBank(v);
 												}}
+												value={bank}
 												placeholder='Select payment bank'
 												checkIconPosition='right'
 												searchable
@@ -316,15 +320,15 @@ const Page = () => {
 														data={[
 															{
 																label: "Successful",
-																value: "Successful",
+																value: "success",
 															},
 															{
 																label: "Failed",
-																value: "Failed",
+																value: "failed",
 															},
 															{
 																label: "Cancelled",
-																value: "Cancelled",
+																value: "cancelled",
 															},
 														]}
 													/>

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { HomeHeader } from "@/components/home-header";
 import { SearchIcon } from "lucide-react";
@@ -18,21 +17,19 @@ import { useRouter } from "next/navigation";
 // import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { authClient } from "@/lib/auth-client";
-import { useEffect } from "react";
+
 const Page = () => {
 	const { data: organizations } = authClient.useListOrganizations();
 	const router = useRouter();
-	const setActiveOrg = async () => {
+	const setActiveOrg = async (id: string) => {
 		if (organizations) {
 			const { data } = await authClient.organization.setActive({
-				organizationId: organizations[0]?.id,
+				organizationId: id,
 			});
 			router.push(`/app/${data?.slug}`);
 		}
 	};
-	useEffect(() => {
-		setActiveOrg();
-	}, [organizations]);
+
 	return (
 		<>
 			<HomeHeader />
@@ -54,7 +51,7 @@ const Page = () => {
 						return (
 							<Card
 								key={org.id}
-								onClick={setActiveOrg}
+								onClick={() => setActiveOrg(org.id)}
 								size='sm'
 								className='w-full max-w-sm cursor-pointer'
 							>

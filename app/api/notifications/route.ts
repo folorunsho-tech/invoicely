@@ -12,10 +12,10 @@ export const GET = async (request: NextRequest) => {
 			const notifications = await prisma.notification.findMany({
 				where: {
 					organizationId: String(data?.session.activeOrganizationId),
-					status: "unread",
+					isRead: false,
 				},
 				orderBy: {
-					createdAt: "desc",
+					timestamp: "desc",
 				},
 			});
 			if (notifications) {
@@ -61,7 +61,8 @@ export const PATCH = async (request: NextRequest) => {
 					},
 				},
 				data: {
-					status: "read",
+					isRead: true,
+					readAt: new Date(),
 				},
 			});
 			if (notification) {

@@ -9,7 +9,6 @@ import {
 	invoiceSentTemplate,
 	invoiceUpdatedTemplate,
 } from "./templates";
-import { InvoiceNotificationType } from "@/generated/prisma/enums";
 import { invitationTemplate } from "./templates/invitation";
 
 export const transporter = nodemailer.createTransport({
@@ -152,7 +151,7 @@ export const sendReminderEmail = async ({
 }: {
 	to: string | any;
 	invoice: Invoice | any;
-	reminderType: InvoiceNotificationType;
+	reminderType: string;
 }) => {
 	const templateFn =
 		reminderType === "REMINDER_1D"

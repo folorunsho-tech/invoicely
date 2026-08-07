@@ -393,6 +393,7 @@ export const ModelName = {
   invoiceReciept: 'invoiceReciept',
   InvoiceCounter: 'InvoiceCounter',
   Payment: 'Payment',
+  Gateway: 'Gateway',
   Item: 'Item',
   Category: 'Category',
   Client: 'Client',
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "invoice" | "notification" | "invoiceReciept" | "invoiceCounter" | "payment" | "item" | "category" | "client" | "organization" | "member" | "invitation"
+    modelProps: "user" | "session" | "account" | "verification" | "invoice" | "notification" | "invoiceReciept" | "invoiceCounter" | "payment" | "gateway" | "item" | "category" | "client" | "organization" | "member" | "invitation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1084,6 +1085,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Gateway: {
+      payload: Prisma.$GatewayPayload<ExtArgs>
+      fields: Prisma.GatewayFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GatewayFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GatewayFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>
+        }
+        findFirst: {
+          args: Prisma.GatewayFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GatewayFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>
+        }
+        findMany: {
+          args: Prisma.GatewayFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>[]
+        }
+        create: {
+          args: Prisma.GatewayCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>
+        }
+        createMany: {
+          args: Prisma.GatewayCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GatewayCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>[]
+        }
+        delete: {
+          args: Prisma.GatewayDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>
+        }
+        update: {
+          args: Prisma.GatewayUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>
+        }
+        deleteMany: {
+          args: Prisma.GatewayDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GatewayUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GatewayUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>[]
+        }
+        upsert: {
+          args: Prisma.GatewayUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>
+        }
+        aggregate: {
+          args: Prisma.GatewayAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGateway>
+        }
+        groupBy: {
+          args: Prisma.GatewayGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GatewayGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GatewayCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GatewayCountAggregateOutputType> | number
+        }
+      }
+    }
     Item: {
       payload: Prisma.$ItemPayload<ExtArgs>
       fields: Prisma.ItemFieldRefs
@@ -1656,9 +1731,11 @@ export const NotificationScalarFieldEnum = {
   description: 'description',
   type: 'type',
   link: 'link',
-  status: 'status',
+  isRead: 'isRead',
+  channel: 'channel',
   timestamp: 'timestamp',
-  createdAt: 'createdAt',
+  readAt: 'readAt',
+  updatedAt: 'updatedAt',
   organizationId: 'organizationId'
 } as const
 
@@ -1704,10 +1781,27 @@ export const PaymentScalarFieldEnum = {
   is_deleted: 'is_deleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  provider: 'provider'
+  gatwayId: 'gatwayId'
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const GatewayScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  isActive: 'isActive',
+  description: 'description',
+  publicKey: 'publicKey',
+  secretKey: 'secretKey',
+  webhookSecret: 'webhookSecret',
+  rank: 'rank',
+  orgId: 'orgId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GatewayScalarFieldEnum = (typeof GatewayScalarFieldEnum)[keyof typeof GatewayScalarFieldEnum]
 
 
 export const ItemScalarFieldEnum = {
@@ -1915,6 +2009,20 @@ export type ListEnumInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'NotificationChannel'
+ */
+export type EnumNotificationChannelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationChannel'>
+    
+
+
+/**
+ * Reference to a field of type 'NotificationChannel[]'
+ */
+export type ListEnumNotificationChannelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationChannel[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1943,16 +2051,16 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
- * Reference to a field of type 'PaymentProvider'
+ * Reference to a field of type 'GatewayProvider'
  */
-export type EnumPaymentProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentProvider'>
+export type EnumGatewayProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GatewayProvider'>
     
 
 
 /**
- * Reference to a field of type 'PaymentProvider[]'
+ * Reference to a field of type 'GatewayProvider[]'
  */
-export type ListEnumPaymentProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentProvider[]'>
+export type ListEnumGatewayProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GatewayProvider[]'>
     
 
 
@@ -2088,6 +2196,7 @@ export type GlobalOmitConfig = {
   invoiceReciept?: Prisma.invoiceRecieptOmit
   invoiceCounter?: Prisma.InvoiceCounterOmit
   payment?: Prisma.PaymentOmit
+  gateway?: Prisma.GatewayOmit
   item?: Prisma.ItemOmit
   category?: Prisma.CategoryOmit
   client?: Prisma.ClientOmit

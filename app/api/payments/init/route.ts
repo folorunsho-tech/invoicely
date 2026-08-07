@@ -1,7 +1,9 @@
+import { createFallbackClient } from "@siyegs/pay-kit";
 import { initTnx } from "@/lib/paykit";
 import { prisma } from "@/lib/prisma";
 import { queueInvoicePayment, queueInvoiceReciept } from "@/lib/queue";
 import { NextRequest, NextResponse } from "next/server";
+import { decrypt } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
 	const { invoiceId }: { invoiceId: string } = await request.json();
@@ -28,14 +30,46 @@ export async function POST(request: NextRequest) {
 				status: true,
 			},
 		});
+		const providers = await prisma.gateway.findMany({
+			where: {
+				orgId: String(invoice?.organizationId),
+				provider: {
+					not: "manual",
+				},
+			},
+			select: {
+				provider: true,
+				secretKey: true,
+				webhookSecret: true,
+				id: true,
+			},
+		});
+		const flutterwave = providers.find(
+			(provider) => provider.provider === "flutterwave",
+		);
+		const paystack = providers.find(
+			(provider) => provider.provider === "paystack",
+		);
+		const pay = createFallbackClient({
+			providers: [
+				{
+					provider: "flutterwave",
+					secretKey: decrypt(flutterwave?.secretKey || ""),
+					webhookSecret: decrypt(flutterwave?.webhookSecret || ""),
+				},
+				{ provider: "paystack", secretKey: decrypt(paystack?.secretKey || "") },
+			],
+		});
 		if (invoice && invoice?.status !== "PAID") {
 			const res = await initTnx({
 				amount: Number(invoice.total),
 				email: invoice.client.email,
 				invoiceId: invoice.id,
 				currency: invoice.currency,
+				pay,
 			});
 			if (res) {
+				const provider = providers.find((p) => p.provider === res.provider);
 				const payment = await prisma.payment.create({
 					data: {
 						invoiceId,
@@ -43,7 +77,7 @@ export async function POST(request: NextRequest) {
 						accessCode: res.accessCode,
 						orgId: invoice.organizationId,
 						amount: invoice.total,
-						provider: res.provider,
+						gatwayId: provider?.id || "",
 					},
 				});
 				const receipt = await prisma.invoiceReciept.create({

@@ -1,26 +1,19 @@
-import { createFallbackClient } from "@siyegs/pay-kit";
-const pay = createFallbackClient({
-	providers: [
-		{
-			provider: "flutterwave",
-			secretKey: process.env.FLW_SECRET_KEY!,
-			webhookSecret: process.env.FLW_HASH,
-		},
-		{ provider: "paystack", secretKey: process.env.PAYSTACK_SECRET_KEY! },
-	],
-});
-// const pay = createPayClient({ provider: "mock" });
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const app_url = process.env.APP_URL;
+// const pay = createPayClient({ provider: "mock" });
 export const initTnx = async ({
 	amount,
 	email,
 	invoiceId,
 	currency,
+	pay,
 }: {
 	amount: number | string;
 	email: string;
 	invoiceId: string;
 	currency: string;
+	pay: any;
 }) => {
 	const subunits = Number(amount) * 100;
 	const { reference, authorizationUrl, accessCode, provider } =
@@ -37,8 +30,7 @@ export const initTnx = async ({
 	return { reference, authorizationUrl, accessCode, provider };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const verifyTnx = async (refrence: string, provider: any) => {
+export const verifyTnx = async (refrence: string, provider: any, pay: any) => {
 	const result = await pay.verify(provider, refrence);
 	return result;
 };

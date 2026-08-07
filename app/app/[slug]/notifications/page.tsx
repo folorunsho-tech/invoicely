@@ -1,13 +1,12 @@
 "use client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
 	deleteNotification,
-	getAllNotifications,
 	markAllNotifications,
 	markNotification,
 } from "@/lib/queries/notifications";
 import { useParams, useRouter } from "next/navigation";
-import { Notification } from "@/generated/prisma/client";
+
 import {
 	Card,
 	CardAction,
@@ -85,7 +84,7 @@ const Page = () => {
 			{notifications?.map((not) => (
 				<Card key={not.id}>
 					<CardHeader
-						className={`flex justify-between items-center ${not.status == "read" ? "text-gray-400" : ""}`}
+						className={`flex justify-between items-center ${not.isRead ? "text-gray-400" : ""}`}
 					>
 						<Label>{not.title}</Label>
 						<div className='flex gap-3 items-center'>
@@ -127,7 +126,7 @@ const Page = () => {
 					</CardHeader>
 					<Link href={not.link ? `/app/${slug}/${not.link}` : "#"}>
 						<CardDescription
-							className={`px-5 ${not.status == "read" ? "text-gray-400" : ""}`}
+							className={`px-5 ${not.isRead ? "text-gray-400" : ""}`}
 						>
 							{not.description}
 						</CardDescription>

@@ -60,6 +60,7 @@ export const ModelName = {
   invoiceReciept: 'invoiceReciept',
   InvoiceCounter: 'InvoiceCounter',
   Payment: 'Payment',
+  Gateway: 'Gateway',
   Item: 'Item',
   Category: 'Category',
   Client: 'Client',
@@ -173,9 +174,11 @@ export const NotificationScalarFieldEnum = {
   description: 'description',
   type: 'type',
   link: 'link',
-  status: 'status',
+  isRead: 'isRead',
+  channel: 'channel',
   timestamp: 'timestamp',
-  createdAt: 'createdAt',
+  readAt: 'readAt',
+  updatedAt: 'updatedAt',
   organizationId: 'organizationId'
 } as const
 
@@ -221,10 +224,27 @@ export const PaymentScalarFieldEnum = {
   is_deleted: 'is_deleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  provider: 'provider'
+  gatwayId: 'gatwayId'
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const GatewayScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  isActive: 'isActive',
+  description: 'description',
+  publicKey: 'publicKey',
+  secretKey: 'secretKey',
+  webhookSecret: 'webhookSecret',
+  rank: 'rank',
+  orgId: 'orgId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GatewayScalarFieldEnum = (typeof GatewayScalarFieldEnum)[keyof typeof GatewayScalarFieldEnum]
 
 
 export const ItemScalarFieldEnum = {

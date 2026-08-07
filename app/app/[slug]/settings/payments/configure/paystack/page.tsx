@@ -16,68 +16,62 @@ import {
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
+import { PasswordInput } from "@mantine/core";
 
 const Page = () => {
 	const { slug }: { slug: string } = useParams();
 	const queryClient = useQueryClient();
-	const [is_test, setIsTest] = useState(false);
-	const [is_enabled, setIsEnabled] = useState(false);
-	const [test_public_key, setTestPublicKey] = useState<string>("");
-	const [test_secret_key, setTestSecretKey] = useState<string>("");
-	const [live_public_key, setLivePublicKey] = useState<string>("");
-	const [live_secret_key, setLiveSecretKey] = useState<string>("");
+	const [isActive, setIsActive] = useState(false);
+	const [publicKey, setPublicKey] = useState<string>("");
+	const [secretKey, setSecretKey] = useState<string>("");
 
 	const paystack = useQuery({
-		queryKey: [`provider-Paystack`],
+		queryKey: [`provider-paystack`],
 		queryFn: async () => {
-			return await getProvider({ provider: "Paystack" });
+			return await getProvider({ provider: "paystack" });
 		},
 	});
 	const mutation = useMutation({
 		mutationFn: updateProvider,
 		onSuccess: () => {
 			// Invalidate and refetch
-			queryClient.invalidateQueries({ queryKey: [`provider-Paystack`] });
+			queryClient.invalidateQueries({ queryKey: [`provider-paystack`] });
 		},
 	});
-	const [showTestInputs, setShowTestInputs] = useState(!paystack.data?.is_live);
+	// const [showTestInputs, setShowTestInputs] = useState(
+	// 	!paystack.data?.is_live,
+	// );
 	const onsubmit = async () => {
 		const data = {
-			is_enabled,
-			is_live: !is_test,
-			test_public_key: test_public_key || null,
-			test_secret_key: test_secret_key || null,
-			live_public_key: live_public_key || null,
-			live_secret_key: live_secret_key || null,
+			isActive,
+			secretKey,
+			publicKey,
 		};
 		// console.log(data);
 		await mutation.mutateAsync({
 			data,
-			provider: "Paystack",
+			provider: "paystack",
 		});
 	};
 
 	useEffect(() => {
 		// eslint-disable-next-line react-hooks/set-state-in-effect
-		setIsEnabled(paystack.data?.is_enabled);
-		setIsTest(!paystack.data?.is_live);
-		setTestPublicKey(paystack.data?.test_public_key);
-		setTestSecretKey(paystack.data?.test_secret_key);
-		setLivePublicKey(paystack.data?.live_public_key);
-		setLiveSecretKey(paystack.data?.live_secret_key);
+		setIsActive(paystack.data?.isActive);
+		setPublicKey(paystack.data?.publicKey);
+		setSecretKey(paystack.data?.secretKey);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [paystack.isLoading]);
 
-	useEffect(() => {
-		// eslint-disable-next-line react-hooks/set-state-in-effect
-		setTestPublicKey(paystack.data?.test_public_key);
-		setTestSecretKey(paystack.data?.test_secret_key);
-		setLivePublicKey(paystack.data?.live_public_key);
-		setLiveSecretKey(paystack.data?.live_secret_key);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [showTestInputs]);
+	// useEffect(() => {
+	// 	// eslint-disable-next-line react-hooks/set-state-in-effect
+	// 	setPublicKey(paystack.data?.publicKey);
+	// 	setSecretKey(paystack.data?.secretKey);
+	// 	setWebhookSecret(paystack.data?.webhookSecret);
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [showTestInputs]);
 	return (
-		<main className='flex-col flex gap-6 py-2 '>
+		<main className='flex-col flex gap-6 p-2 bg-white'>
 			<div className='flex justify-between'>
 				<Button asChild>
 					<Link
@@ -100,19 +94,19 @@ const Page = () => {
 					<FieldGroup>
 						<Field orientation='horizontal'>
 							<Checkbox
-								checked={is_enabled}
+								checked={isActive}
 								onCheckedChange={(checked) => {
 									if (checked) {
-										setIsEnabled(true);
+										setIsActive(true);
 									} else {
-										setIsEnabled(false);
+										setIsActive(false);
 									}
 								}}
 								className='border-gray-800'
 							/>
-							<FieldLabel htmlFor='is_enabled'> Enable Paystack</FieldLabel>
+							<FieldLabel htmlFor='is_enabled'> Enable paystack</FieldLabel>
 						</Field>
-
+						{/* 
 						<Field orientation='horizontal'>
 							<Checkbox
 								checked={is_test}
@@ -128,45 +122,47 @@ const Page = () => {
 								className='border-gray-800'
 							/>
 							<FieldLabel htmlFor='is_test'>Enable test mode</FieldLabel>
+						</Field> */}
+					</FieldGroup>
+
+					<FieldGroup>
+						<Field>
+							<FieldLabel htmlFor='secret_key'>Secret Key</FieldLabel>
+
+							<PasswordInput
+								value={secretKey}
+								onChange={(e) => {
+									setSecretKey(e.currentTarget.value);
+								}}
+								variant='default'
+							/>
+							<FieldDescription>Enter your Secret Key here</FieldDescription>
+						</Field>
+						<Field>
+							<FieldLabel htmlFor='public_key'>Public Key</FieldLabel>
+
+							<Input
+								id='public_key'
+								value={publicKey}
+								onChange={(e) => {
+									setPublicKey(e.currentTarget.value);
+								}}
+							/>
+							<FieldDescription>Enter your Public Key here</FieldDescription>
 						</Field>
 					</FieldGroup>
-					{showTestInputs && (
+
+					{/* {!showTestInputs && (
 						<FieldGroup>
 							<Field>
-								<FieldLabel htmlFor='test_secret_key'>
-									Test Secret Key
-								</FieldLabel>
+									setPublicKey(e.currentTarget.value);
+								}}
+							/>
+							<FieldDescription>Enter your Public Key here</FieldDescription>
+						</Field>
+					</FieldGroup>
 
-								<Input
-									id={`test_secret_key`}
-									value={test_secret_key}
-									onChange={(e) => {
-										setTestSecretKey(e.currentTarget.value);
-									}}
-								/>
-								<FieldDescription>
-									Enter your Test Secret Key here
-								</FieldDescription>
-							</Field>
-							<Field>
-								<FieldLabel htmlFor='test_public_key'>
-									Test Public Key
-								</FieldLabel>
-
-								<Input
-									id='test_public_key'
-									value={test_public_key}
-									onChange={(e) => {
-										setTestPublicKey(e.currentTarget.value);
-									}}
-								/>
-								<FieldDescription>
-									Enter your Test Public Key here
-								</FieldDescription>
-							</Field>
-						</FieldGroup>
-					)}
-					{!showTestInputs && (
+					{/* {!showTestInputs && (
 						<FieldGroup>
 							<Field>
 								<FieldLabel htmlFor='live_secret_key'>
@@ -201,7 +197,7 @@ const Page = () => {
 								</FieldDescription>
 							</Field>
 						</FieldGroup>
-					)}
+					)} */}
 
 					<Field orientation='horizontal' className='flex justify-end'>
 						<Button asChild className='cursor-pointer' variant='destructive'>

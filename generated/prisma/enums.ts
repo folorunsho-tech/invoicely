@@ -9,38 +9,24 @@
 * 🟢 You can import this file directly.
 */
 
-export const InvoiceNotificationType = {
-  INVOICE_SENT: 'INVOICE_SENT',
-  INVOICE_UPDATED: 'INVOICE_UPDATED',
-  REMINDER_7D: 'REMINDER_7D',
-  REMINDER_3D: 'REMINDER_3D',
-  REMINDER_1D: 'REMINDER_1D',
-  OVERDUE: 'OVERDUE',
-  CANCELLATION: 'CANCELLATION',
-  INVOICE_RECIEPT_SENT: 'INVOICE_RECIEPT_SENT'
+export const NotificationChannel = {
+  email: 'email',
+  sms: 'sms',
+  whatsapp: 'whatsapp',
+  telegram: 'telegram'
 } as const
 
-export type InvoiceNotificationType = (typeof InvoiceNotificationType)[keyof typeof InvoiceNotificationType]
+export type NotificationChannel = (typeof NotificationChannel)[keyof typeof NotificationChannel]
 
 
-export const InvoiceNotificationChannel = {
-  EMAIL: 'EMAIL',
-  SMS: 'SMS',
-  WHATSAPP: 'WHATSAPP',
-  TELEGRAM: 'TELEGRAM'
-} as const
-
-export type InvoiceNotificationChannel = (typeof InvoiceNotificationChannel)[keyof typeof InvoiceNotificationChannel]
-
-
-export const PaymentProvider = {
-  manual: 'manual',
+export const GatewayProvider = {
+  stripe: 'stripe',
   paystack: 'paystack',
   flutterwave: 'flutterwave',
-  mock: 'mock'
+  manual: 'manual'
 } as const
 
-export type PaymentProvider = (typeof PaymentProvider)[keyof typeof PaymentProvider]
+export type GatewayProvider = (typeof GatewayProvider)[keyof typeof GatewayProvider]
 
 
 export const InvoiceStatus = {

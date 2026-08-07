@@ -30,6 +30,7 @@ import {
 	CardHeader,
 } from "@/components/ui/card";
 import { DatePickerInput } from "@mantine/dates";
+import { format } from "date-fns";
 const formSchema = z.object({
 	invoiceId: z.string("Invalid invoice id"),
 	channel: z.string("Channel is required"),
@@ -168,6 +169,9 @@ const Page = () => {
 										</CardDescription>
 										<CardDescription>
 											Client Email: {invoice?.client.email}
+										</CardDescription>
+										<CardDescription>
+											Due Date: {format(invoice.due_date, "d/M/y")}
 										</CardDescription>
 									</CardHeader>
 
@@ -331,15 +335,15 @@ const Page = () => {
 														data={[
 															{
 																label: "Successful",
-																value: "Successful",
+																value: "success",
 															},
 															{
 																label: "Failed",
-																value: "Failed",
+																value: "failed",
 															},
 															{
 																label: "Cancelled",
-																value: "Cancelled",
+																value: "cancelled",
 															},
 														]}
 													/>

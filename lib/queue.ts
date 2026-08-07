@@ -1,4 +1,3 @@
-import { InvoiceNotificationType } from "@/generated/prisma/enums";
 import { Queue } from "bullmq";
 export const redisConnection = {
 	host: process.env.REDIS_HOST || "localhost",
@@ -128,7 +127,7 @@ export async function queueInvoicePayment(
 export async function queueInvoiceReminders(
 	reminders: {
 		invoiceId: string;
-		reminderType: InvoiceNotificationType;
+		reminderType: string;
 		organizationId: string;
 		delay?: number;
 	}[],

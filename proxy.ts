@@ -13,10 +13,9 @@ export async function proxy(request: NextRequest) {
 	if (!session) {
 		return NextResponse.redirect(new URL("/auth/signin", request.url));
 	}
-
 	return NextResponse.next();
 }
 
 export const config = {
-	matcher: ["/app"], // Specify the routes the middleware applies to
+	matcher: ["/app/:path*", "/"], // Specify the routes the middleware applies to
 };

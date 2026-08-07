@@ -60,7 +60,7 @@ export function baseLayout({
           <tr>
             <td style="padding:20px 32px;border-top:1px solid #f0f0f0;background-color:#fafafa;">
               <p style="margin:0;font-size:12px;color:#9ca3af;line-height:1.6;">
-                This email was sent by ${companyName}. If you have questions, reply to this email or contact us directly.
+                This email was sent by ${companyName}..
               </p>
             </td>
           </tr>
