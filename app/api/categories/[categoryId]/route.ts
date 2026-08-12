@@ -19,9 +19,13 @@ export async function GET(
 					organizationId: String(data?.session.activeOrganizationId),
 				},
 				include: {
-					_count: {
-						select: {
-							invoices: true,
+					invoices: {
+						include: {
+							_count: {
+								select: {
+									items: true,
+								},
+							},
 						},
 					},
 				},

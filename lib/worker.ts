@@ -215,12 +215,12 @@ async function handleSendReciept(job: Job) {
 
 	if (!receipt) throw new Error(`Receipt ${receiptId} not found`);
 
-	if (receipt.invoice.status !== "PAID") {
-		console.log(
-			`[send-invoice-reciept] Invoice ${receipt.invoiceId} is not paid — skipping`,
-		);
-		return;
-	}
+	// if (receipt.invoice.status !== "PAID") {
+	// 	console.log(
+	// 		`[send-invoice-reciept] Invoice ${receipt.invoiceId} is not paid — skipping`,
+	// 	);
+	// 	return;
+	// }
 	// const client = await init.connect();
 	try {
 		const { success, error }: { success: boolean; error: string } =
@@ -304,12 +304,12 @@ async function handleSendPayment(job: Job) {
 
 	if (!payment) throw new Error(`payment ${paymentId} not found`);
 
-	if (payment.invoice.status !== "PAID") {
-		console.log(
-			`[send-invoice-payment] Invoice ${payment.invoiceId} is not paid — skipping`,
-		);
-		return;
-	}
+	// if (payment.invoice.status !== "PAID") {
+	// 	console.log(
+	// 		`[send-invoice-payment] Invoice ${payment.invoiceId} is not paid — skipping`,
+	// 	);
+	// 	return;
+	// }
 	// const client = await init.connect();
 	try {
 		const notification = await prisma.notification.create({

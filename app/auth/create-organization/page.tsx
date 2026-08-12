@@ -24,7 +24,6 @@ import countriesList from "@/lib/country_state";
 import { useMemo } from "react";
 import { Select } from "@mantine/core";
 import generateOrgCode from "@/lib/generateOrgCode";
-import { useDebouncedCallback } from "@mantine/hooks";
 const formSchema = z.object({
 	name: z
 		.string("Invalid Name")
@@ -34,7 +33,6 @@ const formSchema = z.object({
 	phone: z
 		.string("Phone must be valid")
 		.min(10, "Phone number must be at least 10 characters."),
-	slug: z.string("Slug must be valid"),
 	address: z.string("Address must be valid"),
 	city: z.string("City must be valid"),
 	country_state: z.string("Country - State must be valid"),
@@ -44,35 +42,12 @@ const formSchema = z.object({
 const Page = () => {
 	const router = useRouter();
 
-	const { handleSubmit, control, formState, setError, clearErrors, setValue } =
-		useForm<z.infer<typeof formSchema>>({
-			resolver: zodResolver(formSchema),
-			// mode: "onBlur",
-		});
-	const callback = useDebouncedCallback(
-		async (value: string) => {
-			if (value.length < 3) {
-				return setError("slug", {
-					message: "Slug must be at least 3 characters.",
-				});
-			} else if (value.length > 32) {
-				return setError("slug", {
-					message: "Slug must be at most 32 characters.",
-				});
-			}
-			const { data, error } = await authClient.organization.checkSlug({
-				slug: value, // required
-			});
-			if (!data?.status) {
-				setError("slug", { message: error?.message || "Slug is unavailable" });
-			} else {
-				clearErrors("slug");
-			}
-		},
-		{
-			delay: 300,
-		},
-	);
+	const { handleSubmit, control, formState } = useForm<
+		z.infer<typeof formSchema>
+	>({
+		resolver: zodResolver(formSchema),
+		// mode: "onBlur",
+	});
 	const countriesData = useMemo(() => {
 		return countriesList.map((country) => {
 			return {
@@ -96,7 +71,7 @@ const Page = () => {
 
 		await authClient.organization.create({
 			name: values.name,
-			slug: values.slug,
+			slug: values.name.toLowerCase().replace(/\s+/g, "-"),
 			email: values.email,
 			phone: values.phone,
 			address: values.address,
@@ -113,11 +88,11 @@ const Page = () => {
 					toast(context.error.message, "error");
 				},
 				async onSuccess(context) {
-					const { data } = await authClient.organization.setActive({
+					await authClient.organization.setActive({
 						organizationId: context.data?.id,
 					});
 					toast("Organization created successfully", "success");
-					router.push(`/app/${data?.slug}`); // Redirect to the organization's page after successful creation
+					router.push(`/app/`); // Redirect to the organization's page after successful creation
 				},
 			},
 		});
@@ -157,33 +132,6 @@ const Page = () => {
 										</Field>
 									)}
 								/>
-								<Controller
-									name='slug'
-									control={control}
-									rules={{ required: true }}
-									render={({ field, fieldState }) => (
-										<Field data-invalid={fieldState.invalid}>
-											<FieldLabel htmlFor='slug'>Business Slug</FieldLabel>
-											<Input
-												{...field}
-												id='slug'
-												type='text'
-												placeholder='john-doe'
-												disabled={formState.isSubmitting}
-												required
-												aria-invalid={fieldState.invalid}
-												onChange={async (e) => {
-													setValue("slug", e.currentTarget.value);
-													callback(e.currentTarget.value);
-												}}
-											/>
-											{fieldState.invalid && (
-												<FieldError errors={[fieldState.error]} />
-											)}
-										</Field>
-									)}
-								/>
-
 								<Controller
 									name='email'
 									control={control}

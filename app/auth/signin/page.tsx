@@ -74,7 +74,7 @@ export default function Page() {
 						await authClient.organization.setActive({
 							organizationId: orgs[0].id,
 						});
-						router.push(`/app/${orgs[0].slug}`);
+						router.push(`/app`);
 					} else {
 						router.push("/auth/create-organization");
 					}

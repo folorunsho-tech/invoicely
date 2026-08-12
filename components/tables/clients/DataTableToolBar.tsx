@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { countries } from "./filters";
 import { DataTableFacetedFilter } from "@/components/data-table-faceted-filter";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 
 interface DataTableToolbarProps<TData> {
 	table: Table<TData>;
@@ -19,7 +18,7 @@ export function DataTableToolbar<TData>({
 	table,
 }: DataTableToolbarProps<TData>) {
 	const isFiltered = table.getState().columnFilters.length > 0;
-	const { slug } = useParams();
+
 	return (
 		<div className='flex items-center justify-between flex-wrap gap-2 sm:gap-0'>
 			<div className='flex flex-1 flex-wrap items-center gap-2'>
@@ -58,13 +57,13 @@ export function DataTableToolbar<TData>({
 			</div>
 			<div className='flex items-center gap-2'>
 				<Button size='sm' asChild variant='destructive'>
-					<Link href={`/app/${slug}/clients/trash`}>
+					<Link href={`/app/clients/trash`}>
 						<Trash className='mr-2 h-4 w-4' />
 						Trash
 					</Link>
 				</Button>
 				<Button size='sm' asChild>
-					<Link href={`/app/${slug}/clients/create`}>
+					<Link href={`/app/clients/create`}>
 						<PlusIcon className='mr-2 h-4 w-4' />
 						New Client
 					</Link>

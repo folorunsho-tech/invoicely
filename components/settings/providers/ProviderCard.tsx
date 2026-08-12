@@ -72,7 +72,7 @@ const ProviderCard = ({
 					</CardDescription>
 				</div>
 				<CardAction className='flex gap-1'>
-					{!currProvider?.data?.id && (
+					{false && !currProvider?.data?.id && (
 						<Button
 							onClick={async (e) => {
 								e.preventDefault();

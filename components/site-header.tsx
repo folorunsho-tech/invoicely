@@ -2,10 +2,9 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Bell, LogOut, ChevronsUpDown, UserCog } from "lucide-react";
+import { Bell, LogOut, UserCog } from "lucide-react";
 import {
 	DropdownMenu,
-	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuGroup,
 	DropdownMenuItem,
@@ -15,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { authClient } from "@/lib/auth-client";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { markNotification } from "@/lib/queries/notifications";
@@ -34,7 +33,6 @@ export function SiteHeader() {
 			queryClient.invalidateQueries({ queryKey: ["notifications"] });
 		},
 	});
-	const { slug }: { slug: string } = useParams();
 	const { data: session } = authClient.useSession();
 	const { data: organizations } = authClient.useListOrganizations();
 	const user = {
@@ -56,51 +54,12 @@ export function SiteHeader() {
 					/>
 					<div className='flex gap-3 p-1 items-center'>
 						<h2 className='font-bold'>
-							{organizations?.find((org) => org.slug == slug)?.name}
+							{
+								organizations?.find(
+									(org) => org.id == session?.session.activeOrganizationId,
+								)?.name
+							}
 						</h2>
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button variant='outline'>
-									<ChevronsUpDown />
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent className='w-max max-h-72'>
-								<DropdownMenuGroup>
-									<DropdownMenuLabel>
-										<span className='truncate max-w-[40ch]'>{user.name}</span>
-										&apos;s businesses
-									</DropdownMenuLabel>
-									{organizations?.map((org) => (
-										<DropdownMenuCheckboxItem
-											className='cursor-pointer'
-											checked={slug == org.slug}
-											onClick={async () => {
-												const { data } =
-													await authClient.organization.setActive({
-														organizationId: org.id,
-													});
-												router.push(`/app/${data?.slug}`);
-											}}
-											key={org.slug}
-											disabled={slug == org.slug}
-										>
-											{org.name}
-										</DropdownMenuCheckboxItem>
-									))}
-								</DropdownMenuGroup>
-								{/* <DropdownMenuSeparator />
-								<DropdownMenuGroup>
-									<DropdownMenuItem asChild className='cursor-pointer'>
-										<Link href='/app'>All Businesess</Link>
-									</DropdownMenuItem>
-								</DropdownMenuGroup>
-								<DropdownMenuGroup>
-									<DropdownMenuItem asChild className='cursor-pointer'>
-										<Link href='/app/new-business'>+ New Business</Link>
-									</DropdownMenuItem>
-								</DropdownMenuGroup> */}
-							</DropdownMenuContent>
-						</DropdownMenu>
 					</div>
 				</div>
 
@@ -133,7 +92,7 @@ export function SiteHeader() {
 										>
 											<Link
 												className='flex flex-col gap-1 '
-												href={not.link ? `/app/${slug}/${not.link}` : "#"}
+												href={not.link ? `/app/${not.link}` : "#"}
 											>
 												<Label className='text-xs'>{not.title}</Label>
 												<FieldDescription className='text-xs'>
@@ -155,7 +114,7 @@ export function SiteHeader() {
 										asChild
 										className='cursor-pointer flex justify-center'
 									>
-										<Link href={`/app/${slug}/notifications`}>View All</Link>
+										<Link href={`/app/notifications`}>View All</Link>
 									</DropdownMenuItem>
 								</DropdownMenuGroup>
 							)}

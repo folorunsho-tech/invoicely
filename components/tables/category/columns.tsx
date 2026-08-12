@@ -62,16 +62,6 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		},
 		enableHiding: false,
 	},
-	// {
-	// 	accessorKey: "slug",
-	// 	header: ({ column }) => (
-	// 		<DataTableColumnHeader column={column} title='Slug' />
-	// 	),
-	// 	cell: ({ row }) => {
-	// 		return <p className='max-w-[45ch] truncate'>{row.original.slug}</p>;
-	// 	},
-	// 	enableHiding: false,
-	// },
 	{
 		accessorKey: "invoices",
 		header: ({ column }) => (
@@ -79,7 +69,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		),
 		cell: ({ row }) => {
 			return (
-				<p className='max-w-[45ch] truncate'>{row.original._count.invoices}</p>
+				<p className='max-w-[45ch] truncate'>{row.original._count?.invoices}</p>
 			);
 		},
 		enableHiding: false,
@@ -101,18 +91,10 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align='end' className='w-32 cursor-pointer'>
 					<DropdownMenuItem asChild className='cursor-pointer'>
-						<Link
-							href={`/app/${row.original.organization.slug}/categories/${row.original.id}`}
-						>
-							View
-						</Link>
+						<Link href={`/app/categories/${row.original.id}`}>View</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild className='cursor-pointer'>
-						<Link
-							href={`/app/${row.original.organization.slug}/categories/${row.original.id}/update`}
-						>
-							Edit
-						</Link>
+						<Link href={`/app/categories/${row.original.id}/update`}>Edit</Link>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem

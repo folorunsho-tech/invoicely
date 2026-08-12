@@ -11,6 +11,7 @@ export function useNotifications() {
 		queryFn: async () => {
 			return await getNotifications();
 		},
+		refetchInterval: 30000,
 	});
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	useEffect(() => {

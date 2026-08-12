@@ -23,11 +23,9 @@ import {
 	// ChartColumn,
 } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-	const { slug } = useParams();
 	const { data: curruser } = authClient.useActiveMember();
 	const navMain: {
 		title: string;
@@ -37,43 +35,43 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	}[] = [
 		{
 			title: "Dashboard",
-			url: `/app/${slug}`,
+			url: `/app`,
 			icon: <LayoutDashboardIcon />,
 			visible: true,
 		},
 		{
 			title: "Clients",
-			url: `/app/${slug}/clients`,
+			url: `/app/clients`,
 			icon: <UserCheck />,
 			visible: true,
 		},
 		{
 			title: "Invoices",
-			url: `/app/${slug}/invoices`,
+			url: `/app/invoices`,
 			icon: <ReceiptText />,
 			visible: true,
 		},
 		{
 			title: "Payments",
-			url: `/app/${slug}/payments`,
+			url: `/app/payments`,
 			visible: true,
 			icon: <BanknoteArrowDown />,
 		},
 		// {
 		// 	title: "Analytics",
-		// 	url: `/app/${slug}/analytics`,
+		// 	url: `/app/analytics`,
 		// 	icon: <ChartColumn />,
 		// 	visible: true,
 		// },
 		{
 			title: "Categories",
-			url: `/app/${slug}/categories`,
+			url: `/app/categories`,
 			icon: <Group />,
 			visible: curruser?.role !== "member",
 		},
 		{
 			title: "Settings",
-			url: `/app/${slug}/settings`,
+			url: `/app/settings`,
 			icon: <Settings />,
 			visible: curruser?.role !== "member",
 		},
@@ -87,7 +85,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							asChild
 							className='data-[slot=sidebar-menu-button]:p-1.5!'
 						>
-							<Link href={`/app/${slug}`}>
+							<Link href={`/app`}>
 								<CommandIcon className='size-5!' />
 								<span className='text-base font-semibold'>Invoicely</span>
 							</Link>

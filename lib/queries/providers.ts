@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import toast from "../toaster";
-import { InputJsonValue } from "@prisma/client/runtime/client";
-import { NullableJsonNullValueInput } from "@/generated/prisma/internal/prismaNamespace";
 import { GatewayProvider } from "@/generated/prisma/enums";
 
 const apiUrl = process.env.API_URL || "http://localhost:3000/api/";

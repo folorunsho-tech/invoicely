@@ -37,8 +37,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
 	columns,
 	data,
-	slug,
-}: DataTableProps<TData, TValue> & { slug: string }) {
+}: DataTableProps<TData, TValue>) {
 	const [rowSelection, setRowSelection] = React.useState({});
 	const [columnVisibility, setColumnVisibility] =
 		React.useState<VisibilityState>({});
@@ -80,7 +79,7 @@ export function DataTable<TData, TValue>({
 	return (
 		<section className='flex flex-col gap-6'>
 			<Button className='w-fit self-end'>
-				<Link href={`/app/${slug}/categories/new`}>New Category</Link>
+				<Link href={`/app/categories/new`}>New Category</Link>
 			</Button>
 			<div className=' flex flex-col gap-4'>
 				<div className='overflow-hidden rounded-md border'>

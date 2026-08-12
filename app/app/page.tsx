@@ -1,78 +1,42 @@
 "use client";
-import { HomeHeader } from "@/components/home-header";
-import { SearchIcon } from "lucide-react";
-import {
-	InputGroup,
-	InputGroupAddon,
-	InputGroupInput,
-} from "@/components/ui/input-group";
-// import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { useRouter } from "next/navigation";
-// import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { authClient } from "@/lib/auth-client";
-
+// import { ChartAreaInteractive } from "@/components/chart-area-interactive";
+// import { ChartBarInteractive } from "@/components/chart-bar-interactive";
+import { getPayments } from "@/lib/queries/payment";
+import { useQuery } from "@tanstack/react-query";
+import { SectionCards } from "@/components/section-cards";
+import { columns } from "@/components/tables/payments/columns";
+import { RenderTable } from "@/components/tables/RenderTable";
+import { schema } from "@/components/tables/payments/schema";
+import { Label } from "@/components/ui/label";
 const Page = () => {
-	const { data: organizations } = authClient.useListOrganizations();
-	const router = useRouter();
-	const setActiveOrg = async (id: string) => {
-		if (organizations) {
-			const { data } = await authClient.organization.setActive({
-				organizationId: id,
-			});
-			router.push(`/app/${data?.slug}`);
-		}
-	};
-
+	const res = useQuery({
+		queryKey: ["payments"],
+		queryFn: async () => {
+			return await getPayments();
+		},
+	});
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const payments: any[] = res.data;
 	return (
-		<>
-			<HomeHeader />
-			<main className='space-y-6 p-4'>
-				<h2 className='text-xl font-bold'>Your Businesses</h2>
-				<section className='flex items-center justify-between text-sm'>
-					<InputGroup className='max-w-xs h-8'>
-						<InputGroupInput placeholder='Search for a business...' />
-						<InputGroupAddon>
-							<SearchIcon />
-						</InputGroupAddon>
-					</InputGroup>
-					{/* <Button size='sm' asChild className='cursor-pointer'>
-						<Link href='/app/new-business'>+ New Business</Link>
-					</Button> */}
-				</section>
-				<section>
-					{organizations?.map((org) => {
-						return (
-							<Card
-								key={org.id}
-								onClick={() => setActiveOrg(org.id)}
-								size='sm'
-								className='w-full max-w-sm cursor-pointer'
-							>
-								<CardHeader className='flex items-center space-x-4'>
-									<Avatar size='lg'>
-										<AvatarImage src={org.slug} />
-										<AvatarFallback>{org.name.substring(0, 2)}</AvatarFallback>
-									</Avatar>
-									<div>
-										<CardTitle>{org.name}</CardTitle>
-										<CardDescription>
-											Created at: {new Date(org.createdAt).toLocaleString()}
-										</CardDescription>
-									</div>
-								</CardHeader>
-							</Card>
-						);
-					})}
-				</section>
-			</main>
-		</>
+		<div className='flex flex-1 flex-col'>
+			<div className='@container/main flex flex-1 flex-col gap-2'>
+				<div className='flex flex-col gap-4 py-2 md:gap-6 md:py-4'>
+					<SectionCards />
+					{/* <div className='px-4 lg:px-6 space-y-6'>
+						<ChartAreaInteractive />
+						<ChartBarInteractive />
+					</div> */}
+					<div className='space-y-4'>
+						<Label className='text-md'>Payments</Label>
+						<RenderTable
+							data={payments || []}
+							columns={columns}
+							schema={schema}
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
 	);
 };
 

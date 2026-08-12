@@ -118,7 +118,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Provider' />
 		),
-		cell: ({ row }) => row.original.gateway.provider,
+		cell: ({ row }) => row.original.gateway?.provider,
 	},
 	{
 		accessorKey: "provider_reference",
@@ -175,19 +175,11 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align='end' className='w-32 cursor-pointer'>
 					<DropdownMenuItem asChild className='cursor-pointer'>
-						<Link
-							href={`/app/${row.original.organization.slug}/payments/${row.original.id}`}
-						>
-							View
-						</Link>
+						<Link href={`/app/payments/${row.original.id}`}>View</Link>
 					</DropdownMenuItem>
-					{row.original.gateway.provider == "manual" && (
+					{row.original.gateway?.provider == "manual" && (
 						<DropdownMenuItem asChild className='cursor-pointer'>
-							<Link
-								href={`/app/${row.original.organization.slug}/payments/${row.original.id}/update`}
-							>
-								Edit
-							</Link>
+							<Link href={`/app/payments/${row.original.id}/update`}>Edit</Link>
 						</DropdownMenuItem>
 					)}
 				</DropdownMenuContent>
@@ -219,7 +211,7 @@ export const rcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Provider' />
 		),
-		cell: ({ row }) => row.original.gateway.provider,
+		cell: ({ row }) => row.original.gateway?.provider,
 	},
 	{
 		accessorKey: "provider_reference",
@@ -276,19 +268,11 @@ export const rcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align='end' className='w-32 cursor-pointer'>
 					<DropdownMenuItem asChild className='cursor-pointer'>
-						<Link
-							href={`/app/${row.original.organization.slug}/payments/${row.original.id}`}
-						>
-							View
-						</Link>
+						<Link href={`/app/payments/${row.original.id}`}>View</Link>
 					</DropdownMenuItem>
-					{row.original.gateway.provider == "manual" && (
+					{row.original.gateway?.provider == "manual" && (
 						<DropdownMenuItem asChild className='cursor-pointer'>
-							<Link
-								href={`/app/${row.original.organization.slug}/payments/${row.original.id}/update`}
-							>
-								Edit
-							</Link>
+							<Link href={`/app/payments/${row.original.id}/update`}>Edit</Link>
 						</DropdownMenuItem>
 					)}
 				</DropdownMenuContent>

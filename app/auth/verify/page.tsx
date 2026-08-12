@@ -58,7 +58,7 @@ export default function InputOTPForm() {
 						});
 						interval.stop();
 						setIsSubmitting(false);
-						router.push("/new-business");
+						router.push("/create-organization");
 					},
 					onError(context) {
 						setInvalid(true);

@@ -3,10 +3,10 @@ import { authClient } from "@/lib/auth-client";
 import toast from "../toaster";
 const apiUrl = process.env.API_URL || "http://localhost:3000/api/";
 
-export const getOrgMembers = async (slug: string) => {
+export const getOrgMembers = async (id: string) => {
 	const { data, error } = await authClient.organization.listMembers({
 		query: {
-			organizationSlug: slug,
+			organizationId: id,
 			sortBy: "createdAt",
 			sortDirection: "desc",
 		},

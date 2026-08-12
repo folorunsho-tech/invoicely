@@ -126,18 +126,10 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align='end' className='w-32 cursor-pointer'>
 					<DropdownMenuItem asChild className='cursor-pointer'>
-						<Link
-							href={`/app/${row.original.organization?.slug}/clients/${row.original.id}`}
-						>
-							View
-						</Link>
+						<Link href={`/app/clients/${row.original.id}`}>View</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild className='cursor-pointer'>
-						<Link
-							href={`/app/${row.original.organization?.slug}/clients/${row.original.id}/update`}
-						>
-							Edit
-						</Link>
+						<Link href={`/app/clients/${row.original.id}/update`}>Edit</Link>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem
@@ -260,18 +252,10 @@ export const tcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align='end' className='w-32 cursor-pointer'>
 					<DropdownMenuItem asChild className='cursor-pointer'>
-						<Link
-							href={`/app/${row.original.organization.slug}/clients/${row.original.id}`}
-						>
-							View
-						</Link>
+						<Link href={`/app/clients/${row.original.id}`}>View</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild className='cursor-pointer'>
-						<Link
-							href={`/app/${row.original.organization.slug}/clients/${row.original.id}/update`}
-						>
-							Edit
-						</Link>
+						<Link href={`/app/clients/${row.original.id}/update`}>Edit</Link>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem
