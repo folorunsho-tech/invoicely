@@ -37,5 +37,5 @@ COPY --from=builder /app/.next/static ./.next/static
 USER invoicelynext
 
 EXPOSE 3000
-RUN npm run worker
+# RUN npm run worker
 CMD ["node", "server.js"]
