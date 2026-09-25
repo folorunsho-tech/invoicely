@@ -26,7 +26,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 # Create user
 RUN addgroup --system --gid 1001 nodejs \
-    && adduser --system --uid 1001 nextjs
+    && adduser --system --uid 1001 invoicelynext
 
 # Copy build artifacts
 COPY --from=builder /app/public ./public
