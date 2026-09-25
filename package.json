@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "worker": "dotenv -e .env -- npx tsx ./lib/worker.js",
+    "worker": "dotenv -e .env -- npx tsx ./lib/worker.ts",
     "queue": "npx tsx ./lib/queue.ts"
   },
   "type": "module",

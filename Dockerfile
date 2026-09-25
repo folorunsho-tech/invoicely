@@ -15,8 +15,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate
-ENV NEXT_TELEMETRY_DISABLED=1
-RUN npx prisma migrate deploy
 RUN npm run build
 
 # Production image, copy only necessary files
@@ -36,7 +34,8 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
 
-USER nextjs
+USER invoicelynext
 
 EXPOSE 3000
+RUN npm run worker
 CMD ["node", "server.js"]
