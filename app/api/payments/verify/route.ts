@@ -2,7 +2,8 @@ import { verifyTnx } from "@/lib/paykit";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { queueInvoicePayment, queueInvoiceReciept } from "@/lib/queue";
-import { client } from "@/lib/redis";
+import { getRedisClient } from "@/lib/redis";
+const client = await getRedisClient();
 
 export async function POST(request: NextRequest) {
 	const { reference }: { reference: string } = await request.json();
