@@ -26,6 +26,12 @@ const getStatusBadge = (status: string) => {
 					Pending
 				</Badge>
 			);
+		case "overdue":
+			return (
+				<Badge variant='outline' className='text-yellow-500 border-yellow-500'>
+					Overdue
+				</Badge>
+			);
 
 		case "failed":
 			return (
@@ -87,7 +93,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 	{
 		accessorKey: "paid_at",
 		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Paid On' />
+			<DataTableColumnHeader column={column} title='Paid At' />
 		),
 		cell: ({ row }) => format(row.original.paid_at, "Pp") || null,
 	},
@@ -118,17 +124,15 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Provider' />
 		),
-		cell: ({ row }) => row.original.gateway?.provider,
+		cell: ({ row }) => row.original.provider,
 	},
 	{
-		accessorKey: "provider_reference",
+		accessorKey: "reference",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Reference' />
 		),
 		cell: ({ row }) => (
-			<span className='max-w-[45ch] truncate'>
-				{row.original.provider_transaction_id}
-			</span>
+			<span className='max-w-[45ch] truncate'>{row.original.reference}</span>
 		),
 	},
 	{
@@ -177,7 +181,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 					<DropdownMenuItem asChild className='cursor-pointer'>
 						<Link href={`/app/payments/${row.original.id}`}>View</Link>
 					</DropdownMenuItem>
-					{row.original.gateway?.provider == "manual" && (
+					{row.original.provider == "manual" && (
 						<DropdownMenuItem asChild className='cursor-pointer'>
 							<Link href={`/app/payments/${row.original.id}/update`}>Edit</Link>
 						</DropdownMenuItem>
@@ -201,7 +205,7 @@ export const rcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 	{
 		accessorKey: "paid_at",
 		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Paid On' />
+			<DataTableColumnHeader column={column} title='Paid At' />
 		),
 		cell: ({ row }) => format(row.original.paid_at, "Pp") || null,
 	},
@@ -211,17 +215,15 @@ export const rcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Provider' />
 		),
-		cell: ({ row }) => row.original.gateway?.provider,
+		cell: ({ row }) => row.original.provider,
 	},
 	{
-		accessorKey: "provider_reference",
+		accessorKey: "reference",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Reference' />
 		),
 		cell: ({ row }) => (
-			<span className='max-w-[45ch] truncate'>
-				{row.original.provider_transaction_id}
-			</span>
+			<span className='max-w-[45ch] truncate'>{row.original.reference}</span>
 		),
 	},
 	{
@@ -270,7 +272,7 @@ export const rcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 					<DropdownMenuItem asChild className='cursor-pointer'>
 						<Link href={`/app/payments/${row.original.id}`}>View</Link>
 					</DropdownMenuItem>
-					{row.original.gateway?.provider == "manual" && (
+					{row.original.provider == "manual" && (
 						<DropdownMenuItem asChild className='cursor-pointer'>
 							<Link href={`/app/payments/${row.original.id}/update`}>Edit</Link>
 						</DropdownMenuItem>

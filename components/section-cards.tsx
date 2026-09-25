@@ -31,7 +31,7 @@ export function SectionCards() {
 					<CardDescription>Total Revenue</CardDescription>
 					<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
 						<NumberFormatter
-							value={dashboard.data?.revenue}
+							value={dashboard.data?.revenue || 0}
 							thousandSeparator
 							prefix={activeOrg?.currencySymbol}
 						/>
@@ -57,7 +57,7 @@ export function SectionCards() {
 					<CardDescription>Total Invoices</CardDescription>
 					<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
 						<NumberFormatter
-							value={dashboard.data?.invoices}
+							value={dashboard.data?.invoices || 0}
 							thousandSeparator
 						/>
 					</CardTitle>
@@ -82,7 +82,7 @@ export function SectionCards() {
 					<CardDescription>Total Clients</CardDescription>
 					<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
 						<NumberFormatter
-							value={dashboard.data?.clients}
+							value={dashboard.data?.clients || 0}
 							thousandSeparator
 						/>
 					</CardTitle>

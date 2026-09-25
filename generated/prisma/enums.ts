@@ -9,26 +9,6 @@
 * 🟢 You can import this file directly.
 */
 
-export const NotificationChannel = {
-  email: 'email',
-  sms: 'sms',
-  whatsapp: 'whatsapp',
-  telegram: 'telegram'
-} as const
-
-export type NotificationChannel = (typeof NotificationChannel)[keyof typeof NotificationChannel]
-
-
-export const GatewayProvider = {
-  stripe: 'stripe',
-  paystack: 'paystack',
-  flutterwave: 'flutterwave',
-  manual: 'manual'
-} as const
-
-export type GatewayProvider = (typeof GatewayProvider)[keyof typeof GatewayProvider]
-
-
 export const InvoiceStatus = {
   PENDING: 'PENDING',
   DRAFT: 'DRAFT',

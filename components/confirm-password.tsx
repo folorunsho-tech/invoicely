@@ -11,7 +11,6 @@ function ConfirmPasswordInput({
 	description,
 	htmlFor,
 	id,
-	required = false,
 	field,
 	invalid,
 	fieldState,
@@ -22,7 +21,7 @@ function ConfirmPasswordInput({
 	description?: string;
 	htmlFor?: string;
 	id: string;
-	required?: boolean;
+
 	field?: any;
 	invalid?: any;
 	fieldState: any;

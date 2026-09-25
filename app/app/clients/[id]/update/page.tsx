@@ -13,7 +13,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import countriesList from "@/lib/country_state";
+import { states } from "@/lib/country_state";
 import { useEffect, useMemo } from "react";
 import { Select } from "@mantine/core";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -31,7 +31,7 @@ const formSchema = z.object({
 		.string("City is not correct")
 		.min(3, "City must be at least 3 characters.")
 		.max(32, "City must be at most 32 characters."),
-	country_state: z.string("Country - State must be valid"),
+	state: z.string("State must be valid"),
 	postCode: z.string("Postal Code must be valid"),
 });
 const Page = () => {
@@ -57,16 +57,8 @@ const Page = () => {
 		mode: "all",
 	});
 	const countriesData = useMemo(() => {
-		return countriesList.map((country) => {
-			return {
-				group: country.name,
-				items: country.stateProvinces.map((state) => {
-					return {
-						label: `${country.name} - ${state.name}`,
-						value: `${country.name}_${state.name}`,
-					};
-				}),
-			};
+		return states.map((state) => {
+			return state.name;
 		});
 	}, []);
 	useEffect(() => {
@@ -77,23 +69,21 @@ const Page = () => {
 				phone: client.data.phone,
 				address: client.data.address,
 				city: client.data.city,
-				country_state: `${client.data.country}_${client.data.state}`,
+				state: client.data.state,
 				postCode: client.data.postCode,
 			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id, client.data]);
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		const country = values.country_state.split("_")[0];
-		const state = values.country_state.split("_")[1];
 		const data = {
 			name: values.name,
 			email: values.email,
 			phone: values.phone,
 			address: values.address,
 			city: values.city,
-			country,
-			state,
+			country: "Nigeria",
+			state: values.state,
 			postCode: values.postCode,
 		};
 		await mutation.mutateAsync({
@@ -262,22 +252,20 @@ const Page = () => {
 										)}
 									/>
 									<Controller
-										name='country_state'
+										name='state'
 										control={control}
 										rules={{ required: true }}
 										render={({ field, fieldState }) => (
 											<Field data-invalid={fieldState.invalid}>
-												<FieldLabel htmlFor='country_state'>
-													Country - Sate
-												</FieldLabel>
+												<FieldLabel htmlFor='state'>State</FieldLabel>
 												<Select
 													disabled={formState.isSubmitting}
 													required
 													{...field}
 													className='max-w-80'
 													aria-invalid={fieldState.invalid}
-													placeholder='Select a country - state'
-													error={formState.errors.country_state?.message}
+													placeholder='Select a state'
+													error={formState.errors.state?.message}
 													checkIconPosition='right'
 													allowDeselect={false}
 													searchable

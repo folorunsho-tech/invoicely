@@ -51,6 +51,8 @@ const Page = () => {
 			return "text-sm font-semibold outline-red-500 border-red-500 text-red-500";
 		if (status == "pending")
 			return "text-sm font-semibold outline-orange-500 border-orange-500 text-orange-500";
+		if (status == "overdue")
+			return "text-sm font-semibold outline-orange-500 border-orange-500 text-orange-500";
 		if (status == "success")
 			return "text-sm font-semibold outline-green-500 border-green-500 text-green-500";
 	};
@@ -66,8 +68,9 @@ const Page = () => {
 		if (status == "OVERDUE")
 			return "text-sm font-semibold outline-blue-500 border-blue-500 text-blue-500";
 	};
+
 	const metadata = payment?.data?.metadata
-		? JSON.parse(JSON.parse(payment.data?.metadata))
+		? JSON.parse(payment?.data?.metadata)
 		: null;
 	return (
 		<main className='space-y-6'>
@@ -108,7 +111,7 @@ const Page = () => {
 					</div>
 					<div className='flex gap-2 items-center'>
 						<Label className='text-md'>Reference: </Label>
-						<span className=''>{payment.data?.provider_transaction_id}</span>
+						<span className=''>{payment.data?.reference}</span>
 					</div>
 					<div className='flex gap-2 items-center'>
 						<Label className='text-md'>Status: </Label>
@@ -154,7 +157,7 @@ const Page = () => {
 					)}
 					<div className='flex gap-2 items-center'>
 						<Label className='text-md'>Payment provider: </Label>
-						<span>{payment.data?.gateway?.provider}</span>
+						<span>{payment.data?.provider}</span>
 					</div>
 				</CardContent>
 			</Card>

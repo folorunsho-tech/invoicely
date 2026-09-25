@@ -192,23 +192,6 @@ export type EnumInvoiceStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumInvoiceStatusFilter<$PrismaModel>
 }
 
-export type EnumNotificationChannelNullableFilter<$PrismaModel = never> = {
-  equals?: $Enums.NotificationChannel | Prisma.EnumNotificationChannelFieldRefInput<$PrismaModel> | null
-  in?: $Enums.NotificationChannel[] | Prisma.ListEnumNotificationChannelFieldRefInput<$PrismaModel> | null
-  notIn?: $Enums.NotificationChannel[] | Prisma.ListEnumNotificationChannelFieldRefInput<$PrismaModel> | null
-  not?: Prisma.NestedEnumNotificationChannelNullableFilter<$PrismaModel> | $Enums.NotificationChannel | null
-}
-
-export type EnumNotificationChannelNullableWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.NotificationChannel | Prisma.EnumNotificationChannelFieldRefInput<$PrismaModel> | null
-  in?: $Enums.NotificationChannel[] | Prisma.ListEnumNotificationChannelFieldRefInput<$PrismaModel> | null
-  notIn?: $Enums.NotificationChannel[] | Prisma.ListEnumNotificationChannelFieldRefInput<$PrismaModel> | null
-  not?: Prisma.NestedEnumNotificationChannelNullableWithAggregatesFilter<$PrismaModel> | $Enums.NotificationChannel | null
-  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumNotificationChannelNullableFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumNotificationChannelNullableFilter<$PrismaModel>
-}
-
 export type IntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -285,23 +268,6 @@ export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedJsonNullableFilter<$PrismaModel>
   _max?: Prisma.NestedJsonNullableFilter<$PrismaModel>
-}
-
-export type EnumGatewayProviderFilter<$PrismaModel = never> = {
-  equals?: $Enums.GatewayProvider | Prisma.EnumGatewayProviderFieldRefInput<$PrismaModel>
-  in?: $Enums.GatewayProvider[] | Prisma.ListEnumGatewayProviderFieldRefInput<$PrismaModel>
-  notIn?: $Enums.GatewayProvider[] | Prisma.ListEnumGatewayProviderFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumGatewayProviderFilter<$PrismaModel> | $Enums.GatewayProvider
-}
-
-export type EnumGatewayProviderWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.GatewayProvider | Prisma.EnumGatewayProviderFieldRefInput<$PrismaModel>
-  in?: $Enums.GatewayProvider[] | Prisma.ListEnumGatewayProviderFieldRefInput<$PrismaModel>
-  notIn?: $Enums.GatewayProvider[] | Prisma.ListEnumGatewayProviderFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumGatewayProviderWithAggregatesFilter<$PrismaModel> | $Enums.GatewayProvider
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumGatewayProviderFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumGatewayProviderFilter<$PrismaModel>
 }
 
 export type DecimalNullableFilter<$PrismaModel = never> = {
@@ -522,23 +488,6 @@ export type NestedEnumInvoiceStatusWithAggregatesFilter<$PrismaModel = never> = 
   _max?: Prisma.NestedEnumInvoiceStatusFilter<$PrismaModel>
 }
 
-export type NestedEnumNotificationChannelNullableFilter<$PrismaModel = never> = {
-  equals?: $Enums.NotificationChannel | Prisma.EnumNotificationChannelFieldRefInput<$PrismaModel> | null
-  in?: $Enums.NotificationChannel[] | Prisma.ListEnumNotificationChannelFieldRefInput<$PrismaModel> | null
-  notIn?: $Enums.NotificationChannel[] | Prisma.ListEnumNotificationChannelFieldRefInput<$PrismaModel> | null
-  not?: Prisma.NestedEnumNotificationChannelNullableFilter<$PrismaModel> | $Enums.NotificationChannel | null
-}
-
-export type NestedEnumNotificationChannelNullableWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.NotificationChannel | Prisma.EnumNotificationChannelFieldRefInput<$PrismaModel> | null
-  in?: $Enums.NotificationChannel[] | Prisma.ListEnumNotificationChannelFieldRefInput<$PrismaModel> | null
-  notIn?: $Enums.NotificationChannel[] | Prisma.ListEnumNotificationChannelFieldRefInput<$PrismaModel> | null
-  not?: Prisma.NestedEnumNotificationChannelNullableWithAggregatesFilter<$PrismaModel> | $Enums.NotificationChannel | null
-  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumNotificationChannelNullableFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumNotificationChannelNullableFilter<$PrismaModel>
-}
-
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -588,23 +537,6 @@ export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
   gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
-}
-
-export type NestedEnumGatewayProviderFilter<$PrismaModel = never> = {
-  equals?: $Enums.GatewayProvider | Prisma.EnumGatewayProviderFieldRefInput<$PrismaModel>
-  in?: $Enums.GatewayProvider[] | Prisma.ListEnumGatewayProviderFieldRefInput<$PrismaModel>
-  notIn?: $Enums.GatewayProvider[] | Prisma.ListEnumGatewayProviderFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumGatewayProviderFilter<$PrismaModel> | $Enums.GatewayProvider
-}
-
-export type NestedEnumGatewayProviderWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.GatewayProvider | Prisma.EnumGatewayProviderFieldRefInput<$PrismaModel>
-  in?: $Enums.GatewayProvider[] | Prisma.ListEnumGatewayProviderFieldRefInput<$PrismaModel>
-  notIn?: $Enums.GatewayProvider[] | Prisma.ListEnumGatewayProviderFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumGatewayProviderWithAggregatesFilter<$PrismaModel> | $Enums.GatewayProvider
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumGatewayProviderFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumGatewayProviderFilter<$PrismaModel>
 }
 
 export type NestedDecimalNullableFilter<$PrismaModel = never> = {

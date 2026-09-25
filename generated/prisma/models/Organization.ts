@@ -40,7 +40,6 @@ export type OrganizationMinAggregateOutputType = {
   country: string | null
   createdAt: Date | null
   metadata: string | null
-  currencyPos: string | null
   currencySymbol: string | null
 }
 
@@ -60,7 +59,6 @@ export type OrganizationMaxAggregateOutputType = {
   country: string | null
   createdAt: Date | null
   metadata: string | null
-  currencyPos: string | null
   currencySymbol: string | null
 }
 
@@ -80,7 +78,6 @@ export type OrganizationCountAggregateOutputType = {
   country: number
   createdAt: number
   metadata: number
-  currencyPos: number
   currencySymbol: number
   _all: number
 }
@@ -102,7 +99,6 @@ export type OrganizationMinAggregateInputType = {
   country?: true
   createdAt?: true
   metadata?: true
-  currencyPos?: true
   currencySymbol?: true
 }
 
@@ -122,7 +118,6 @@ export type OrganizationMaxAggregateInputType = {
   country?: true
   createdAt?: true
   metadata?: true
-  currencyPos?: true
   currencySymbol?: true
 }
 
@@ -142,7 +137,6 @@ export type OrganizationCountAggregateInputType = {
   country?: true
   createdAt?: true
   metadata?: true
-  currencyPos?: true
   currencySymbol?: true
   _all?: true
 }
@@ -235,7 +229,6 @@ export type OrganizationGroupByOutputType = {
   country: string
   createdAt: Date
   metadata: string | null
-  currencyPos: string
   currencySymbol: string
   _count: OrganizationCountAggregateOutputType | null
   _min: OrganizationMinAggregateOutputType | null
@@ -276,7 +269,6 @@ export type OrganizationWhereInput = {
   country?: Prisma.StringFilter<"Organization"> | string
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   metadata?: Prisma.StringNullableFilter<"Organization"> | string | null
-  currencyPos?: Prisma.StringFilter<"Organization"> | string
   currencySymbol?: Prisma.StringFilter<"Organization"> | string
   invoices?: Prisma.InvoiceListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
@@ -284,10 +276,8 @@ export type OrganizationWhereInput = {
   members?: Prisma.MemberListRelationFilter
   invitations?: Prisma.InvitationListRelationFilter
   invoiceCounters?: Prisma.InvoiceCounterListRelationFilter
-  notifications?: Prisma.NotificationListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
   invoiceReciepts?: Prisma.InvoiceRecieptListRelationFilter
-  gateways?: Prisma.GatewayListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -306,7 +296,6 @@ export type OrganizationOrderByWithRelationInput = {
   country?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
-  currencyPos?: Prisma.SortOrder
   currencySymbol?: Prisma.SortOrder
   invoices?: Prisma.InvoiceOrderByRelationAggregateInput
   categories?: Prisma.CategoryOrderByRelationAggregateInput
@@ -314,10 +303,8 @@ export type OrganizationOrderByWithRelationInput = {
   members?: Prisma.MemberOrderByRelationAggregateInput
   invitations?: Prisma.InvitationOrderByRelationAggregateInput
   invoiceCounters?: Prisma.InvoiceCounterOrderByRelationAggregateInput
-  notifications?: Prisma.NotificationOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
   invoiceReciepts?: Prisma.invoiceRecieptOrderByRelationAggregateInput
-  gateways?: Prisma.GatewayOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -339,7 +326,6 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   country?: Prisma.StringFilter<"Organization"> | string
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   metadata?: Prisma.StringNullableFilter<"Organization"> | string | null
-  currencyPos?: Prisma.StringFilter<"Organization"> | string
   currencySymbol?: Prisma.StringFilter<"Organization"> | string
   invoices?: Prisma.InvoiceListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
@@ -347,10 +333,8 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   members?: Prisma.MemberListRelationFilter
   invitations?: Prisma.InvitationListRelationFilter
   invoiceCounters?: Prisma.InvoiceCounterListRelationFilter
-  notifications?: Prisma.NotificationListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
   invoiceReciepts?: Prisma.InvoiceRecieptListRelationFilter
-  gateways?: Prisma.GatewayListRelationFilter
 }, "id" | "code" | "slug">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -369,7 +353,6 @@ export type OrganizationOrderByWithAggregationInput = {
   country?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
-  currencyPos?: Prisma.SortOrder
   currencySymbol?: Prisma.SortOrder
   _count?: Prisma.OrganizationCountOrderByAggregateInput
   _max?: Prisma.OrganizationMaxOrderByAggregateInput
@@ -395,7 +378,6 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   country?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Organization"> | Date | string
   metadata?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
-  currencyPos?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   currencySymbol?: Prisma.StringWithAggregatesFilter<"Organization"> | string
 }
 
@@ -415,7 +397,6 @@ export type OrganizationCreateInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryCreateNestedManyWithoutOrganizationInput
@@ -423,10 +404,8 @@ export type OrganizationCreateInput = {
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -445,7 +424,6 @@ export type OrganizationUncheckedCreateInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -453,10 +431,8 @@ export type OrganizationUncheckedCreateInput = {
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -475,7 +451,6 @@ export type OrganizationUpdateInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutOrganizationNestedInput
@@ -483,10 +458,8 @@ export type OrganizationUpdateInput = {
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -505,7 +478,6 @@ export type OrganizationUncheckedUpdateInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -513,10 +485,8 @@ export type OrganizationUncheckedUpdateInput = {
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -535,7 +505,6 @@ export type OrganizationCreateManyInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
 }
 
@@ -555,7 +524,6 @@ export type OrganizationUpdateManyMutationInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -575,7 +543,6 @@ export type OrganizationUncheckedUpdateManyInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -600,7 +567,6 @@ export type OrganizationCountOrderByAggregateInput = {
   country?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
-  currencyPos?: Prisma.SortOrder
   currencySymbol?: Prisma.SortOrder
 }
 
@@ -620,7 +586,6 @@ export type OrganizationMaxOrderByAggregateInput = {
   country?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
-  currencyPos?: Prisma.SortOrder
   currencySymbol?: Prisma.SortOrder
 }
 
@@ -640,7 +605,6 @@ export type OrganizationMinOrderByAggregateInput = {
   country?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
-  currencyPos?: Prisma.SortOrder
   currencySymbol?: Prisma.SortOrder
 }
 
@@ -656,20 +620,6 @@ export type OrganizationUpdateOneRequiredWithoutInvoicesNestedInput = {
   upsert?: Prisma.OrganizationUpsertWithoutInvoicesInput
   connect?: Prisma.OrganizationWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutInvoicesInput, Prisma.OrganizationUpdateWithoutInvoicesInput>, Prisma.OrganizationUncheckedUpdateWithoutInvoicesInput>
-}
-
-export type OrganizationCreateNestedOneWithoutNotificationsInput = {
-  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationsInput, Prisma.OrganizationUncheckedCreateWithoutNotificationsInput>
-  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutNotificationsInput
-  connect?: Prisma.OrganizationWhereUniqueInput
-}
-
-export type OrganizationUpdateOneRequiredWithoutNotificationsNestedInput = {
-  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationsInput, Prisma.OrganizationUncheckedCreateWithoutNotificationsInput>
-  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutNotificationsInput
-  upsert?: Prisma.OrganizationUpsertWithoutNotificationsInput
-  connect?: Prisma.OrganizationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutNotificationsInput, Prisma.OrganizationUpdateWithoutNotificationsInput>, Prisma.OrganizationUncheckedUpdateWithoutNotificationsInput>
 }
 
 export type OrganizationCreateNestedOneWithoutInvoiceRecieptsInput = {
@@ -712,20 +662,6 @@ export type OrganizationUpdateOneRequiredWithoutPaymentsNestedInput = {
   upsert?: Prisma.OrganizationUpsertWithoutPaymentsInput
   connect?: Prisma.OrganizationWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutPaymentsInput, Prisma.OrganizationUpdateWithoutPaymentsInput>, Prisma.OrganizationUncheckedUpdateWithoutPaymentsInput>
-}
-
-export type OrganizationCreateNestedOneWithoutGatewaysInput = {
-  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutGatewaysInput, Prisma.OrganizationUncheckedCreateWithoutGatewaysInput>
-  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutGatewaysInput
-  connect?: Prisma.OrganizationWhereUniqueInput
-}
-
-export type OrganizationUpdateOneRequiredWithoutGatewaysNestedInput = {
-  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutGatewaysInput, Prisma.OrganizationUncheckedCreateWithoutGatewaysInput>
-  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutGatewaysInput
-  upsert?: Prisma.OrganizationUpsertWithoutGatewaysInput
-  connect?: Prisma.OrganizationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutGatewaysInput, Prisma.OrganizationUpdateWithoutGatewaysInput>, Prisma.OrganizationUncheckedUpdateWithoutGatewaysInput>
 }
 
 export type OrganizationCreateNestedOneWithoutCategoriesInput = {
@@ -800,17 +736,14 @@ export type OrganizationCreateWithoutInvoicesInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   categories?: Prisma.CategoryCreateNestedManyWithoutOrganizationInput
   clients?: Prisma.ClientCreateNestedManyWithoutOrganizationInput
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvoicesInput = {
@@ -829,17 +762,14 @@ export type OrganizationUncheckedCreateWithoutInvoicesInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutOrganizationInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutOrganizationInput
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvoicesInput = {
@@ -874,17 +804,14 @@ export type OrganizationUpdateWithoutInvoicesInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   categories?: Prisma.CategoryUpdateManyWithoutOrganizationNestedInput
   clients?: Prisma.ClientUpdateManyWithoutOrganizationNestedInput
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
@@ -903,141 +830,7 @@ export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutOrganizationNestedInput
-  clients?: Prisma.ClientUncheckedUpdateManyWithoutOrganizationNestedInput
-  members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
-  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
-  invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
-  invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
-}
-
-export type OrganizationCreateWithoutNotificationsInput = {
-  id: string
-  name: string
-  slug: string
-  logo?: string | null
-  code: string
-  currency?: string
-  email: string
-  phone?: string | null
-  address: string
-  city: string
-  state?: string | null
-  postCode?: string | null
-  country: string
-  createdAt: Date | string
-  metadata?: string | null
-  currencyPos?: string
-  currencySymbol: string
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutOrganizationInput
-  clients?: Prisma.ClientCreateNestedManyWithoutOrganizationInput
-  members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
-  invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
-  invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
-  invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
-}
-
-export type OrganizationUncheckedCreateWithoutNotificationsInput = {
-  id: string
-  name: string
-  slug: string
-  logo?: string | null
-  code: string
-  currency?: string
-  email: string
-  phone?: string | null
-  address: string
-  city: string
-  state?: string | null
-  postCode?: string | null
-  country: string
-  createdAt: Date | string
-  metadata?: string | null
-  currencyPos?: string
-  currencySymbol: string
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutOrganizationInput
-  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutOrganizationInput
-  members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
-  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
-  invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
-  invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
-}
-
-export type OrganizationCreateOrConnectWithoutNotificationsInput = {
-  where: Prisma.OrganizationWhereUniqueInput
-  create: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationsInput, Prisma.OrganizationUncheckedCreateWithoutNotificationsInput>
-}
-
-export type OrganizationUpsertWithoutNotificationsInput = {
-  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutNotificationsInput, Prisma.OrganizationUncheckedUpdateWithoutNotificationsInput>
-  create: Prisma.XOR<Prisma.OrganizationCreateWithoutNotificationsInput, Prisma.OrganizationUncheckedCreateWithoutNotificationsInput>
-  where?: Prisma.OrganizationWhereInput
-}
-
-export type OrganizationUpdateToOneWithWhereWithoutNotificationsInput = {
-  where?: Prisma.OrganizationWhereInput
-  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutNotificationsInput, Prisma.OrganizationUncheckedUpdateWithoutNotificationsInput>
-}
-
-export type OrganizationUpdateWithoutNotificationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  slug?: Prisma.StringFieldUpdateOperationsInput | string
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
-  currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
-  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutOrganizationNestedInput
-  clients?: Prisma.ClientUpdateManyWithoutOrganizationNestedInput
-  members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
-  invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
-  invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
-  invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
-}
-
-export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  slug?: Prisma.StringFieldUpdateOperationsInput | string
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
-  currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutOrganizationNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutOrganizationNestedInput
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1045,7 +838,6 @@ export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvoiceRecieptsInput = {
@@ -1064,7 +856,6 @@ export type OrganizationCreateWithoutInvoiceRecieptsInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryCreateNestedManyWithoutOrganizationInput
@@ -1072,9 +863,7 @@ export type OrganizationCreateWithoutInvoiceRecieptsInput = {
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvoiceRecieptsInput = {
@@ -1093,7 +882,6 @@ export type OrganizationUncheckedCreateWithoutInvoiceRecieptsInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1101,9 +889,7 @@ export type OrganizationUncheckedCreateWithoutInvoiceRecieptsInput = {
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvoiceRecieptsInput = {
@@ -1138,7 +924,6 @@ export type OrganizationUpdateWithoutInvoiceRecieptsInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutOrganizationNestedInput
@@ -1146,9 +931,7 @@ export type OrganizationUpdateWithoutInvoiceRecieptsInput = {
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvoiceRecieptsInput = {
@@ -1167,7 +950,6 @@ export type OrganizationUncheckedUpdateWithoutInvoiceRecieptsInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1175,9 +957,7 @@ export type OrganizationUncheckedUpdateWithoutInvoiceRecieptsInput = {
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvoiceCountersInput = {
@@ -1196,17 +976,14 @@ export type OrganizationCreateWithoutInvoiceCountersInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryCreateNestedManyWithoutOrganizationInput
   clients?: Prisma.ClientCreateNestedManyWithoutOrganizationInput
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvoiceCountersInput = {
@@ -1225,17 +1002,14 @@ export type OrganizationUncheckedCreateWithoutInvoiceCountersInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutOrganizationInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutOrganizationInput
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvoiceCountersInput = {
@@ -1270,17 +1044,14 @@ export type OrganizationUpdateWithoutInvoiceCountersInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutOrganizationNestedInput
   clients?: Prisma.ClientUpdateManyWithoutOrganizationNestedInput
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvoiceCountersInput = {
@@ -1299,17 +1070,14 @@ export type OrganizationUncheckedUpdateWithoutInvoiceCountersInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutOrganizationNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutOrganizationNestedInput
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutPaymentsInput = {
@@ -1328,7 +1096,6 @@ export type OrganizationCreateWithoutPaymentsInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryCreateNestedManyWithoutOrganizationInput
@@ -1336,9 +1103,7 @@ export type OrganizationCreateWithoutPaymentsInput = {
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutPaymentsInput = {
@@ -1357,7 +1122,6 @@ export type OrganizationUncheckedCreateWithoutPaymentsInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1365,9 +1129,7 @@ export type OrganizationUncheckedCreateWithoutPaymentsInput = {
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutPaymentsInput = {
@@ -1402,7 +1164,6 @@ export type OrganizationUpdateWithoutPaymentsInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutOrganizationNestedInput
@@ -1410,9 +1171,7 @@ export type OrganizationUpdateWithoutPaymentsInput = {
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
@@ -1431,7 +1190,6 @@ export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1439,140 +1197,6 @@ export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
-  invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
-}
-
-export type OrganizationCreateWithoutGatewaysInput = {
-  id: string
-  name: string
-  slug: string
-  logo?: string | null
-  code: string
-  currency?: string
-  email: string
-  phone?: string | null
-  address: string
-  city: string
-  state?: string | null
-  postCode?: string | null
-  country: string
-  createdAt: Date | string
-  metadata?: string | null
-  currencyPos?: string
-  currencySymbol: string
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutOrganizationInput
-  clients?: Prisma.ClientCreateNestedManyWithoutOrganizationInput
-  members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
-  invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
-  invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
-  invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
-}
-
-export type OrganizationUncheckedCreateWithoutGatewaysInput = {
-  id: string
-  name: string
-  slug: string
-  logo?: string | null
-  code: string
-  currency?: string
-  email: string
-  phone?: string | null
-  address: string
-  city: string
-  state?: string | null
-  postCode?: string | null
-  country: string
-  createdAt: Date | string
-  metadata?: string | null
-  currencyPos?: string
-  currencySymbol: string
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutOrganizationInput
-  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutOrganizationInput
-  members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
-  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
-  invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
-  invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
-}
-
-export type OrganizationCreateOrConnectWithoutGatewaysInput = {
-  where: Prisma.OrganizationWhereUniqueInput
-  create: Prisma.XOR<Prisma.OrganizationCreateWithoutGatewaysInput, Prisma.OrganizationUncheckedCreateWithoutGatewaysInput>
-}
-
-export type OrganizationUpsertWithoutGatewaysInput = {
-  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutGatewaysInput, Prisma.OrganizationUncheckedUpdateWithoutGatewaysInput>
-  create: Prisma.XOR<Prisma.OrganizationCreateWithoutGatewaysInput, Prisma.OrganizationUncheckedCreateWithoutGatewaysInput>
-  where?: Prisma.OrganizationWhereInput
-}
-
-export type OrganizationUpdateToOneWithWhereWithoutGatewaysInput = {
-  where?: Prisma.OrganizationWhereInput
-  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutGatewaysInput, Prisma.OrganizationUncheckedUpdateWithoutGatewaysInput>
-}
-
-export type OrganizationUpdateWithoutGatewaysInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  slug?: Prisma.StringFieldUpdateOperationsInput | string
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
-  currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
-  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutOrganizationNestedInput
-  clients?: Prisma.ClientUpdateManyWithoutOrganizationNestedInput
-  members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
-  invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
-  invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
-  invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
-}
-
-export type OrganizationUncheckedUpdateWithoutGatewaysInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  slug?: Prisma.StringFieldUpdateOperationsInput | string
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
-  currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutOrganizationNestedInput
-  clients?: Prisma.ClientUncheckedUpdateManyWithoutOrganizationNestedInput
-  members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
-  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
-  invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -1592,17 +1216,14 @@ export type OrganizationCreateWithoutCategoriesInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   clients?: Prisma.ClientCreateNestedManyWithoutOrganizationInput
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutCategoriesInput = {
@@ -1621,17 +1242,14 @@ export type OrganizationUncheckedCreateWithoutCategoriesInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutOrganizationInput
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutCategoriesInput = {
@@ -1666,17 +1284,14 @@ export type OrganizationUpdateWithoutCategoriesInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   clients?: Prisma.ClientUpdateManyWithoutOrganizationNestedInput
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutCategoriesInput = {
@@ -1695,17 +1310,14 @@ export type OrganizationUncheckedUpdateWithoutCategoriesInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutOrganizationNestedInput
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutClientsInput = {
@@ -1724,17 +1336,14 @@ export type OrganizationCreateWithoutClientsInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryCreateNestedManyWithoutOrganizationInput
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutClientsInput = {
@@ -1753,17 +1362,14 @@ export type OrganizationUncheckedCreateWithoutClientsInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutOrganizationInput
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutClientsInput = {
@@ -1798,17 +1404,14 @@ export type OrganizationUpdateWithoutClientsInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutOrganizationNestedInput
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutClientsInput = {
@@ -1827,17 +1430,14 @@ export type OrganizationUncheckedUpdateWithoutClientsInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutOrganizationNestedInput
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutMembersInput = {
@@ -1856,17 +1456,14 @@ export type OrganizationCreateWithoutMembersInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryCreateNestedManyWithoutOrganizationInput
   clients?: Prisma.ClientCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMembersInput = {
@@ -1885,17 +1482,14 @@ export type OrganizationUncheckedCreateWithoutMembersInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutOrganizationInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMembersInput = {
@@ -1930,17 +1524,14 @@ export type OrganizationUpdateWithoutMembersInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutOrganizationNestedInput
   clients?: Prisma.ClientUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMembersInput = {
@@ -1959,17 +1550,14 @@ export type OrganizationUncheckedUpdateWithoutMembersInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutOrganizationNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvitationsInput = {
@@ -1988,17 +1576,14 @@ export type OrganizationCreateWithoutInvitationsInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryCreateNestedManyWithoutOrganizationInput
   clients?: Prisma.ClientCreateNestedManyWithoutOrganizationInput
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvitationsInput = {
@@ -2017,17 +1602,14 @@ export type OrganizationUncheckedCreateWithoutInvitationsInput = {
   country: string
   createdAt: Date | string
   metadata?: string | null
-  currencyPos?: string
   currencySymbol: string
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutOrganizationInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutOrganizationInput
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
-  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvitationsInput = {
@@ -2062,17 +1644,14 @@ export type OrganizationUpdateWithoutInvitationsInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutOrganizationNestedInput
   clients?: Prisma.ClientUpdateManyWithoutOrganizationNestedInput
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
@@ -2091,17 +1670,14 @@ export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
   country?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyPos?: Prisma.StringFieldUpdateOperationsInput | string
   currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutOrganizationNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutOrganizationNestedInput
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
-  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 
@@ -2116,10 +1692,8 @@ export type OrganizationCountOutputType = {
   members: number
   invitations: number
   invoiceCounters: number
-  notifications: number
   payments: number
   invoiceReciepts: number
-  gateways: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2129,10 +1703,8 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   members?: boolean | OrganizationCountOutputTypeCountMembersArgs
   invitations?: boolean | OrganizationCountOutputTypeCountInvitationsArgs
   invoiceCounters?: boolean | OrganizationCountOutputTypeCountInvoiceCountersArgs
-  notifications?: boolean | OrganizationCountOutputTypeCountNotificationsArgs
   payments?: boolean | OrganizationCountOutputTypeCountPaymentsArgs
   invoiceReciepts?: boolean | OrganizationCountOutputTypeCountInvoiceRecieptsArgs
-  gateways?: boolean | OrganizationCountOutputTypeCountGatewaysArgs
 }
 
 /**
@@ -2190,13 +1762,6 @@ export type OrganizationCountOutputTypeCountInvoiceCountersArgs<ExtArgs extends 
 /**
  * OrganizationCountOutputType without action
  */
-export type OrganizationCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.NotificationWhereInput
-}
-
-/**
- * OrganizationCountOutputType without action
- */
 export type OrganizationCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.PaymentWhereInput
 }
@@ -2206,13 +1771,6 @@ export type OrganizationCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime
  */
 export type OrganizationCountOutputTypeCountInvoiceRecieptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.invoiceRecieptWhereInput
-}
-
-/**
- * OrganizationCountOutputType without action
- */
-export type OrganizationCountOutputTypeCountGatewaysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.GatewayWhereInput
 }
 
 
@@ -2232,7 +1790,6 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   country?: boolean
   createdAt?: boolean
   metadata?: boolean
-  currencyPos?: boolean
   currencySymbol?: boolean
   invoices?: boolean | Prisma.Organization$invoicesArgs<ExtArgs>
   categories?: boolean | Prisma.Organization$categoriesArgs<ExtArgs>
@@ -2240,10 +1797,8 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   members?: boolean | Prisma.Organization$membersArgs<ExtArgs>
   invitations?: boolean | Prisma.Organization$invitationsArgs<ExtArgs>
   invoiceCounters?: boolean | Prisma.Organization$invoiceCountersArgs<ExtArgs>
-  notifications?: boolean | Prisma.Organization$notificationsArgs<ExtArgs>
   payments?: boolean | Prisma.Organization$paymentsArgs<ExtArgs>
   invoiceReciepts?: boolean | Prisma.Organization$invoiceRecieptsArgs<ExtArgs>
-  gateways?: boolean | Prisma.Organization$gatewaysArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -2263,7 +1818,6 @@ export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   country?: boolean
   createdAt?: boolean
   metadata?: boolean
-  currencyPos?: boolean
   currencySymbol?: boolean
 }, ExtArgs["result"]["organization"]>
 
@@ -2283,7 +1837,6 @@ export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   country?: boolean
   createdAt?: boolean
   metadata?: boolean
-  currencyPos?: boolean
   currencySymbol?: boolean
 }, ExtArgs["result"]["organization"]>
 
@@ -2303,11 +1856,10 @@ export type OrganizationSelectScalar = {
   country?: boolean
   createdAt?: boolean
   metadata?: boolean
-  currencyPos?: boolean
   currencySymbol?: boolean
 }
 
-export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "logo" | "code" | "currency" | "email" | "phone" | "address" | "city" | "state" | "postCode" | "country" | "createdAt" | "metadata" | "currencyPos" | "currencySymbol", ExtArgs["result"]["organization"]>
+export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "logo" | "code" | "currency" | "email" | "phone" | "address" | "city" | "state" | "postCode" | "country" | "createdAt" | "metadata" | "currencySymbol", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invoices?: boolean | Prisma.Organization$invoicesArgs<ExtArgs>
   categories?: boolean | Prisma.Organization$categoriesArgs<ExtArgs>
@@ -2315,10 +1867,8 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   members?: boolean | Prisma.Organization$membersArgs<ExtArgs>
   invitations?: boolean | Prisma.Organization$invitationsArgs<ExtArgs>
   invoiceCounters?: boolean | Prisma.Organization$invoiceCountersArgs<ExtArgs>
-  notifications?: boolean | Prisma.Organization$notificationsArgs<ExtArgs>
   payments?: boolean | Prisma.Organization$paymentsArgs<ExtArgs>
   invoiceReciepts?: boolean | Prisma.Organization$invoiceRecieptsArgs<ExtArgs>
-  gateways?: boolean | Prisma.Organization$gatewaysArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2333,10 +1883,8 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     members: Prisma.$MemberPayload<ExtArgs>[]
     invitations: Prisma.$InvitationPayload<ExtArgs>[]
     invoiceCounters: Prisma.$InvoiceCounterPayload<ExtArgs>[]
-    notifications: Prisma.$NotificationPayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
     invoiceReciepts: Prisma.$invoiceRecieptPayload<ExtArgs>[]
-    gateways: Prisma.$GatewayPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2354,7 +1902,6 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     country: string
     createdAt: Date
     metadata: string | null
-    currencyPos: string
     currencySymbol: string
   }, ExtArgs["result"]["organization"]>
   composites: {}
@@ -2756,10 +2303,8 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   members<T extends Prisma.Organization$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invitations<T extends Prisma.Organization$invitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invoiceCounters<T extends Prisma.Organization$invoiceCountersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$invoiceCountersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceCounterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  notifications<T extends Prisma.Organization$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.Organization$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invoiceReciepts<T extends Prisma.Organization$invoiceRecieptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$invoiceRecieptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$invoiceRecieptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  gateways<T extends Prisma.Organization$gatewaysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$gatewaysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GatewayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2804,7 +2349,6 @@ export interface OrganizationFieldRefs {
   readonly country: Prisma.FieldRef<"Organization", 'String'>
   readonly createdAt: Prisma.FieldRef<"Organization", 'DateTime'>
   readonly metadata: Prisma.FieldRef<"Organization", 'String'>
-  readonly currencyPos: Prisma.FieldRef<"Organization", 'String'>
   readonly currencySymbol: Prisma.FieldRef<"Organization", 'String'>
 }
     
@@ -3343,30 +2887,6 @@ export type Organization$invoiceCountersArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
- * Organization.notifications
- */
-export type Organization$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Notification
-   */
-  select?: Prisma.NotificationSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Notification
-   */
-  omit?: Prisma.NotificationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationInclude<ExtArgs> | null
-  where?: Prisma.NotificationWhereInput
-  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
-  cursor?: Prisma.NotificationWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
-}
-
-/**
  * Organization.payments
  */
 export type Organization$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3412,30 +2932,6 @@ export type Organization$invoiceRecieptsArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.InvoiceRecieptScalarFieldEnum | Prisma.InvoiceRecieptScalarFieldEnum[]
-}
-
-/**
- * Organization.gateways
- */
-export type Organization$gatewaysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Gateway
-   */
-  select?: Prisma.GatewaySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Gateway
-   */
-  omit?: Prisma.GatewayOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.GatewayInclude<ExtArgs> | null
-  where?: Prisma.GatewayWhereInput
-  orderBy?: Prisma.GatewayOrderByWithRelationInput | Prisma.GatewayOrderByWithRelationInput[]
-  cursor?: Prisma.GatewayWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.GatewayScalarFieldEnum | Prisma.GatewayScalarFieldEnum[]
 }
 
 /**

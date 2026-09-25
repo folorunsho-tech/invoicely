@@ -32,11 +32,6 @@ export async function GET(request: NextRequest) {
 							client: true,
 						},
 					},
-					gateway: {
-						select: {
-							provider: true,
-						},
-					},
 				},
 			});
 			if (payments) {
@@ -63,7 +58,7 @@ export async function POST(request: NextRequest) {
 	const {
 		amount,
 		paid_at,
-		provider_transaction_id,
+		reference,
 		metadata,
 		channel,
 		status,
@@ -73,7 +68,7 @@ export async function POST(request: NextRequest) {
 	}: {
 		amount: number;
 		paid_at: Date | string;
-		provider_transaction_id: string;
+		reference: string;
 		metadata: any;
 		invoiceId: string;
 		channel: string;
@@ -84,12 +79,7 @@ export async function POST(request: NextRequest) {
 	const isPermitted = await hasPermission({
 		payment: ["create"],
 	});
-	const manualGateway = await prisma.gateway.findFirst({
-		where: {
-			orgId,
-			provider: "manual",
-		},
-	});
+
 	if (isPermitted.success) {
 		const isPaymentExist = await prisma.payment.findFirst({
 			where: {
@@ -97,7 +87,7 @@ export async function POST(request: NextRequest) {
 				status: "success",
 			},
 		});
-		if (!isPaymentExist && manualGateway) {
+		if (!isPaymentExist) {
 			try {
 				const payment = await prisma.payment.create({
 					data: {
@@ -105,16 +95,16 @@ export async function POST(request: NextRequest) {
 						amount,
 						currency: currency || "NGN",
 						paid_at: new Date(paid_at),
-						provider_transaction_id,
+						reference,
 						metadata,
 						invoiceId,
 						channel,
 						status,
-						reference: "",
+
 						receipts: {
 							create: { invoiceId, orgId },
 						},
-						gatwayId: manualGateway?.id,
+						provider: "manual",
 					},
 					include: {
 						invoice: {
@@ -179,7 +169,7 @@ export async function DELETE(request: NextRequest) {
 		try {
 			const deleted = await prisma.payment.deleteMany({
 				where: {
-					organizationId: String(data?.session.activeOrganizationId),
+					orgId: String(data?.session?.activeOrganizationId),
 					id: {
 						in: toDelete,
 					},

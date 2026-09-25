@@ -98,7 +98,7 @@ const Page = () => {
 		const data = {
 			status: values.status,
 			paid_at: paid_at,
-			provider_transaction_id: provider_transaction_id,
+			reference: provider_transaction_id,
 			channel: values.channel,
 			metadata: getMetadata(),
 		};
@@ -106,9 +106,7 @@ const Page = () => {
 	};
 	useEffect(() => {
 		if (payment) {
-			const metadata = payment?.metadata
-				? JSON.parse(JSON.parse(payment.metadata))
-				: null;
+			const metadata = payment?.metadata ? JSON.parse(payment.metadata) : null;
 			setValues({
 				invoiceId: invoice?.id,
 				status: payment?.status,
@@ -325,6 +323,10 @@ const Page = () => {
 															{
 																label: "Failed",
 																value: "failed",
+															},
+															{
+																label: "Overdue",
+																value: "overdue",
 															},
 															{
 																label: "Cancelled",

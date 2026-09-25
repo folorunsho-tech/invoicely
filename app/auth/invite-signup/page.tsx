@@ -23,13 +23,19 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ConfirmPasswordInput from "@/components/confirm-password";
 import toast from "@/lib/toaster";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getInvitation } from "@/lib/queries/invitations";
-
+import { useDebouncedCallback } from "@mantine/hooks";
+// import { Suspense } from "react";
+import { use } from "react";
 const formSchema = z
 	.object({
 		name: z
+			.string()
+			.min(3, "Name must be at least 3 characters.")
+			.max(32, "Name must be at most 32 characters."),
+		username: z
 			.string()
 			.min(3, "Name must be at least 3 characters.")
 			.max(32, "Name must be at most 32 characters."),
@@ -45,16 +51,20 @@ const formSchema = z
 		path: ["confirm_password"],
 		message: "Passwords must match",
 	});
-export default function Page() {
+export default function Page({
+	searchParams,
+}: {
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
 	const router = useRouter();
-	const searchParams = useSearchParams();
-	const id = searchParams.get("id");
-	const { handleSubmit, control, formState } = useForm<
-		z.infer<typeof formSchema>
-	>({
-		resolver: zodResolver(formSchema),
-		// mode: "onBlur",
-	});
+
+	const id = use(searchParams).id;
+	const orgid = use(searchParams).orgid;
+	const { handleSubmit, control, formState, setError, clearErrors, setValue } =
+		useForm<z.infer<typeof formSchema>>({
+			resolver: zodResolver(formSchema),
+			// mode: "onBlur",
+		});
 	const invitation = useQuery({
 		queryKey: [`invitation-${id}`],
 		queryFn: async () => {
@@ -66,6 +76,7 @@ export default function Page() {
 			name: values.name, // required
 			email: invitation.data?.email, // required
 			password: values.password, // required
+			username: values.username,
 			fetchOptions: {
 				onError(context) {
 					toast(context.error.message, "error");
@@ -75,12 +86,24 @@ export default function Page() {
 						email: invitation.data?.email,
 						type: "email-verification",
 					});
-					router.push(`/auth/invite-verify?id=${id}`);
+					router.push(`/auth/invite-verify?id=${id}&orgid=${orgid}`);
 				},
 			},
 		});
 	};
+	const getUsername = useDebouncedCallback(async (query: string) => {
+		const { data: response } = await authClient.isUsernameAvailable({
+			username: query,
+		});
 
+		if (!response?.available) {
+			setError("username", {
+				message: "Username is unavailble",
+			});
+		} else if (response?.available) {
+			clearErrors(["username"]);
+		}
+	}, 500);
 	return (
 		<div className='flex min-h-svh w-full items-center justify-center p-6 md:p-10'>
 			<div className='w-full max-w-sm'>
@@ -94,6 +117,16 @@ export default function Page() {
 					<CardContent>
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<FieldGroup>
+								<Field>
+									<FieldLabel htmlFor='email'>Email</FieldLabel>
+									<Input
+										disabled={true}
+										id='email'
+										type='email'
+										placeholder='m@example.com'
+										value={invitation.data?.email}
+									/>
+								</Field>
 								<Controller
 									name='name'
 									control={control}
@@ -116,16 +149,36 @@ export default function Page() {
 										</Field>
 									)}
 								/>
-								<Field>
-									<FieldLabel htmlFor='email'>Email</FieldLabel>
-									<Input
-										disabled={true}
-										id='email'
-										type='email'
-										placeholder='m@example.com'
-										value={invitation.data?.email}
-									/>
-								</Field>
+								<Controller
+									name='username'
+									control={control}
+									rules={{ required: true }}
+									render={({ field, fieldState }) => (
+										<Field data-invalid={fieldState.invalid}>
+											<FieldLabel htmlFor='username'>Username</FieldLabel>
+											<Input
+												{...field}
+												id='username'
+												type='text'
+												placeholder='john_doe'
+												disabled={formState.isSubmitting}
+												required
+												aria-invalid={fieldState.invalid}
+												onChange={async (e) => {
+													setValue("username", e.currentTarget.value, {
+														shouldDirty: true,
+														shouldTouch: true,
+														shouldValidate: true,
+													});
+													getUsername(e.currentTarget.value);
+												}}
+											/>
+											{fieldState.invalid && (
+												<FieldError errors={[fieldState.error]} />
+											)}
+										</Field>
+									)}
+								/>
 								<Controller
 									name='password'
 									control={control}

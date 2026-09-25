@@ -3,8 +3,9 @@ import { prismaAdapter } from "@better-auth/prisma-adapter";
 import { prisma } from "./prisma";
 import { emailOTP } from "better-auth/plugins";
 import { transporter, sendOrganizationInvitation } from "./email";
-import { organization } from "better-auth/plugins";
-import { ac, owner, admin, member, editor } from "@/lib/permissions";
+import { organization, username } from "better-auth/plugins";
+import { ac, owner, admin, member, editor, demo } from "@/lib/permissions";
+import { inbox } from "better-inbox";
 export const auth = betterAuth({
 	database: prismaAdapter(prisma, { provider: "postgresql" }),
 	baseURL: process.env.BETTER_AUTH_URL,
@@ -25,21 +26,9 @@ export const auth = betterAuth({
 	},
 
 	plugins: [
+		inbox(),
 		organization({
 			// allowUserToCreateOrganization: false,
-			organizationHooks: {
-				afterCreateOrganization: async ({ organization }) => {
-					// Run custom logic after organization is created
-					// e.g., create default resources, send notifications
-					await prisma.gateway.create({
-						data: {
-							orgId: organization.id,
-							provider: "manual",
-							rank: 0,
-						},
-					});
-				},
-			},
 			async sendInvitationEmail(data) {
 				const inviteLink = `${process.env.APP_URL}/accept-invitation/${data.id}`;
 				sendOrganizationInvitation({
@@ -61,12 +50,7 @@ export const auth = betterAuth({
 							required: true,
 							defaultValue: "NGN",
 						},
-						currencyPos: {
-							type: "string",
-							input: true,
-							required: true,
-							defaultValue: "left",
-						},
+
 						currencySymbol: {
 							type: "string",
 							input: true,
@@ -123,6 +107,7 @@ export const auth = betterAuth({
 				admin,
 				member,
 				editor,
+				demo,
 			},
 		}),
 		emailOTP({
@@ -158,5 +143,6 @@ export const auth = betterAuth({
 				}
 			},
 		}),
+		username(),
 	],
 });

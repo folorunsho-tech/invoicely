@@ -26,6 +26,8 @@ const formSchema = z
 	});
 
 const ChangePassword = () => {
+	const { data: curruser } = authClient.useActiveMember();
+
 	const { handleSubmit, control, formState, reset } = useForm<
 		z.infer<typeof formSchema>
 	>({
@@ -39,16 +41,20 @@ const ChangePassword = () => {
 	});
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		const { data, error } = await authClient.changePassword({
-			newPassword: values.password, // required
-			currentPassword: values.prev_password, // required
-			revokeOtherSessions: true,
-		});
-		if (error) {
-			toast(error.message, "error");
-		} else if (data.token) {
-			toast("Password updated successfully", "success");
-			reset();
+		if (curruser?.role !== "demo") {
+			const { data, error } = await authClient.changePassword({
+				newPassword: values.password, // required
+				currentPassword: values.prev_password, // required
+				revokeOtherSessions: true,
+			});
+			if (error) {
+				toast(error.message, "error");
+			} else if (data.token) {
+				toast("Password updated successfully", "success");
+				reset();
+			}
+		} else {
+			toast("You are not allowed to update password", "error");
 		}
 	};
 	return (

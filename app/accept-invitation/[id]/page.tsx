@@ -42,6 +42,7 @@ const Page = () => {
 			queryClient.invalidateQueries({ queryKey: [`invitation-${id}`] });
 		},
 	});
+
 	return (
 		<main className='p-4 flex-col gap-6 items-center flex'>
 			{invitation.data?.status == "pending" && (
@@ -81,7 +82,9 @@ const Page = () => {
 										// }
 										router.push(`/auth/signin`);
 									} else if (!res?.data) {
-										router.push(`/auth/invite-signup?id=${id}`);
+										router.push(
+											`/auth/invite-signup?id=${id}&orgid=${invitation.data?.organizationId}`,
+										);
 									}
 								}}
 								variant={`green`}

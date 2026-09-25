@@ -40,7 +40,7 @@ const TrashModal = ({
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger className='cursor-pointer w-full' asChild>
 				<Button variant='destructive' className='flex justify-start'>
-					Trash
+					<span className='text-sm'>Trash</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent>

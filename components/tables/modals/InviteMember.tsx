@@ -34,12 +34,14 @@ import {
 } from "@/components/ui/select";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "@/lib/toaster";
 
 const formSchema = z.object({
 	email: z.email("Email is not correct"),
 	role: z.string("Role is not valid"),
 });
 const InviteMember = () => {
+	const { data: curruser } = authClient.useActiveMember();
 	const { handleSubmit, control, formState, reset, setValue } = useForm<
 		z.infer<typeof formSchema>
 	>({
@@ -56,15 +58,19 @@ const InviteMember = () => {
 		},
 	});
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		const data = {
-			email: values.email,
-			organizationId: String(activeOrganization?.id),
-			role: values.role,
-		};
-		// console.log(data);
-		await mutation.mutateAsync(data);
-		setOpen(false);
-		reset();
+		if (!(curruser?.role == "demo" || curruser?.role == "member")) {
+			const data = {
+				email: values.email,
+				organizationId: String(activeOrganization?.id),
+				role: values.role,
+			};
+			// console.log(data);
+			await mutation.mutateAsync(data);
+			setOpen(false);
+			reset();
+		} else {
+			toast("You are not allowed to invite member", "error");
+		}
 	};
 
 	return (

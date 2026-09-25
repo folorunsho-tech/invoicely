@@ -19,8 +19,15 @@ import { format } from "date-fns";
 import { NumberFormatter } from "@mantine/core";
 import { Badge } from "@/components/ui/badge";
 import DeleteModal from "../modals/DeleteModal";
-import { deleteInvoice, trashInvoice } from "@/lib/queries/invoice";
+import {
+	deleteInvoice,
+	trashInvoice,
+	markInvoiceCancelled,
+	markInvoiceOverdue,
+} from "@/lib/queries/invoice";
 import TrashModal from "../modals/TrashModal";
+import CancelModal from "../modals/CancelInvoice";
+import OverdueModal from "../modals/OverdueInvoice";
 const getStatusBadge = (status: string) => {
 	switch (status) {
 		case "TRASHED":
@@ -175,7 +182,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 						<span className='sr-only'>Open menu</span>
 					</Button>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent align='end' className='w-32 cursor-pointer'>
+				<DropdownMenuContent align='end' className='space-y-2 cursor-pointer'>
 					<DropdownMenuItem asChild className='cursor-pointer'>
 						<Link href={`/app/invoices/${row.original.id}`}>View</Link>
 					</DropdownMenuItem>
@@ -183,6 +190,28 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 						<Link href={`/app/invoices/${row.original.id}/update`}>Edit</Link>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
+					<DropdownMenuItem className='cursor-pointer bg-green-300' asChild>
+						<OverdueModal
+							title='Move as overdue'
+							description='Are you sure you want to mark this invoice as overdued?'
+							overdueFn={markInvoiceOverdue}
+							id={row.original.id}
+							queryKey={["invoices"]}
+						/>
+					</DropdownMenuItem>
+					<DropdownMenuItem
+						variant='destructive'
+						className='cursor-pointer'
+						asChild
+					>
+						<CancelModal
+							title='Mark as cancelled'
+							description='Are you sure you want to mark this invoice as cancelled?'
+							cancelFn={markInvoiceCancelled}
+							id={row.original.id}
+							queryKey={["invoices"]}
+						/>
+					</DropdownMenuItem>
 					<DropdownMenuItem
 						variant='destructive'
 						className='cursor-pointer'
@@ -202,28 +231,6 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 	},
 ];
 export const rcolumns: ColumnDef<z.infer<typeof schema>>[] = [
-	// {
-	// 	id: "select",
-	// 	header: ({ table }) => (
-	// 		<Checkbox
-	// 			checked={
-	// 				table.getIsAllPageRowsSelected() ||
-	// 				(table.getIsSomePageRowsSelected() && "indeterminate")
-	// 			}
-	// 			onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-	// 			aria-label='Select all'
-	// 		/>
-	// 	),
-	// 	cell: ({ row }) => (
-	// 		<Checkbox
-	// 			checked={row.getIsSelected()}
-	// 			onCheckedChange={(value) => row.toggleSelected(!!value)}
-	// 			aria-label='Select row'
-	// 		/>
-	// 	),
-	// 	enableSorting: true,
-	// 	enableHiding: false,
-	// },
 	{
 		accessorKey: "invoiceNumber",
 		header: ({ column }) => (
@@ -450,7 +457,7 @@ export const tcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 						asChild
 					>
 						<DeleteModal
-							title='Delete Category'
+							title='Delete Invoice'
 							description='Are you sure you want to delete this invoice?'
 							deleteFn={deleteInvoice}
 							id={row.original.id}

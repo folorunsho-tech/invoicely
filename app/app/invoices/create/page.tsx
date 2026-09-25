@@ -203,7 +203,7 @@ const Page = () => {
 
 	return (
 		<main className='flex flex-col gap-6'>
-			<section className='flex items-center justify-between w-full sticky top-1 bg-white z-50 py-4 px-2 rounded-xl outline-1'>
+			<section className='flex items-center justify-between w-full sticky top-1 bg-white z-10 py-4 px-2 rounded-xl outline-1'>
 				<Button asChild>
 					<Link
 						href={`/app/invoices`}
@@ -705,7 +705,9 @@ const Page = () => {
 												);
 											}}
 											className='cursor-pointer'
-											disabled={!formState.isValid || formState.isSubmitting}
+											disabled={
+												!formState.isValid || formState.isSubmitting || !client
+											}
 										>
 											Save as Draft
 										</Button>
@@ -732,7 +734,9 @@ const Page = () => {
 												);
 											}}
 											className='cursor-pointer'
-											disabled={!formState.isValid || formState.isSubmitting}
+											disabled={
+												!formState.isValid || formState.isSubmitting || !client
+											}
 										>
 											Save & Send
 										</Button>

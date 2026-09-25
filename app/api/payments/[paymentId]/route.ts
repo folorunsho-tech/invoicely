@@ -35,11 +35,6 @@ export async function GET(
 						select: { slug: true },
 					},
 					receipts: true,
-					gateway: {
-						select: {
-							provider: true,
-						},
-					},
 				},
 			});
 			if (found) {
@@ -73,7 +68,7 @@ export async function PATCH(
 ) {
 	const { paymentId } = await params;
 	const data = await getSession();
-	const { status, paid_at, provider_transaction_id, channel, metadata } =
+	const { status, paid_at, reference, channel, metadata } =
 		await request.json();
 
 	const isPermitted = await hasPermission({
@@ -89,7 +84,7 @@ export async function PATCH(
 				data: {
 					status,
 					paid_at: new Date(paid_at),
-					provider_transaction_id,
+					reference,
 					channel,
 					metadata: JSON.stringify(metadata),
 					invoice: {

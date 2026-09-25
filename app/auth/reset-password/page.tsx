@@ -15,9 +15,11 @@ import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ConfirmPasswordInput from "@/components/confirm-password";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast from "@/lib/toaster";
 import Link from "next/link";
+// import { Suspense } from "react";
+import { use } from "react";
 
 const formSchema = z
 	.object({
@@ -32,10 +34,14 @@ const formSchema = z
 		message: "Passwords must match",
 	});
 
-const Page = () => {
+const Page = ({
+	searchParams,
+}: {
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
 	const router = useRouter();
-	const searchParams = useSearchParams();
-	const token = searchParams.get("token");
+	const token = use(searchParams).token;
+
 	const { handleSubmit, control, formState } = useForm<
 		z.infer<typeof formSchema>
 	>({
@@ -45,7 +51,7 @@ const Page = () => {
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		await authClient.resetPassword({
 			newPassword: values.confirm_password,
-			token: token || "",
+			token: String(token) || "",
 			fetchOptions: {
 				onError(context) {
 					toast(context.error.message, "error");

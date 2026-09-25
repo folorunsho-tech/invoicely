@@ -27,7 +27,7 @@ function PasswordInput({
 }) {
 	const [inputRef, setInputRef] = useState("password");
 	return (
-		<Field className='w-full' {...props}>
+		<Field {...props}>
 			{label && <FieldLabel htmlFor={htmlFor}>{label}</FieldLabel>}
 			<InputGroup>
 				<InputGroupInput

@@ -11,7 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Controller, useForm } from "react-hook-form";
 import toast from "@/lib/toaster";
-import countriesList from "@/lib/country_state";
+import { states } from "@/lib/country_state";
+
 import { useEffect, useMemo } from "react";
 import { Select } from "@mantine/core";
 import * as z from "zod";
@@ -27,11 +28,12 @@ const formSchema = z.object({
 		.min(10, "Phone number must be at least 10 characters."),
 	address: z.string("Address must be valid"),
 	city: z.string("City must be valid"),
-	country_state: z.string("Country must be valid"),
+	state: z.string("State must be valid"),
 	postCode: z.string("Postal Code must be valid"),
 });
 const Page = () => {
 	const { data: activeOrganization } = authClient.useActiveOrganization();
+	const { data: curruser } = authClient.useActiveMember();
 
 	const { handleSubmit, control, formState, reset } = useForm<
 		z.infer<typeof formSchema>
@@ -39,42 +41,36 @@ const Page = () => {
 		resolver: zodResolver(formSchema),
 	});
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		const aCountry = values.country_state.split("_")[0];
-		const state = values.country_state.split("_")[1];
-		await authClient.organization.update({
-			organizationId: activeOrganization?.id,
-			data: {
-				name: values.name,
-				email: values.email,
-				phone: values.phone,
-				address: values.address,
-				city: values.city,
-				state,
-				country: aCountry,
-				postCode: values.postCode,
-			},
+		if (!(curruser?.role == "demo" || curruser?.role == "member")) {
+			await authClient.organization.update({
+				organizationId: activeOrganization?.id,
+				data: {
+					name: values.name,
+					email: values.email,
+					phone: values.phone,
+					address: values.address,
+					city: values.city,
+					state: values.state,
+					country: "Nigeria",
+					postCode: values.postCode,
+				},
 
-			fetchOptions: {
-				onError(context) {
-					toast(context.error.message, "error");
+				fetchOptions: {
+					onError(context) {
+						toast(context.error.message, "error");
+					},
+					async onSuccess() {
+						toast("Business updated successfully", "success");
+					},
 				},
-				async onSuccess() {
-					toast("Organization updated successfully", "success");
-				},
-			},
-		});
+			});
+		} else {
+			toast("You are not allowed to update business", "error");
+		}
 	};
 	const countriesData = useMemo(() => {
-		return countriesList.map((country) => {
-			return {
-				group: country.name,
-				items: country.stateProvinces.map((state) => {
-					return {
-						label: `${country.name} - ${state.name}`,
-						value: `${country.name}_${state.name}`,
-					};
-				}),
-			};
+		return states.map((state) => {
+			return state.name;
 		});
 	}, []);
 	useEffect(() => {
@@ -85,7 +81,7 @@ const Page = () => {
 				phone: activeOrganization?.phone,
 				address: activeOrganization?.address,
 				city: activeOrganization?.city,
-				country_state: `${activeOrganization?.country}_${activeOrganization?.state}`,
+				state: activeOrganization?.state,
 				postCode: activeOrganization?.postCode,
 			});
 		}
@@ -93,7 +89,7 @@ const Page = () => {
 	}, [activeOrganization]);
 	return (
 		<main className='p-4'>
-			<section className='w-full'>
+			<section className='max-w-lg'>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<FieldGroup className='flex gap-3'>
 						<Controller
@@ -161,21 +157,19 @@ const Page = () => {
 						/>
 						<div className='flex gap-4 items-center flex-wrap'>
 							<Controller
-								name='country_state'
+								name='state'
 								control={control}
 								rules={{ required: true }}
 								render={({ field, fieldState }) => (
 									<Field data-invalid={fieldState.invalid}>
-										<FieldLabel htmlFor='country_state'>
-											Country - Sate
-										</FieldLabel>
+										<FieldLabel htmlFor='state'>State</FieldLabel>
 										<Select
 											disabled={formState.isSubmitting}
 											required
 											{...field}
 											aria-invalid={fieldState.invalid}
 											placeholder='Select a country - state'
-											error={formState.errors.country_state?.message}
+											error={formState.errors.state?.message}
 											checkIconPosition='right'
 											// allowDeselect={false}
 											searchable

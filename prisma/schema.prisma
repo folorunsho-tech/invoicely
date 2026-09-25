@@ -25,8 +25,14 @@ model User {
   members       Member[]
   invitations   Invitation[]
 
+  notifications Notification[]
+
+  username        String?
+  displayUsername String?
+
   @@unique([email])
   @@map("user")
+  @@unique([username])
 }
 
 model Session {
@@ -105,31 +111,6 @@ model Invoice {
   receipts        invoiceReciept[]
 }
 
-model Notification {
-  id             String               @id @default(uuid())
-  title          String
-  for            String
-  description    String
-  type           String
-  link           String?
-  isRead         Boolean              @default(false)
-  channel        NotificationChannel? @default(email)
-  timestamp      DateTime
-  readAt         DateTime             @default(now())
-  updatedAt      DateTime             @updatedAt
-  organization   Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId String
-
-  @@index([organizationId])
-}
-
-enum NotificationChannel {
-  email
-  sms
-  whatsapp
-  telegram
-}
-
 model invoiceReciept {
   id           String       @id @default(cuid())
   paymentId    String
@@ -158,53 +139,24 @@ model InvoiceCounter {
 }
 
 model Payment {
-  id                      String           @id @default(uuid())
-  amount                  Decimal          @db.Money
-  currency                String           @default("NGN")
-  paid_at                 DateTime?
-  provider_transaction_id String?
-  metadata                Json?
-  status                  String           @default("pending")
-  reference               String           @unique
-  accessCode              String?
-  message                 String?
-  channel                 String?
-  invoiceId               String
-  orgId                   String
-  is_deleted              Boolean          @default(false)
-  createdAt               DateTime         @default(now())
-  updatedAt               DateTime         @updatedAt
-  gatwayId                String
-  gateway                 Gateway          @relation(fields: [gatwayId], references: [id], onDelete: Cascade)
-  invoice                 Invoice          @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
-  organization            Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
-  receipts                invoiceReciept[]
-}
-
-enum GatewayProvider {
-  stripe
-  paystack
-  flutterwave
-  manual
-}
-
-model Gateway {
-  id            String          @id @default(uuid())
-  provider      GatewayProvider
-  isActive      Boolean         @default(true)
-  description   String?
-  publicKey     String?
-  secretKey     String?
-  webhookSecret String?
-  rank          Int
-  orgId         String
-  organization  Organization    @relation(fields: [orgId], references: [id], onDelete: Cascade)
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  payments      Payment[]
-
-  @@unique([orgId, provider])
-  @@index([orgId])
+  id           String           @id @default(uuid())
+  amount       Decimal          @db.Money
+  currency     String           @default("NGN")
+  paid_at      DateTime?
+  metadata     Json?
+  status       String           @default("pending")
+  reference    String           @unique
+  accessCode   String?
+  channel      String?
+  invoiceId    String
+  orgId        String
+  is_deleted   Boolean          @default(false)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  provider     String
+  invoice      Invoice          @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  organization Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  receipts     invoiceReciept[]
 }
 
 model Item {
@@ -271,13 +223,9 @@ model Organization {
   members         Member[]
   invitations     Invitation[]
   invoiceCounters InvoiceCounter[]
-  notifications   Notification[]
   payments        Payment[]
-
-  currencyPos     String           @default("left")
   currencySymbol  String
   invoiceReciepts invoiceReciept[]
-  gateways        Gateway[]
 
   @@unique([slug])
   @@index([code, country])
@@ -316,9 +264,26 @@ model Invitation {
 }
 
 enum InvoiceStatus {
-  PENDING   @map("pending")
-  DRAFT     @map("draft")
-  OVERDUE   @map("overdue")
-  PAID      @map("paid")
+  PENDING @map("pending")
+  DRAFT @map("draft")
+  OVERDUE @map("overdue")
+  PAID @map("paid")
   CANCELLED @map("cancelled")
+}
+
+model Notification {
+  id             String   @id
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String?
+  type           String
+  title          String
+  body           String?
+  href           String?
+  data           Json?
+  read           Boolean  @default(false)
+  createdAt      DateTime
+
+  @@index([organizationId, userId, createdAt])
+  @@map("notification")
 }

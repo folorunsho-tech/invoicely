@@ -17,6 +17,24 @@ export const getOrgMembers = async (id: string) => {
 	}
 	return data;
 };
+export const getOrgMember = async ({
+	id,
+	orgId,
+}: {
+	id: string | undefined;
+	orgId: string | undefined;
+}) => {
+	const url = `settings/members/get-member?orgId=${orgId}&id=${id}`;
+	const response = await fetch(apiUrl + url, {
+		method: "GET",
+		body: JSON.stringify({ id, orgId }),
+	});
+	if (!response.ok) {
+		throw new Error(`HTTP error! Status: ${response.status}`);
+	}
+	const data = await response.json();
+	return data;
+};
 
 export const addMember = async ({
 	user,

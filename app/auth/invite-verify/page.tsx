@@ -15,7 +15,7 @@ import {
 	InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { RefreshCwIcon } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useInterval } from "@mantine/hooks";
@@ -23,9 +23,16 @@ import { authClient } from "@/lib/auth-client";
 import toast from "@/lib/toaster";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addMember } from "@/lib/queries/members";
-export default function InputOTPForm() {
-	const searchParams = useSearchParams();
-	const id = searchParams.get("id");
+import { use } from "react";
+
+export default function InputOTPForm({
+	searchParams,
+}: {
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+	const id = use(searchParams).id;
+	const orgid = use(searchParams).orgid;
+
 	const { data } = authClient.useSession();
 	const router = useRouter();
 	const [value, setValue] = useState("");
@@ -71,9 +78,12 @@ export default function InputOTPForm() {
 						setIsSubmitting(false);
 						const response = await mutation.mutateAsync({
 							user: res?.user,
-							inviteId: id,
+							inviteId: String(id),
 						});
 						if (response) {
+							await authClient.organization.setActive({
+								organizationId: String(orgid),
+							});
 							router.push("/app");
 						}
 					},

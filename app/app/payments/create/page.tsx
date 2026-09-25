@@ -48,7 +48,7 @@ const Page = () => {
 	const [paid_at, setPaidAt] = useState<string | Date | null>("");
 	const [chain, setChain] = useState<string | null>("");
 	const [coinAmount, setCoinAmount] = useState<number | string>("");
-	const [provider_transaction_id, setTNXId] = useState<string | null>("");
+	const [reference, setReference] = useState<string | null>("");
 	const queryClient = useQueryClient();
 	const { control, formState, setValue, handleSubmit } = useForm<
 		z.infer<typeof formSchema>
@@ -92,7 +92,7 @@ const Page = () => {
 			invoiceId: values.invoiceId,
 			status: values.status,
 			paid_at: paid_at,
-			provider_transaction_id: provider_transaction_id,
+			reference,
 			channel: values.channel,
 			currency: "NGN",
 			amount: Number(invoice?.total),
@@ -281,16 +281,16 @@ const Page = () => {
 										</Field>
 									)}
 									<Field>
-										<FieldLabel htmlFor='provider_transaction_id'>
+										<FieldLabel htmlFor='reference'>
 											Transaction reference (optional)
 										</FieldLabel>
 										<Input
 											disabled={formState.isSubmitting}
-											id='provider_transaction_id'
+											id='reference'
 											type='text'
 											placeholder='transaction reference...'
 											onChange={(e) => {
-												setTNXId(e.currentTarget.value);
+												setReference(e.currentTarget.value);
 											}}
 										/>
 									</Field>
@@ -338,6 +338,10 @@ const Page = () => {
 															{
 																label: "Failed",
 																value: "failed",
+															},
+															{
+																label: "Overdue",
+																value: "overdue",
 															},
 															{
 																label: "Cancelled",

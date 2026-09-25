@@ -18,6 +18,7 @@ const Page = () => {
 	});
 	const payments: any[] = res.data;
 	const succesful = payments?.filter((p) => p?.status == "success");
+	const failed = payments?.filter((p) => p?.status == "failed");
 	const total = succesful?.reduce((prev, curr) => {
 		return prev + Number(curr?.amount);
 	}, 0);
@@ -36,10 +37,6 @@ const Page = () => {
 									/>
 								),
 							},
-						]}
-					/>
-					<DataCards
-						cards={[
 							{
 								description: "Total amount earned",
 								title: (
@@ -47,6 +44,15 @@ const Page = () => {
 										prefix={org?.currencySymbol}
 										thousandSeparator
 										value={total || 0}
+									/>
+								),
+							},
+							{
+								description: "Total failed",
+								title: (
+									<NumberFormatter
+										thousandSeparator
+										value={failed?.length || 0}
 									/>
 								),
 							},

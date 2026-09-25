@@ -124,6 +124,31 @@ export async function queueInvoicePayment(
 	);
 }
 
+export async function queueInvoiceOverdue({
+	invoiceId,
+	organizationId,
+	delay,
+}: {
+	invoiceId: string;
+	organizationId: string;
+	delay: number;
+}) {
+	return await invoiceQueue.add(
+		"send-overdue",
+		{
+			invoiceId,
+			organizationId,
+		},
+		{
+			delay: delay,
+			attempts: 2,
+			backoff: { type: "exponential", delay: 10000 },
+			jobId: `send-overdue-${invoiceId}`,
+			removeOnComplete: true,
+			removeOnFail: true,
+		},
+	);
+}
 export async function queueInvoiceReminders(
 	reminders: {
 		invoiceId: string;

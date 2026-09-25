@@ -4,7 +4,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { type schema } from "./schema";
 import { DataTableColumnHeader } from "@/components/data-table-column-header";
 import z from "zod";
-// import { Checkbox } from "@/components/ui/checkbox";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -13,35 +12,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { EllipsisVerticalIcon } from "lucide-react";
-// import Link from "next/link";
 import { format } from "date-fns";
 import { removeMember } from "@/lib/queries/members";
 import RemoveModal from "../modals/RemoveModal";
+import UpdateRole from "../modals/UpdateRole";
 
 export const columns: ColumnDef<z.infer<typeof schema>>[] = [
-	// {
-	// 	id: "select",
-	// 	header: ({ table }) => (
-	// 		<Checkbox
-	// 			checked={
-	// 				table.getIsAllPageRowsSelected() ||
-	// 				(table.getIsSomePageRowsSelected() && "indeterminate")
-	// 			}
-	// 			onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-	// 			aria-label='Select all'
-	// 		/>
-	// 	),
-	// 	cell: ({ row }) => (
-	// 		<Checkbox
-	// 			checked={row.getIsSelected()}
-	// 			onCheckedChange={(value) => row.toggleSelected(!!value)}
-	// 			aria-label='Select row'
-	// 		/>
-	// 	),
-	// 	enableSorting: true,
-	// 	enableHiding: false,
-	// },
-
 	{
 		accessorKey: "user.name",
 		header: ({ column }) => (
@@ -90,12 +66,13 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align='end' className='w-32 cursor-pointer'>
-					{/* <DropdownMenuItem asChild className='cursor-pointer'>
-						<Link href={`member/${row.original.id}`}>View</Link>
-					</DropdownMenuItem> */}
-					{/* <DropdownMenuItem asChild className='cursor-pointer'>
-						<Link href={`member/${row.original.id}/update`}>Edit</Link>
-					</DropdownMenuItem> */}
+					<DropdownMenuItem asChild className='cursor-pointer'>
+						<UpdateRole
+							id={row.original.id}
+							email={row.original.user.email}
+							role={row.original.role}
+						/>
+					</DropdownMenuItem>
 					<DropdownMenuItem
 						variant='destructive'
 						className='cursor-pointer'

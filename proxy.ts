@@ -13,6 +13,7 @@ export async function proxy(request: NextRequest) {
 	if (!session) {
 		return NextResponse.redirect(new URL("/auth/signin", request.url));
 	}
+
 	return NextResponse.next();
 }
 

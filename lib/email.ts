@@ -3,6 +3,7 @@ import { invoice as Invoice, Reciept } from "./types";
 import nodemailer from "nodemailer";
 import {
 	invoiceCancellationTemplate,
+	invoiceOverdueTemplate,
 	invoiceReceiptTemplate,
 	invoiceReminder1DayTemplate,
 	invoiceReminder3DayTemplate,
@@ -62,6 +63,29 @@ function paymentUrl(invoice: Invoice) {
 	return `${APP_URL}/invoice/${invoice.id}/pay`;
 }
 
+export const sendInvoiceOverdue = async ({
+	to,
+	invoice,
+	overdueBy,
+}: {
+	to: string | any;
+	invoice: Invoice | any;
+	overdueBy: string;
+}) => {
+	const { subject, html } = invoiceOverdueTemplate({
+		invoice: invoice,
+		clientName: invoice?.client?.name,
+		companyName: invoice?.organization?.name,
+		paymentUrl: paymentUrl(invoice),
+		overdueBy,
+	});
+	return await sendEmail({
+		to,
+		subject,
+		html,
+		from: invoice?.organization?.name,
+	});
+};
 export const sendInvoiceEmail = async ({
 	to,
 	invoice,

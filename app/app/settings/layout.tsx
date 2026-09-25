@@ -44,15 +44,6 @@ export default function SetingsLayout({
 						<Link href={`/app/settings/members`}>Members</Link>
 					</NavigationMenuLink>
 				</NavigationMenuItem>
-				<NavigationMenuItem>
-					<NavigationMenuLink
-						asChild
-						active={nav.includes(`/app/settings/payments`)}
-						className='data-active:border-b-2 data-active:border-purple-500 rounded-none'
-					>
-						<Link href={`/app/settings/payments`}>Payments</Link>
-					</NavigationMenuLink>
-				</NavigationMenuItem>
 			</NavigationMenu>
 			{children}
 		</main>

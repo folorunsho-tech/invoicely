@@ -25,7 +25,13 @@ export async function GET(request: NextRequest) {
 							items: true,
 						},
 					},
-					client: true,
+					client: {
+						select: {
+							name: true,
+							email: true,
+							id: true,
+						},
+					},
 					organization: {
 						select: {
 							slug: true,

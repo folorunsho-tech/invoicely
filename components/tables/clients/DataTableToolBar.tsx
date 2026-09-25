@@ -6,7 +6,7 @@ import { PlusIcon, Trash, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { countries } from "./filters";
+import { states } from "./filters";
 import { DataTableFacetedFilter } from "@/components/data-table-faceted-filter";
 import Link from "next/link";
 
@@ -30,11 +30,11 @@ export function DataTableToolbar<TData>({
 					}}
 					className='h-8 w-37.5 lg:w-62.5'
 				/>
-				{table.getColumn("country") && (
+				{table.getColumn("state") && (
 					<DataTableFacetedFilter
-						column={table.getColumn("country")}
-						title='Country'
-						options={countries}
+						column={table.getColumn("state")}
+						title='State'
+						options={states}
 					/>
 				)}
 				{/* {table.getColumn("state") && (

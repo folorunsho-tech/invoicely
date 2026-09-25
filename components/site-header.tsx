@@ -8,7 +8,6 @@ import {
 	DropdownMenuContent,
 	DropdownMenuGroup,
 	DropdownMenuItem,
-	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -16,32 +15,33 @@ import { Button } from "./ui/button";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { markNotification } from "@/lib/queries/notifications";
-
-import { Label } from "./ui/label";
-import { FieldDescription } from "./ui/field";
-import { useNotifications } from "@/hooks/use-notifications";
+import { useInbox } from "better-inbox/react";
+import { useState } from "react";
+import { formatDistanceToNowStrict } from "date-fns";
 export function SiteHeader() {
 	const router = useRouter();
-	const queryClient = useQueryClient();
-
-	const mutation = useMutation({
-		mutationFn: markNotification,
-		onSuccess: () => {
-			// Invalidate and refetch
-			queryClient.invalidateQueries({ queryKey: ["notifications"] });
-		},
-	});
 	const { data: session } = authClient.useSession();
+	const { data: curruser } = authClient.useActiveMember();
+
+	const [filterVal, setFilterVal] = useState<"all" | "unread">("all");
+	const { notifications, unreadCount, markRead, markAllRead } = useInbox(
+		authClient,
+		{
+			organizationId: session?.session?.activeOrganizationId || "",
+			pollInterval: 15000,
+			pageSize: 20,
+			filter: filterVal,
+		},
+	);
 	const { data: organizations } = authClient.useListOrganizations();
 	const user = {
 		name: session?.user.name,
+		username: session?.user.username || "avatar",
 		email: session?.user.email,
 		avatar: session?.user.image,
 		fallback: session?.user.name.substring(0, 2).toUpperCase(),
+		role: curruser?.role,
 	};
-	const { notifications, markOneRead } = useNotifications();
 
 	return (
 		<header className='flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)'>
@@ -64,60 +64,89 @@ export function SiteHeader() {
 				</div>
 
 				<div className='flex items-center gap-4'>
+					<Separator
+						orientation='vertical'
+						className='mx-2 data-[orientation=vertical]:h-10'
+					/>
+
 					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant='outline' className='relative'>
-								<Bell />
-								{notifications?.length > 0 && (
-									<span className='absolute border-2 -top-2 right-0 bg-red-500 px-1.5 py-0.5 z-50 text-xs rounded-full text-gray-50'>
-										{notifications?.length}
+						<DropdownMenuTrigger className='relative' asChild>
+							<div className='cursor-pointer'>
+								<Button variant='ghost'>
+									<Bell />
+								</Button>
+								{unreadCount > 0 && (
+									<span className='bg-indigo-600 right-0 top-0 absolute rounded-full text-white px-1.5 py-0.5 text-xs'>
+										{unreadCount}
 									</span>
 								)}
-							</Button>
+							</div>
 						</DropdownMenuTrigger>
-						<DropdownMenuContent className='w-60' align='center'>
-							<DropdownMenuLabel>Notifications</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							<DropdownMenuGroup className='overflow-y-auto max-h-60 w-60'>
-								{notifications?.length > 0 &&
-									notifications?.map((not) => (
-										<DropdownMenuItem
-											key={not.id}
-											asChild
-											className='cursor-pointer '
-											onClick={async () => {
-												markOneRead(not.id);
-												mutation.mutate({ id: not.id });
-											}}
-										>
-											<Link
-												className='flex flex-col gap-1 '
-												href={not.link ? `/app/${not.link}` : "#"}
-											>
-												<Label className='text-xs'>{not.title}</Label>
-												<FieldDescription className='text-xs'>
-													{not.description}
-												</FieldDescription>
-											</Link>
-										</DropdownMenuItem>
-									))}
-								{notifications?.length == 0 && (
-									<DropdownMenuItem>
-										<Label>No notification</Label>
-									</DropdownMenuItem>
-								)}
+						<DropdownMenuContent align='end' className='w-sm'>
+							<DropdownMenuGroup className='flex gap-1 items-center justify-between'>
+								<div className='flex gap-1 items-center'>
+									<Button
+										variant={"ghost"}
+										size={"xs"}
+										onClick={() => {
+											setFilterVal("all");
+										}}
+									>
+										<span className='text-sm'>All</span>
+									</Button>
+									<Separator orientation='vertical' />
+									<Button
+										variant={"ghost"}
+										size={"xs"}
+										onClick={() => {
+											setFilterVal("unread");
+										}}
+									>
+										<span className='text-sm'>Unread</span>
+									</Button>
+								</div>
+								<Button
+									variant={"ghost"}
+									size={"xs"}
+									onClick={async () => {
+										await markAllRead();
+									}}
+								>
+									<span className='text-sm'>Mark all as read</span>
+								</Button>
 							</DropdownMenuGroup>
 							<DropdownMenuSeparator />
-							{notifications?.length > 0 && (
-								<DropdownMenuGroup>
-									<DropdownMenuItem
-										asChild
-										className='cursor-pointer flex justify-center'
-									>
-										<Link href={`/app/notifications`}>View All</Link>
+							<DropdownMenuGroup className='overflow-y-auto'>
+								{unreadCount < 1 && (
+									<DropdownMenuItem className='cursor-pointer flex justify-center'>
+										<span>You are all caught up</span>
 									</DropdownMenuItem>
-								</DropdownMenuGroup>
-							)}
+								)}
+								{unreadCount > 0 &&
+									notifications?.map((not) => (
+										<DropdownMenuItem
+											className={
+												not.read
+													? "text-gray-400 cursor-pointer"
+													: "text-gray-900 cursor-pointer"
+											}
+											key={not.id}
+											onClick={async () => {
+												await markRead(not.id);
+												router.push(`/app/${not.href}`);
+											}}
+										>
+											<h3>{not.title}</h3>
+											<p className='mt-1 text-sm'>{not.body}</p>
+											<p className='mt-1 text-sm'>
+												{formatDistanceToNowStrict(new Date(not?.createdAt), {
+													unit: "month",
+													roundingMethod: "ceil",
+												})}
+											</p>
+										</DropdownMenuItem>
+									))}
+							</DropdownMenuGroup>
 						</DropdownMenuContent>
 					</DropdownMenu>
 					<div className='flex gap-2 items-center'>
@@ -125,20 +154,22 @@ export function SiteHeader() {
 							<DropdownMenuTrigger asChild>
 								<Button variant='ghost' size='icon' className='rounded-full'>
 									<Avatar className='h-8 w-8 rounded-lg grayscale'>
-										<AvatarImage src={user.avatar || ""} alt={user.name} />
+										<AvatarImage src={user.avatar || ""} alt={user.username} />
 										<AvatarFallback>{user.fallback}</AvatarFallback>
 									</Avatar>
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align='end'>
-								<DropdownMenuGroup>
-									<DropdownMenuItem asChild className='cursor-pointer'>
-										<Link href='/app/accounts'>
-											<UserCog />
-											Account
-										</Link>
-									</DropdownMenuItem>
-								</DropdownMenuGroup>
+								{user.role !== "demo" && (
+									<DropdownMenuGroup>
+										<DropdownMenuItem asChild className='cursor-pointer'>
+											<Link href='/app/accounts'>
+												<UserCog />
+												Account
+											</Link>
+										</DropdownMenuItem>
+									</DropdownMenuGroup>
+								)}
 								<DropdownMenuSeparator />
 								<DropdownMenuItem
 									variant='destructive'
@@ -158,10 +189,11 @@ export function SiteHeader() {
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
+
 						<div className='grid flex-1 text-left text-sm leading-tight'>
-							<span className='truncate font-medium'>{user.name}</span>
+							<span className='truncate font-medium'>{user.username}</span>
 							<span className='truncate text-xs text-muted-foreground'>
-								{user.email}
+								{user.name}
 							</span>
 						</div>
 					</div>

@@ -33,35 +33,27 @@ export function DataTableToolbar<TData>({
 						options={[
 							{
 								label: "Pending",
-								value: "Pending",
+								value: "pending",
 							},
 							{
 								label: "Cancelled",
-								value: "Cancelled",
+								value: "cancelled",
 							},
 							{
 								label: "Successful",
-								value: "Successful",
+								value: "success",
 							},
 							{
 								label: "Failed",
-								value: "Failed",
+								value: "failed",
+							},
+							{
+								label: "Overdue",
+								value: "overdue",
 							},
 						]}
 					/>
 				)}
-				{/* {table.getColumn("channel") && (
-					<DataTableFacetedFilter
-						column={table.getColumn("channel")}
-						title='Channel'
-						options={[
-							{
-								label: "Failed",
-								value: "Failed",
-							},
-						]}
-					/>
-				)} */}
 
 				{table.getColumn("provider") && (
 					<DataTableFacetedFilter
@@ -70,15 +62,15 @@ export function DataTableToolbar<TData>({
 						options={[
 							{
 								label: "Manual",
-								value: "Manual",
+								value: "manual",
 							},
 							{
 								label: "Paystack",
-								value: "Paystack",
+								value: "paystack",
 							},
 							{
 								label: "Flutterwave",
-								value: "Flutterwave",
+								value: "flutterwave",
 							},
 						]}
 					/>

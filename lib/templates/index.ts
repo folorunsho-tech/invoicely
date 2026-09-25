@@ -50,6 +50,51 @@ export function invoiceReceiptTemplate({
 }
 // ─── 1. Invoice Sent ──────────────────────────────────────────────────────────
 
+export function invoiceOverdueTemplate({
+	invoice,
+	clientName,
+	companyName,
+	paymentUrl,
+	overdueBy,
+}: {
+	invoice: invoice;
+	clientName: string;
+	companyName: string;
+	paymentUrl: string;
+	overdueBy: string;
+}) {
+	const content = `
+    <h1 style="margin:0 0 6px;font-size:22px;font-weight:700;color:#111827;letter-spacing:-0.3px;">
+      Your invoice #${invoice.invoiceNumber} is overdue by ${overdueBy}
+    </h1>
+    <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">
+      Hi ${clientName}, please find your invoice details below.
+    </p>
+
+    ${invoiceMeta(invoice)}
+    ${invoiceSummary(invoice)}
+
+    ${
+			paymentUrl
+				? ctaButton({ label: "Pay now", href: paymentUrl, color: "#18181b" })
+				: ""
+		}
+
+    <p style="margin:0;font-size:13px;color:#9ca3af;line-height:1.6;">
+      Payment was due by <strong style="color:#374151;">${formatDate(invoice.due_date)}</strong>.
+      If you have questions about this invoice, contact support.
+    </p>
+  `;
+
+	return {
+		subject: `Invoice #${invoice.invoiceNumber} — ${formatCurrency(Number(invoice.total), invoice.currency)} due ${formatDate(invoice.due_date)}`,
+		html: baseLayout({
+			previewText: `Invoice #${invoice.invoiceNumber} for ${formatCurrency(Number(invoice.total), invoice.currency)} is ready.`,
+			content,
+			companyName,
+		}),
+	};
+}
 export function invoiceSentTemplate({
 	invoice,
 	clientName,

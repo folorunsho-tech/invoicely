@@ -119,12 +119,26 @@ export const markInvoiceCancelled = async ({ id }: { id: string }) => {
 	});
 	if (!response.ok) {
 		toast(response.statusText, "error");
-		throw new Error(`HTTP error! Status: ${response.status}`);
-	}
-	const data = await response.json();
-	toast(response.statusText, "success");
+	} else {
+		const data = await response.json();
+		toast(response.statusText, "success");
 
-	return data;
+		return data;
+	}
+};
+export const markInvoiceOverdue = async ({ id }: { id: string }) => {
+	const response = await fetch(apiUrl + `${url}/${id}/overdue`, {
+		method: "PATCH",
+		body: JSON.stringify({ id }),
+	});
+	if (!response.ok) {
+		toast(response.statusText, "error");
+	} else {
+		const data = await response.json();
+		toast(response.statusText, "success");
+
+		return data;
+	}
 };
 export const restoreInvoices = async (ids: { id: string }[]) => {
 	const response = await fetch(apiUrl + `${url}/trash/restore`, {
@@ -133,7 +147,6 @@ export const restoreInvoices = async (ids: { id: string }[]) => {
 	});
 	if (!response.ok) {
 		toast(response.statusText, "error");
-		throw new Error(`HTTP error! Status: ${response.status}`);
 	}
 	const data = await response.json();
 	toast(response.statusText, "success");

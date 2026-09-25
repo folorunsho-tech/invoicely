@@ -2,55 +2,20 @@ import { getSession, hasPermission } from "@/lib/authlibs";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
-	// const searchParams = request.nextUrl.searchParams;
-	// const limit = Number(searchParams.get("limit"));
-	// const page = Number(searchParams.get("page"));
-	// const search = String(searchParams.get("search"));
-	// const sortBy = String(searchParams.get("sortBy"));
-	// const sortOrder = String(searchParams.get("sortOrder"));
 	const data = await getSession();
 	const isPermitted = await hasPermission({
 		client: ["read"],
 	});
 	if (isPermitted.success) {
-		// const skip = (page - 1) * limit;
-
 		try {
 			const clients = await prisma.client.findMany({
 				where: {
 					organizationId: String(data?.session.activeOrganizationId),
 					is_deleted: false,
-					// OR: [
-					// 	{
-					// 		name: { contains: search, mode: "insensitive" },
-					// 	},
-					// 	{
-					// 		email: { contains: search, mode: "insensitive" },
-					// 	},
-					// 	{
-					// 		phone: { contains: search, mode: "insensitive" },
-					// 	},
-					// 	{
-					// 		state: { contains: search, mode: "insensitive" },
-					// 	},
-					// 	{
-					// 		city: { contains: search, mode: "insensitive" },
-					// 	},
-					// 	{
-					// 		state: { contains: search, mode: "insensitive" },
-					// 	},
-					// 	{
-					// 		postCode: { contains: search, mode: "insensitive" },
-					// 	},
-					// 	{
-					// 		country: { contains: search, mode: "insensitive" },
-					// 	},
-					// ],
 				},
 				orderBy: {
 					updatedAt: "desc",
 				},
-				// [sortBy]: sortOrder,
 
 				include: {
 					_count: {
@@ -64,53 +29,8 @@ export async function GET(request: NextRequest) {
 						},
 					},
 				},
-
-				// skip,
-				// take: limit,
 			});
-			// const total = await prisma.client.count({
-			// 	where: {
-			// 		organizationId: String(data?.session.activeOrganizationId),
-			// 		is_deleted: false,
-			// 		OR: [
-			// 			{
-			// 				name: { contains: search, mode: "insensitive" },
-			// 			},
-			// 			{
-			// 				email: { contains: search, mode: "insensitive" },
-			// 			},
-			// 			{
-			// 				phone: { contains: search, mode: "insensitive" },
-			// 			},
-			// 			{
-			// 				state: { contains: search, mode: "insensitive" },
-			// 			},
-			// 			{
-			// 				city: { contains: search, mode: "insensitive" },
-			// 			},
-			// 			{
-			// 				state: { contains: search, mode: "insensitive" },
-			// 			},
-			// 			{
-			// 				postCode: { contains: search, mode: "insensitive" },
-			// 			},
-			// 			{
-			// 				country: { contains: search, mode: "insensitive" },
-			// 			},
-			// 		],
-			// 	},
-			// });
-			// const response = {
-			// 	data: clients,
-			// 	meta: {
-			// 		total,
-			// 		page,
-			// 		limit,
-			// 		totalPages: Math.ceil(total / limit),
-			// 		hasNextPage: page < Math.ceil(total / limit),
-			// 		hasPrevPage: page > 1,
-			// 	},
-			// };
+
 			if (clients) {
 				return NextResponse.json(clients, {
 					status: 200,

@@ -8,7 +8,6 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
-// import { CirclePlusIcon } from "lucide-react";
 import Link from "next/link";
 
 export function NavMain({
@@ -19,27 +18,14 @@ export function NavMain({
 		url: string;
 		icon?: React.ReactNode;
 		visible: boolean;
+		exact?: boolean;
 	}[];
 }) {
 	const pathname = usePathname();
-	// const { businessId } = useParams();
+
 	return (
 		<SidebarGroup>
 			<SidebarGroupContent className='flex flex-col gap-2'>
-				{/* <SidebarMenu>
-					<SidebarMenuItem className='flex items-center gap-2'>
-						<SidebarMenuButton
-							tooltip='New Invoice'
-							asChild
-							className='min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground'
-						>
-							<Link href={`/app/${businessId}/invoices/create`}>
-								<CirclePlusIcon />
-								<span>New Invoice</span>
-							</Link>
-						</SidebarMenuButton>
-					</SidebarMenuItem>
-				</SidebarMenu> */}
 				<SidebarMenu>
 					{items.map((item) => {
 						return (
@@ -49,8 +35,9 @@ export function NavMain({
 										tooltip={item.title}
 										asChild
 										isActive={
-											pathname == item.url ||
-											pathname.includes(item.title.toLocaleLowerCase())
+											item.exact
+												? pathname == item.url
+												: pathname.includes(item.url.toLocaleLowerCase())
 										}
 										className='data-active:bg-primary data-active:text-gray-50 transition duration-200 ease-in hover:bg-primary hover:text-gray-50'
 									>

@@ -157,7 +157,8 @@ export const initTransaction = async (invoiceId: string) => {
 	const response = await fetch(apiUrl + `${url}/init`, options);
 	const res = await response.json();
 	if (!response.ok) {
-		// console.log("init tnx func: ", res);
+		toast(response.statusText, "error");
+
 		throw new Error(`HTTP error! Status: ${response.status}`);
 	}
 	return { ...res, status: response.status, message: response.statusText };
@@ -183,19 +184,13 @@ export const sendReceipt = async (paymentId: string) => {
 	return res;
 };
 
-export const verifyPayment = async ({
-	reference,
-	tnxId,
-}: {
-	reference: string;
-	tnxId: string;
-}) => {
+export const verifyPayment = async ({ reference }: { reference: string }) => {
 	const options = {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify({ reference, tnxId }),
+		body: JSON.stringify({ reference }),
 	};
 	const response = await fetch(apiUrl + `${url}/verify`, options);
 	if (!response.ok) {

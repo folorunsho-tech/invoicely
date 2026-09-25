@@ -14,6 +14,20 @@ export async function PATCH(
 		invoice: ["update"],
 	});
 	if (isPermitted.success) {
+		const inv = await prisma.invoice.findUnique({
+			where: {
+				id: invoiceId,
+			},
+			select: {
+				status: true,
+			},
+		});
+		if (inv?.status == "PAID") {
+			return NextResponse.json(null, {
+				status: 400,
+				statusText: "Can not cancel paid invoice",
+			});
+		}
 		try {
 			const invoice = await prisma.invoice.update({
 				where: {
@@ -28,7 +42,6 @@ export async function PATCH(
 					client: true,
 					organization: true,
 					items: true,
-					notifications: true,
 				},
 			});
 			await queueInvoiceCancellation(
@@ -54,7 +67,7 @@ export async function PATCH(
 			console.log(error);
 			return NextResponse.json(error, {
 				status: 500,
-				statusText: "Internal Server Error",
+				statusText: "Error cancelling invoice",
 			});
 		}
 	} else {

@@ -9,9 +9,9 @@
 // 	Icon,
 // 	Timer,
 // } from "lucide-react";
-import countrystate from "@/lib/country_state";
+import { states as cStates } from "@/lib/country_state";
 
-export const countries = countrystate.map((country) => ({
-	value: country.name,
-	label: country.name,
+export const states = cStates.map((state) => ({
+	value: state.name,
+	label: state.name,
 }));

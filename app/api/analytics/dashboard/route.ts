@@ -6,7 +6,7 @@ export const GET = async () => {
 	const data = await getSession();
 
 	const isPermitted = await hasPermission({
-		notifications: ["read"],
+		analytics: ["read"],
 	});
 	const organizationId = String(data?.session.activeOrganizationId);
 	if (isPermitted.success) {

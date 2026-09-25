@@ -19,10 +19,10 @@ export const sendInvitation = async ({
 	if (error) {
 		console.log(error);
 		toast(error.message, "error");
-		throw new Error(`HTTP error! Status: ${error.status}`);
+	} else {
+		toast("Invitation sent seccessfully to " + email, "success");
+		return data;
 	}
-	toast("Invitation sent seccessfully to " + email, "success");
-	return data;
 };
 const apiUrl = process.env.API_URL || "http://localhost:3000/api/";
 
@@ -63,7 +63,6 @@ export const cancelInvitation = async (id: string) => {
 	});
 	if (error) {
 		toast(error.message, "error");
-		throw new Error(`HTTP error! Status: ${error.status}`);
 	}
 	toast("Invitation cancelled", "success");
 	return data;

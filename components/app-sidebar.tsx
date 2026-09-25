@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { NavMain } from "@/components/nav-main";
-// import { NavSecondary } from "@/components/nav-secondary";
 
 import {
 	Sidebar,
@@ -20,6 +19,7 @@ import {
 	Group,
 	Settings,
 	BanknoteArrowDown,
+
 	// ChartColumn,
 } from "lucide-react";
 import Link from "next/link";
@@ -32,12 +32,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 		url: string;
 		icon: React.ReactNode;
 		visible: boolean;
+		exact?: boolean;
 	}[] = [
 		{
 			title: "Dashboard",
 			url: `/app`,
 			icon: <LayoutDashboardIcon />,
 			visible: true,
+			exact: true,
 		},
 		{
 			title: "Clients",
@@ -57,23 +59,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			visible: true,
 			icon: <BanknoteArrowDown />,
 		},
-		// {
-		// 	title: "Analytics",
-		// 	url: `/app/analytics`,
-		// 	icon: <ChartColumn />,
-		// 	visible: true,
-		// },
+
 		{
 			title: "Categories",
 			url: `/app/categories`,
 			icon: <Group />,
-			visible: curruser?.role !== "member",
+			visible: !(curruser?.role == "member" || curruser?.role == "demo"),
 		},
 		{
 			title: "Settings",
 			url: `/app/settings`,
 			icon: <Settings />,
-			visible: curruser?.role !== "member",
+			visible: !(curruser?.role == "member" || curruser?.role == "demo"),
 		},
 	];
 	return (
@@ -95,7 +92,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			</SidebarHeader>
 			<SidebarContent>
 				<NavMain items={navMain} />
-				{/* <NavSecondary items={data.navSecondary} className='mt-auto' /> */}
 			</SidebarContent>
 		</Sidebar>
 	);

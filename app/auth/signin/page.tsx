@@ -24,7 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "@/lib/toaster";
 import { useRouter } from "next/navigation";
 const formSchema = z.object({
-	email: z.email("Email is not correct"),
+	username: z.string("Username is not correct"),
 	password: z
 		.string()
 		.min(8, "Password must be at least 8 characters")
@@ -40,8 +40,8 @@ export default function Page() {
 		mode: "onChange",
 	});
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		await authClient.signIn.email({
-			email: values.email, // required
+		await authClient.signIn.username({
+			username: values.username, // required
 			password: values.password, // required
 			rememberMe: true,
 			// callbackURL: "/app",
@@ -54,7 +54,7 @@ export default function Page() {
 
 					if (!isVerified) {
 						await authClient.emailOtp.sendVerificationOtp({
-							email: values.email,
+							email: context.data?.user?.email,
 							type: "email-verification",
 						});
 						router.push("/auth/verify");
@@ -64,9 +64,6 @@ export default function Page() {
 		});
 		await authClient.organization.list({
 			fetchOptions: {
-				onError(context) {
-					toast(context.error.message, "error");
-				},
 				async onSuccess(context) {
 					const orgs = context.data;
 
@@ -75,8 +72,6 @@ export default function Page() {
 							organizationId: orgs[0].id,
 						});
 						router.push(`/app`);
-					} else {
-						router.push("/auth/create-organization");
 					}
 				},
 			},
@@ -86,6 +81,8 @@ export default function Page() {
 		<div className='flex min-h-svh w-full items-center justify-center p-6 md:p-10'>
 			<div className='w-full max-w-sm'>
 				<div className={"flex flex-col gap-6"}>
+					<h2 className='text-center font-bold'>Invoicely</h2>
+					<p>Login with username: demo, password: demo12345</p>
 					<Card>
 						<CardHeader>
 							<CardTitle>Login to your account</CardTitle>
@@ -97,16 +94,16 @@ export default function Page() {
 							<form onSubmit={handleSubmit(onSubmit)}>
 								<FieldGroup>
 									<Controller
-										name='email'
+										name='username'
 										control={control}
 										rules={{ required: true }}
 										render={({ field, fieldState }) => (
 											<Field data-invalid={fieldState.invalid}>
-												<FieldLabel htmlFor='email'>Email</FieldLabel>
+												<FieldLabel htmlFor='username'>Username</FieldLabel>
 												<Input
-													id='email'
-													type='email'
-													placeholder='m@example.com'
+													id='username'
+													type='username'
+													placeholder='e.g joh_doe'
 													required
 													{...field}
 													aria-invalid={fieldState.invalid}
@@ -119,14 +116,14 @@ export default function Page() {
 										)}
 									/>
 									<Field>
-										<div className='flex items-center'>
+										{/* <div className='flex items-center'>
 											<Link
 												href='/auth/forgot-password'
 												className='ml-auto inline-block text-sm underline-offset-4 hover:underline'
 											>
 												Forgot your password?
 											</Link>
-										</div>
+										</div> */}
 										<Controller
 											name='password'
 											control={control}
@@ -154,13 +151,11 @@ export default function Page() {
 										>
 											Login
 										</Button>
-										{/* <Button variant="outline" type="button">
-                  Login with Google
-                </Button> */}
-										<FieldDescription className='text-center'>
+
+										{/* <FieldDescription className='text-center'>
 											Don&apos;t have an account?{" "}
 											<Link href='/auth/signup'>Sign up</Link>
-										</FieldDescription>
+										</FieldDescription> */}
 									</Field>
 								</FieldGroup>
 							</form>

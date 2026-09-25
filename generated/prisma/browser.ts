@@ -43,11 +43,6 @@ export type Verification = Prisma.VerificationModel
  */
 export type Invoice = Prisma.InvoiceModel
 /**
- * Model Notification
- * 
- */
-export type Notification = Prisma.NotificationModel
-/**
  * Model invoiceReciept
  * 
  */
@@ -62,11 +57,6 @@ export type InvoiceCounter = Prisma.InvoiceCounterModel
  * 
  */
 export type Payment = Prisma.PaymentModel
-/**
- * Model Gateway
- * 
- */
-export type Gateway = Prisma.GatewayModel
 /**
  * Model Item
  * 
@@ -97,3 +87,8 @@ export type Member = Prisma.MemberModel
  * 
  */
 export type Invitation = Prisma.InvitationModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

@@ -101,16 +101,18 @@ const Page = () => {
 							Go back
 						</Link>
 					</Button>
-					<Button
-						onClick={async (e) => {
-							e.preventDefault();
-							await mutation.mutateAsync({ id });
-						}}
-						disabled={mutation.isPending}
-					>
-						<LoaderIcon />
-						Resend Invoice
-					</Button>
+					{invoice?.status !== "DRAFT" && (
+						<Button
+							onClick={async (e) => {
+								e.preventDefault();
+								await mutation.mutateAsync({ id });
+							}}
+							disabled={mutation.isPending}
+						>
+							<LoaderIcon />
+							Resend Invoice
+						</Button>
+					)}
 				</div>
 				<div className='flex justify-between items-center'>
 					<div>

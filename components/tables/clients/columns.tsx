@@ -89,20 +89,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 		),
 		cell: ({ row }) => row.original.state,
 	},
-	// {
-	// 	accessorKey: "postCode",
-	// 	header: ({ column }) => (
-	// 		<DataTableColumnHeader column={column} title='Zip Code' />
-	// 	),
-	// 	cell: ({ row }) => row.original.postCode,
-	// },
-	{
-		accessorKey: "country",
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Country' />
-		),
-		cell: ({ row }) => row.original.country,
-	},
+
 	{
 		accessorKey: "invoices",
 		header: ({ column }) => (
@@ -222,13 +209,6 @@ export const tcolumns: ColumnDef<z.infer<typeof schema>>[] = [
 		cell: ({ row }) => row.original.state,
 	},
 
-	{
-		accessorKey: "country",
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Country' />
-		),
-		cell: ({ row }) => row.original.country,
-	},
 	{
 		accessorKey: "invoices",
 		header: ({ column }) => (
