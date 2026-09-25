@@ -9,9 +9,9 @@ export async function GET(request: NextRequest) {
 				name: true,
 			},
 		});
-		if (isAllowed) {
+		if (!isAllowed) {
 			return NextResponse.json(
-				{ isAllowed: false },
+				{ isAllowed: true },
 				{
 					status: 200,
 					statusText: "Signup Allowed",
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 			);
 		} else {
 			return NextResponse.json(
-				{ isAllowed: true },
+				{ isAllowed: false },
 				{
 					status: 400,
 					statusText: "Signup not allowed",

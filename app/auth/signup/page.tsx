@@ -90,7 +90,7 @@ export default function Page() {
 	});
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		if (response?.data?.isAllowed) {
+		if (response?.data?.isAllowed == true) {
 			const code = await generateOrgCode(values.businessname, 5);
 			const slug = randomId(values.businessname.split(" ").join("-"));
 			await authClient.signUp.email({
