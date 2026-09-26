@@ -30,8 +30,8 @@ import generateOrgCode from "@/lib/generateOrgCode";
 import { Select } from "@mantine/core";
 import { useMemo } from "react";
 import { randomId } from "@mantine/hooks";
-import { signupAllowed } from "@/lib/queries/organization";
-import { useQuery } from "@tanstack/react-query";
+const enableSignup =
+	process.env.NEXT_PUBLIC_ENABLE_SIGNUP?.toLocaleLowerCase() === "true";
 const formSchema = z
 	.object({
 		fullname: z
@@ -70,12 +70,6 @@ const formSchema = z
 
 export default function Page() {
 	const router = useRouter();
-	const response = useQuery({
-		queryKey: ["isAllowed"],
-		queryFn: async () => {
-			return await signupAllowed();
-		},
-	});
 	const countriesData = useMemo(() => {
 		return states.map((state) => {
 			return state.name;
@@ -85,11 +79,11 @@ export default function Page() {
 		z.infer<typeof formSchema>
 	>({
 		resolver: zodResolver(formSchema),
-		// mode: "onBlur",
+		mode: "all",
 	});
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		if (response?.data?.isAllowed == true) {
+		if (enableSignup) {
 			const code = await generateOrgCode(values.businessname, 5);
 			const slug = randomId(values.businessname.split(" ").join("-"));
 			await authClient.signUp.email({

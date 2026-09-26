@@ -13,6 +13,9 @@ export async function proxy(request: NextRequest) {
 	if (!session) {
 		return NextResponse.redirect(new URL("/auth/signin", request.url));
 	}
+	if (session && request.nextUrl.pathname.endsWith("/")) {
+		return NextResponse.redirect(new URL("/app", request.url));
+	}
 
 	return NextResponse.next();
 }
