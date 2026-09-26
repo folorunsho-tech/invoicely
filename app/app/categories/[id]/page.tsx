@@ -37,13 +37,9 @@ const Page = () => {
 				</CardHeader>
 				<CardContent className='flex justify-between items-start'>
 					<div>
-						{/* <div className='flex gap-2'>
-							<Label>slug:</Label>
-							<p>{category.data?.slug}</p>
-						</div> */}
 						<div className='flex gap-2'>
 							<Label>description:</Label>
-							<p>{category.data?.description}</p>
+							<p>{category.data?.description || ""}</p>
 						</div>
 					</div>
 

@@ -53,7 +53,7 @@ const Page = () => {
 			reset({
 				name: category.data.name,
 				// slug: category.data.slug,
-				description: category.data.description,
+				description: category.data.description || "",
 			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
