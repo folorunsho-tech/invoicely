@@ -56,6 +56,8 @@ export default function Page() {
 							type: "email-verification",
 						});
 						router.push("/auth/verify");
+					} else if (isVerified) {
+						router.push("/app");
 					}
 				},
 			},

@@ -83,6 +83,7 @@ export async function POST(request: NextRequest) {
 				});
 			} else {
 				return NextResponse.json(null, {
+					status: 400,
 					statusText: "error adding client",
 				});
 			}
@@ -126,6 +127,7 @@ export async function DELETE(request: NextRequest) {
 				});
 			} else {
 				return NextResponse.json(null, {
+					status: 400,
 					statusText: "error deleting clients",
 				});
 			}

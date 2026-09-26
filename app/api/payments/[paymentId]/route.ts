@@ -112,6 +112,7 @@ export async function PATCH(
 				});
 			} else {
 				return NextResponse.json(null, {
+					status: 400,
 					statusText: "error adding payment",
 				});
 			}
@@ -153,6 +154,7 @@ export async function DELETE(
 				});
 			} else {
 				return NextResponse.json(null, {
+					status: 400,
 					statusText: "error deleting payment",
 				});
 			}

@@ -1,18 +1,4 @@
 import toast from "../toaster";
-// {
-// 	limit = 50,
-// 	page = 1,
-// 	search = "",
-// 	sortBy = "updatedAt",
-// 	sortOrder = "desc",
-// }: {
-// 	limit?: number;
-// 	page?: number;
-// 	search?: string;
-// 	sortBy?: string;
-// 	sortOrder?: string;
-// }
-// ?limit=${limit}&page=${page}&search=${search}&sortBy=${sortBy}&sortOrder=${sortOrder}
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 const url = `categories`;

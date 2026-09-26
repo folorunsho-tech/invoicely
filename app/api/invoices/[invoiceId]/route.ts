@@ -176,6 +176,7 @@ export async function PATCH(
 				});
 			} else {
 				return NextResponse.json(null, {
+					status: 400,
 					statusText: "error updating invoice",
 				});
 			}

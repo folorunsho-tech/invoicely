@@ -42,6 +42,7 @@ export async function POST(
 				return NextResponse.json(
 					{ success: false, message: "error queueing invoice for sending" },
 					{
+						status: 400,
 						statusText: "error sending invoice",
 					},
 				);

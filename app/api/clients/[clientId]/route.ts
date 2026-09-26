@@ -105,6 +105,7 @@ export async function PATCH(
 				});
 			} else {
 				return NextResponse.json(null, {
+					status: 400,
 					statusText: "error updating client",
 				});
 			}
@@ -146,6 +147,7 @@ export async function DELETE(
 				});
 			} else {
 				return NextResponse.json(null, {
+					status: 400,
 					statusText: "error deleting client",
 				});
 			}

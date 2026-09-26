@@ -29,6 +29,7 @@ export async function PATCH(request: NextRequest) {
 				});
 			} else {
 				return NextResponse.json(null, {
+					status: 400,
 					statusText: "error trashing payments",
 				});
 			}
