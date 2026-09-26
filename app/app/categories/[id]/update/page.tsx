@@ -23,11 +23,7 @@ const formSchema = z.object({
 		.string("Name is not correct")
 		.min(3, "Name must be at least 3 characters.")
 		.max(32, "Name must be at most 32 characters."),
-	// slug: z
-	// 	.string("Slug is not valid")
-	// 	.min(3, "Slug must be at least 3 characters.")
-	// 	.max(32, "Slug must be at most 32 characters."),
-	description: z.string().optional(),
+	description: z.string("Invalid description").optional(),
 });
 const Page = () => {
 	const queryClient = useQueryClient();
@@ -115,28 +111,6 @@ const Page = () => {
 									)}
 								/>
 
-								{/* <Controller
-									name='slug'
-									control={control}
-									rules={{ required: true }}
-									render={({ field, fieldState }) => (
-										<Field data-invalid={fieldState.invalid}>
-											<FieldLabel htmlFor='slug'>Category Slug</FieldLabel>
-											<Input
-												disabled={formState.isSubmitting}
-												id='slug'
-												type='text'
-												placeholder='e.g web-development'
-												required
-												{...field}
-												aria-invalid={fieldState.invalid}
-											/>
-											{fieldState.invalid && (
-												<FieldError errors={[fieldState.error]} />
-											)}
-										</Field>
-									)}
-								/> */}
 								<Controller
 									name='description'
 									control={control}
@@ -152,6 +126,7 @@ const Page = () => {
 												placeholder='e.g A category for web development invoices'
 												{...field}
 												aria-invalid={fieldState.invalid}
+												required={false}
 											/>
 											{fieldState.invalid && (
 												<FieldError errors={[fieldState.error]} />

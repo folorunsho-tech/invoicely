@@ -57,7 +57,20 @@ export default function Page() {
 						});
 						router.push("/auth/verify");
 					} else if (isVerified) {
-						router.push("/app");
+						await authClient.organization.list({
+							fetchOptions: {
+								async onSuccess(context) {
+									const orgs = context.data;
+
+									if (orgs && orgs.length > 0) {
+										await authClient.organization.setActive({
+											organizationId: orgs[0].id,
+										});
+										router.push(`/app`);
+									}
+								},
+							},
+						});
 					}
 				},
 			},

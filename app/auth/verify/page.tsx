@@ -55,10 +55,27 @@ export default function InputOTPForm() {
 						await authClient.emailOtp.verifyEmail({
 							email: data?.user?.email || "",
 							otp: value,
+							fetchOptions: {
+								async onSuccess() {
+									interval.stop();
+									setIsSubmitting(false);
+									await authClient.organization.list({
+										fetchOptions: {
+											async onSuccess(context) {
+												const orgs = context.data;
+
+												if (orgs && orgs.length > 0) {
+													await authClient.organization.setActive({
+														organizationId: orgs[0].id,
+													});
+													router.push(`/app`);
+												}
+											},
+										},
+									});
+								},
+							},
 						});
-						interval.stop();
-						setIsSubmitting(false);
-						router.push("/app");
 					},
 					onError(context) {
 						setInvalid(true);
