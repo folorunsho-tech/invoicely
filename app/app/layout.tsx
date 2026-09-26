@@ -14,13 +14,26 @@ export default function DashboardLayout({
 	children: React.ReactNode;
 }) {
 	const router = useRouter();
-	const { data } = authClient.useSession();
+	const setActiveOrg = async () => {
+		await authClient.organization.list({
+			fetchOptions: {
+				async onSuccess(context) {
+					const orgs = context.data;
+
+					if (orgs && orgs.length > 0) {
+						await authClient.organization.setActive({
+							organizationId: orgs[0].id,
+						});
+						router.push(`/app`);
+					}
+				},
+			},
+		});
+	};
 	useEffect(() => {
-		if (data && !data?.session.activeOrganizationId) {
-			router.push("/auth/signin");
-		}
+		setActiveOrg();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data?.session]);
+	}, []);
 	return (
 		<SidebarProvider defaultOpen={true}>
 			<AppSidebar />
