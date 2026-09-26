@@ -46,10 +46,6 @@ export function DataTableToolbar<TData>({
 								label: "member",
 								value: "member",
 							},
-							{
-								label: "demo",
-								value: "demo",
-							},
 						]}
 					/>
 				)}

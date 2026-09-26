@@ -196,6 +196,10 @@ const InviteMember = () => {
 														value: "member",
 														label: "Member",
 													},
+													{
+														label: "Demo",
+														value: "demo",
+													},
 												]?.map((item: { value: string; label: string }) => (
 													<SelectItem key={item.value} value={item.value}>
 														{item.label}
