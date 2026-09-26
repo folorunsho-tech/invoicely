@@ -9,13 +9,11 @@ import {
 } from "@/components/ui/card";
 import {
 	Field,
-	FieldDescription,
 	FieldError,
 	FieldGroup,
 	FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import PasswordInput from "@/components/password-input";
 import { authClient } from "@/lib/auth-client";
 import { Controller, useForm } from "react-hook-form";
@@ -58,20 +56,21 @@ export default function Page() {
 							type: "email-verification",
 						});
 						router.push("/auth/verify");
-					}
-				},
-			},
-		});
-		await authClient.organization.list({
-			fetchOptions: {
-				async onSuccess(context) {
-					const orgs = context.data;
+					} else if (isVerified) {
+						await authClient.organization.list({
+							fetchOptions: {
+								async onSuccess(context) {
+									const orgs = context.data;
 
-					if (orgs && orgs.length > 0) {
-						await authClient.organization.setActive({
-							organizationId: orgs[0].id,
+									if (orgs && orgs.length > 0) {
+										await authClient.organization.setActive({
+											organizationId: orgs[0].id,
+										});
+										router.push(`/app`);
+									}
+								},
+							},
 						});
-						router.push(`/app`);
 					}
 				},
 			},
