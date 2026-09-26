@@ -14,7 +14,7 @@ import toast from "../toaster";
 // }
 // ?limit=${limit}&page=${page}&search=${search}&sortBy=${sortBy}&sortOrder=${sortOrder}
 
-const apiUrl = process.env.API_URL || "http://localhost:3000/api/";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 const url = `categories`;
 export const getCategories = async () => {
 	const response = await fetch(apiUrl + url, {

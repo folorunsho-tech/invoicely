@@ -24,7 +24,7 @@ export const sendInvitation = async ({
 		return data;
 	}
 };
-const apiUrl = process.env.API_URL || "http://localhost:3000/api/";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export const acceptInvitation = async ({
 	id,

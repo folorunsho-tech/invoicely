@@ -1,6 +1,6 @@
 import toast from "../toaster";
 
-const apiUrl = process.env.API_URL || "http://localhost:3000/api/";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export const getClients = async () => {
 	const url = `clients`;
 	const response = await fetch(apiUrl + url, {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { authClient } from "@/lib/auth-client";
 import toast from "../toaster";
-const apiUrl = process.env.API_URL || "http://localhost:3000/api/";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export const getOrgMembers = async (id: string) => {
 	const { data, error } = await authClient.organization.listMembers({
