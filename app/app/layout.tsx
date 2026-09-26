@@ -22,7 +22,7 @@ export default function DashboardLayout({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data?.session]);
 	return (
-		<SidebarProvider defaultOpen={false}>
+		<SidebarProvider defaultOpen={true}>
 			<AppSidebar />
 			<SidebarInset>
 				<SiteHeader />
