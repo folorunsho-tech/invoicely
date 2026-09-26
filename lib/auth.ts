@@ -4,7 +4,7 @@ import { prisma } from "./prisma";
 import { emailOTP } from "better-auth/plugins";
 import { transporter, sendOrganizationInvitation } from "./email";
 import { organization, username } from "better-auth/plugins";
-import { ac, owner, admin, member, editor, demo } from "@/lib/permissions";
+import { ac, owner, admin, member, editor, demo } from "../lib/permissions";
 import { inbox } from "better-inbox";
 export const auth = betterAuth({
 	database: prismaAdapter(prisma, { provider: "postgresql" }),
