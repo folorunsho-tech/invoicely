@@ -20,7 +20,7 @@ import {
 	Table,
 	TableFooter,
 } from "@/components/ui/table";
-import { getInvoice } from "@/lib/queries/invoice";
+import { getInvoicePay } from "@/lib/queries/invoice";
 import { Button } from "@/components/ui/button";
 import { initTransaction } from "@/lib/queries/payment";
 import toast from "@/lib/toaster";
@@ -42,7 +42,7 @@ const Page = () => {
 	const invoiceRes = useQuery({
 		queryKey: [`invoice-${id}`],
 		queryFn: async () => {
-			return await getInvoice({ id });
+			return await getInvoicePay({ id });
 		},
 	});
 	const mutation = useMutation({

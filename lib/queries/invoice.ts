@@ -33,6 +33,17 @@ export const getInvoice = async ({ id }: { id: string }) => {
 	const data = await response.json();
 	return data;
 };
+export const getInvoicePay = async ({ id }: { id: string }) => {
+	const response = await fetch(apiUrl + `${url}/${id}/pay`, {
+		method: "GET",
+	});
+	if (!response.ok) {
+		toast(response.statusText, "error");
+		throw new Error(`HTTP error! Status: ${response.status}`);
+	}
+	const data = await response.json();
+	return data;
+};
 export const getTrashInvoices = async () => {
 	const response = await fetch(apiUrl + url + "/trash", {
 		method: "GET",
