@@ -133,7 +133,9 @@ export function SiteHeader() {
 											key={not.id}
 											onClick={async () => {
 												await markRead(not.id);
-												router.push(`/app/${not.href}`);
+												if (not.href) {
+													router.push(`/app/${not.href}`);
+												}
 											}}
 										>
 											<div className='flex flex-col gap-1'>

@@ -39,7 +39,7 @@ const Page = ({
 					)}
 				</CardHeader>
 				<CardContent className='flex flex-col gap-4 items-center'>
-					{tnxState.includes("success") && (
+					{(tnxState == "success" || tnxState == "successful") && (
 						<CircleCheckBig size={40} className='text-green-600' />
 					)}
 					{tnxState == "failed" && (

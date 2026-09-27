@@ -12,6 +12,9 @@ export async function GET() {
 				where: {
 					organizationId: String(data?.session.activeOrganizationId),
 					is_deleted: false,
+					status: {
+						not: "PAID",
+					},
 				},
 				orderBy: {
 					updatedAt: "desc",
