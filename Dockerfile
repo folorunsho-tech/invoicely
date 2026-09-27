@@ -45,6 +45,9 @@ RUN addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 invoicelynext
 
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/lib ./lib
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/generated ./generated
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 

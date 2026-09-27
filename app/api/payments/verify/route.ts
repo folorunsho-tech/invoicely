@@ -8,7 +8,6 @@ const client = await getRedisClient();
 export async function POST(request: NextRequest) {
 	const { reference }: { reference: string } = await request.json();
 	const rec = await client.get(`payment:${reference}`);
-
 	try {
 		if (!reference) {
 			return NextResponse.json(
@@ -19,13 +18,14 @@ export async function POST(request: NextRequest) {
 				},
 			);
 		}
-		const paymentExists = await prisma.payment.findUnique({
+		const paymentSuccess = await prisma.payment.findUnique({
 			where: {
 				reference,
 				status: "success",
 			},
 		});
-		if (!paymentExists) {
+		// console.log({ rec, reference });
+		if (paymentSuccess) {
 			return NextResponse.json(
 				{
 					success: true,
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 				},
 			);
 		}
-		if (rec && paymentExists) {
+		if (rec && !paymentSuccess) {
 			const { organizationId, invoiceId, provider, accessCode } =
 				JSON.parse(rec);
 
@@ -56,21 +56,8 @@ export async function POST(request: NextRequest) {
 
 			const result = await verifyTnx(reference, provider);
 			if (result.status == "success") {
-				const payment = await prisma.payment.upsert({
-					where: {
-						reference: result.reference,
-					},
-					update: {
-						invoiceId,
-						channel: result.channel,
-						accessCode,
-						orgId: String(invoice?.organizationId),
-						amount: String(invoice?.total),
-						provider,
-						paid_at: result.paidAt ? new Date(result.paidAt) : new Date(),
-						status: result.status,
-					},
-					create: {
+				const payment = await prisma.payment.create({
+					data: {
 						invoiceId,
 						reference: result.reference,
 						accessCode,
