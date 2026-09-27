@@ -16,15 +16,17 @@ const Page = ({
 	const reference = use(searchParams).tx_ref;
 	const status = use(searchParams).status;
 	const [tnxState, setTnxState] = useState<
-		"successful" | "failed" | "abandoned" | "cancelled"
-	>(status as "successful" | "failed" | "abandoned" | "cancelled");
+		"successful" | "failed" | "abandoned" | "cancelled" | "success"
+	>(status as "successful" | "failed" | "abandoned" | "cancelled" | "success");
 	const mutation = useMutation({
 		mutationFn: verifyPayment,
 	});
 	useEffect(() => {
 		if (status !== "cancelled" && status !== "abandoned" && reference) {
 			mutation.mutateAsync({ reference: String(reference) }).then((res) => {
-				setTnxState(res?.payment?.status as "successful" | "failed");
+				setTnxState(
+					res?.payment?.status as "success" | "successful" | "failed",
+				);
 			});
 		}
 	}, [reference, status]);
@@ -37,7 +39,7 @@ const Page = ({
 					)}
 				</CardHeader>
 				<CardContent className='flex flex-col gap-4 items-center'>
-					{tnxState == "successful" && (
+					{tnxState.includes("success") && (
 						<CircleCheckBig size={40} className='text-green-600' />
 					)}
 					{tnxState == "failed" && (

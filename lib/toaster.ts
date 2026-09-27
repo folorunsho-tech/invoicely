@@ -6,7 +6,7 @@ export default function toast(
 ) {
 	switch (type) {
 		case "success":
-			toaster.success(message, {
+			toaster.success(message || "Request successful", {
 				style: {
 					backgroundColor: "teal",
 					color: "white",
@@ -16,7 +16,7 @@ export default function toast(
 
 			break;
 		case "warning":
-			toaster.warning(message, {
+			toaster.warning(message || "Warning !!!", {
 				style: {
 					backgroundColor: "orange",
 					color: "white",
@@ -26,7 +26,7 @@ export default function toast(
 
 			break;
 		case "error":
-			toaster.error(message, {
+			toaster.error(message || "Request Error", {
 				style: {
 					backgroundColor: "red",
 					color: "white",

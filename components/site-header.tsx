@@ -82,7 +82,7 @@ export function SiteHeader() {
 								)}
 							</div>
 						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end' className='w-sm'>
+						<DropdownMenuContent align='end' className='w-64 max-w-sm'>
 							<DropdownMenuGroup className='flex gap-1 items-center justify-between'>
 								<div className='flex gap-1 items-center'>
 									<Button
@@ -127,8 +127,8 @@ export function SiteHeader() {
 										<DropdownMenuItem
 											className={
 												not.read
-													? "text-gray-400 cursor-pointer"
-													: "text-gray-900 cursor-pointer"
+													? "text-gray-400 cursor-pointer flex gap-2 flex-wrap items-start"
+													: "text-gray-900 cursor-pointer flex gap-2 flex-wrap items-start"
 											}
 											key={not.id}
 											onClick={async () => {
@@ -136,12 +136,16 @@ export function SiteHeader() {
 												router.push(`/app/${not.href}`);
 											}}
 										>
-											<h3>{not.title}</h3>
-											<p className='mt-1 text-sm'>{not.body}</p>
-											<p className='mt-1 text-sm'>
+											<div className='flex flex-col gap-1'>
+												<h3>{not.title}</h3>
+												<p className='text-sm'>{not.body}</p>
+											</div>
+
+											<p className='text-xs'>
 												{formatDistanceToNowStrict(new Date(not?.createdAt), {
 													unit: "month",
 													roundingMethod: "ceil",
+													addSuffix: true,
 												})}
 											</p>
 										</DropdownMenuItem>
