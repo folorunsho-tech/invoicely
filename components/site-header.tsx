@@ -145,7 +145,6 @@ export function SiteHeader() {
 
 											<p className='text-xs'>
 												{formatDistanceToNowStrict(new Date(not?.createdAt), {
-													unit: "month",
 													roundingMethod: "ceil",
 													addSuffix: true,
 												})}

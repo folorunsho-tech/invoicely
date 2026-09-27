@@ -197,7 +197,7 @@ export const verifyPayment = async ({ reference }: { reference: string }) => {
 		toast(response.statusText, "error");
 		throw new Error(`HTTP error! Status: ${response.status}`);
 	}
-	const res = await response.json();
 	toast(response.statusText, "success");
+	const res = await response.json();
 	return res;
 };

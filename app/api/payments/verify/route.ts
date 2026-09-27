@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 			return NextResponse.json(
 				{
 					success: true,
-					status: "success",
+					pstatus: "success",
 				},
 				{
 					status: 200,
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
 						{
 							success: true,
 							error: null,
-							status: result.status,
+							pstatus: result.status,
 						},
 						{
 							status: 200,
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
 					{
 						success: false,
 						error: `Payment ${result.status}`,
-						status: result.status,
+						pstatus: result.status,
 					},
 					{
 						status: 400,

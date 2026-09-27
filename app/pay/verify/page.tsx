@@ -24,9 +24,7 @@ const Page = ({
 	useEffect(() => {
 		if (status !== "cancelled" && status !== "abandoned" && reference) {
 			mutation.mutateAsync({ reference: String(reference) }).then((res) => {
-				setTnxState(
-					res?.payment?.status as "success" | "successful" | "failed",
-				);
+				setTnxState(res?.pstatus);
 			});
 		}
 	}, [reference, status]);
