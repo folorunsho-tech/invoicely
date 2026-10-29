@@ -58,6 +58,11 @@ export type InvoiceCounter = Prisma.InvoiceCounterModel
  */
 export type Payment = Prisma.PaymentModel
 /**
+ * Model Gateway
+ * 
+ */
+export type Gateway = Prisma.GatewayModel
+/**
  * Model Item
  * 
  */

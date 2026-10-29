@@ -3,11 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { queueInvoicePayment, queueInvoiceReciept } from "@/lib/queue";
 import { getRedisClient } from "@/lib/redis";
+import { createFallbackClient, ProviderName } from "@siyegs/pay-kit";
+import { decrypt } from "@/lib/utils";
 const client = await getRedisClient();
 
 export async function POST(request: NextRequest) {
 	const { reference }: { reference: string } = await request.json();
-	const rec = await client.get(`payment:${reference}`);
+	const rec = await client?.get(`payment:${reference}`);
 	try {
 		if (!reference) {
 			return NextResponse.json(
@@ -38,13 +40,36 @@ export async function POST(request: NextRequest) {
 			);
 		}
 		if (rec && !paymentSuccess) {
-			const { organizationId, invoiceId, provider, accessCode } =
-				JSON.parse(rec);
+			const pInfo: {
+				reference: string;
+				authorizationUrl: string;
+				accessCode: string | undefined;
+				provider: ProviderName;
+				invoiceId: string;
+				organizationId: string;
+			} | null = JSON.parse(rec);
+			const gateways = await prisma.gateway.findMany({
+				where: {
+					orgId: pInfo?.organizationId,
+					isEnabled: true,
+				},
+			});
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const providers: any[] = gateways.map((gateway) => ({
+				provider: gateway.provider,
+				secretKey: gateway?.secretKey ? decrypt(gateway?.secretKey) : "",
+				webhookSecret: gateway?.webhookSecret
+					? decrypt(gateway?.webhookSecret)
+					: "",
+			}));
+			const pay = createFallbackClient({
+				providers,
+			});
 
 			const invoice = await prisma.invoice.findUnique({
 				where: {
-					id: invoiceId,
-					organizationId: organizationId,
+					id: pInfo?.invoiceId,
+					organizationId: pInfo?.organizationId,
 				},
 				select: {
 					id: true,
@@ -54,16 +79,16 @@ export async function POST(request: NextRequest) {
 				},
 			});
 
-			const result = await verifyTnx(reference, provider);
+			const result = await verifyTnx(pay, reference, pInfo?.provider);
 			if (result.status == "success") {
 				const payment = await prisma.payment.create({
 					data: {
-						invoiceId,
+						invoiceId: String(pInfo?.invoiceId),
 						reference: result.reference,
-						accessCode,
+						accessCode: pInfo?.accessCode,
 						orgId: String(invoice?.organizationId),
 						amount: String(invoice?.total),
-						provider,
+						provider: String(pInfo?.provider),
 						paid_at: result.paidAt ? new Date(result.paidAt) : new Date(),
 						status: result.status,
 						channel: result.channel,

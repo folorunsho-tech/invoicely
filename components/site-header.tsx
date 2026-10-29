@@ -29,7 +29,7 @@ export function SiteHeader() {
 		{
 			organizationId: session?.session?.activeOrganizationId || "",
 			pollInterval: 15000,
-			pageSize: 20,
+			pageSize: 5,
 			filter: filterVal,
 		},
 	);

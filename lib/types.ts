@@ -24,3 +24,9 @@ export type Reciept = invoiceReciept & {
 	// organization?: Organization;
 	invoice: invoiceR;
 };
+
+// export type providers = {
+// 	provider: string;
+// 	secretKey: string;
+// 	webhookSecret?: string;
+// };

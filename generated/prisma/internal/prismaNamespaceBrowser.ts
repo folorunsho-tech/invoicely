@@ -59,6 +59,7 @@ export const ModelName = {
   invoiceReciept: 'invoiceReciept',
   InvoiceCounter: 'InvoiceCounter',
   Payment: 'Payment',
+  Gateway: 'Gateway',
   Item: 'Item',
   Category: 'Category',
   Client: 'Client',
@@ -209,6 +210,22 @@ export const PaymentScalarFieldEnum = {
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const GatewayScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  isEnabled: 'isEnabled',
+  description: 'description',
+  publicKey: 'publicKey',
+  secretKey: 'secretKey',
+  webhookSecret: 'webhookSecret',
+  orgId: 'orgId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GatewayScalarFieldEnum = (typeof GatewayScalarFieldEnum)[keyof typeof GatewayScalarFieldEnum]
 
 
 export const ItemScalarFieldEnum = {

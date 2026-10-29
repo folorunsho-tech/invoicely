@@ -278,6 +278,7 @@ export type OrganizationWhereInput = {
   invoiceCounters?: Prisma.InvoiceCounterListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
   invoiceReciepts?: Prisma.InvoiceRecieptListRelationFilter
+  gateways?: Prisma.GatewayListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -305,6 +306,7 @@ export type OrganizationOrderByWithRelationInput = {
   invoiceCounters?: Prisma.InvoiceCounterOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
   invoiceReciepts?: Prisma.invoiceRecieptOrderByRelationAggregateInput
+  gateways?: Prisma.GatewayOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -335,6 +337,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   invoiceCounters?: Prisma.InvoiceCounterListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
   invoiceReciepts?: Prisma.InvoiceRecieptListRelationFilter
+  gateways?: Prisma.GatewayListRelationFilter
 }, "id" | "code" | "slug">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -406,6 +409,7 @@ export type OrganizationCreateInput = {
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -433,6 +437,7 @@ export type OrganizationUncheckedCreateInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -460,6 +465,7 @@ export type OrganizationUpdateInput = {
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -487,6 +493,7 @@ export type OrganizationUncheckedUpdateInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -664,6 +671,20 @@ export type OrganizationUpdateOneRequiredWithoutPaymentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutPaymentsInput, Prisma.OrganizationUpdateWithoutPaymentsInput>, Prisma.OrganizationUncheckedUpdateWithoutPaymentsInput>
 }
 
+export type OrganizationCreateNestedOneWithoutGatewaysInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutGatewaysInput, Prisma.OrganizationUncheckedCreateWithoutGatewaysInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutGatewaysInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutGatewaysNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutGatewaysInput, Prisma.OrganizationUncheckedCreateWithoutGatewaysInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutGatewaysInput
+  upsert?: Prisma.OrganizationUpsertWithoutGatewaysInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutGatewaysInput, Prisma.OrganizationUpdateWithoutGatewaysInput>, Prisma.OrganizationUncheckedUpdateWithoutGatewaysInput>
+}
+
 export type OrganizationCreateNestedOneWithoutCategoriesInput = {
   create?: Prisma.XOR<Prisma.OrganizationCreateWithoutCategoriesInput, Prisma.OrganizationUncheckedCreateWithoutCategoriesInput>
   connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutCategoriesInput
@@ -744,6 +765,7 @@ export type OrganizationCreateWithoutInvoicesInput = {
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvoicesInput = {
@@ -770,6 +792,7 @@ export type OrganizationUncheckedCreateWithoutInvoicesInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvoicesInput = {
@@ -812,6 +835,7 @@ export type OrganizationUpdateWithoutInvoicesInput = {
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
@@ -838,6 +862,7 @@ export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvoiceRecieptsInput = {
@@ -864,6 +889,7 @@ export type OrganizationCreateWithoutInvoiceRecieptsInput = {
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvoiceRecieptsInput = {
@@ -890,6 +916,7 @@ export type OrganizationUncheckedCreateWithoutInvoiceRecieptsInput = {
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvoiceRecieptsInput = {
@@ -932,6 +959,7 @@ export type OrganizationUpdateWithoutInvoiceRecieptsInput = {
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvoiceRecieptsInput = {
@@ -958,6 +986,7 @@ export type OrganizationUncheckedUpdateWithoutInvoiceRecieptsInput = {
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvoiceCountersInput = {
@@ -984,6 +1013,7 @@ export type OrganizationCreateWithoutInvoiceCountersInput = {
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvoiceCountersInput = {
@@ -1010,6 +1040,7 @@ export type OrganizationUncheckedCreateWithoutInvoiceCountersInput = {
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvoiceCountersInput = {
@@ -1052,6 +1083,7 @@ export type OrganizationUpdateWithoutInvoiceCountersInput = {
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvoiceCountersInput = {
@@ -1078,6 +1110,7 @@ export type OrganizationUncheckedUpdateWithoutInvoiceCountersInput = {
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutPaymentsInput = {
@@ -1104,6 +1137,7 @@ export type OrganizationCreateWithoutPaymentsInput = {
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutPaymentsInput = {
@@ -1130,6 +1164,7 @@ export type OrganizationUncheckedCreateWithoutPaymentsInput = {
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutPaymentsInput = {
@@ -1172,6 +1207,7 @@ export type OrganizationUpdateWithoutPaymentsInput = {
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
@@ -1197,6 +1233,131 @@ export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutGatewaysInput = {
+  id: string
+  name: string
+  slug: string
+  logo?: string | null
+  code: string
+  currency?: string
+  email: string
+  phone?: string | null
+  address: string
+  city: string
+  state?: string | null
+  postCode?: string | null
+  country: string
+  createdAt: Date | string
+  metadata?: string | null
+  currencySymbol: string
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutOrganizationInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutOrganizationInput
+  clients?: Prisma.ClientCreateNestedManyWithoutOrganizationInput
+  members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
+  invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
+  invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutGatewaysInput = {
+  id: string
+  name: string
+  slug: string
+  logo?: string | null
+  code: string
+  currency?: string
+  email: string
+  phone?: string | null
+  address: string
+  city: string
+  state?: string | null
+  postCode?: string | null
+  country: string
+  createdAt: Date | string
+  metadata?: string | null
+  currencySymbol: string
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutOrganizationInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutOrganizationInput
+  members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
+  invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutGatewaysInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutGatewaysInput, Prisma.OrganizationUncheckedCreateWithoutGatewaysInput>
+}
+
+export type OrganizationUpsertWithoutGatewaysInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutGatewaysInput, Prisma.OrganizationUncheckedUpdateWithoutGatewaysInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutGatewaysInput, Prisma.OrganizationUncheckedCreateWithoutGatewaysInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutGatewaysInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutGatewaysInput, Prisma.OrganizationUncheckedUpdateWithoutGatewaysInput>
+}
+
+export type OrganizationUpdateWithoutGatewaysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
+  invoices?: Prisma.InvoiceUpdateManyWithoutOrganizationNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutOrganizationNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutOrganizationNestedInput
+  members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
+  invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
+  invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutGatewaysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currencySymbol?: Prisma.StringFieldUpdateOperationsInput | string
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutOrganizationNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutOrganizationNestedInput
+  members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -1224,6 +1385,7 @@ export type OrganizationCreateWithoutCategoriesInput = {
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutCategoriesInput = {
@@ -1250,6 +1412,7 @@ export type OrganizationUncheckedCreateWithoutCategoriesInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutCategoriesInput = {
@@ -1292,6 +1455,7 @@ export type OrganizationUpdateWithoutCategoriesInput = {
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutCategoriesInput = {
@@ -1318,6 +1482,7 @@ export type OrganizationUncheckedUpdateWithoutCategoriesInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutClientsInput = {
@@ -1344,6 +1509,7 @@ export type OrganizationCreateWithoutClientsInput = {
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutClientsInput = {
@@ -1370,6 +1536,7 @@ export type OrganizationUncheckedCreateWithoutClientsInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutClientsInput = {
@@ -1412,6 +1579,7 @@ export type OrganizationUpdateWithoutClientsInput = {
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutClientsInput = {
@@ -1438,6 +1606,7 @@ export type OrganizationUncheckedUpdateWithoutClientsInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutMembersInput = {
@@ -1464,6 +1633,7 @@ export type OrganizationCreateWithoutMembersInput = {
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMembersInput = {
@@ -1490,6 +1660,7 @@ export type OrganizationUncheckedCreateWithoutMembersInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMembersInput = {
@@ -1532,6 +1703,7 @@ export type OrganizationUpdateWithoutMembersInput = {
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMembersInput = {
@@ -1558,6 +1730,7 @@ export type OrganizationUncheckedUpdateWithoutMembersInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvitationsInput = {
@@ -1584,6 +1757,7 @@ export type OrganizationCreateWithoutInvitationsInput = {
   invoiceCounters?: Prisma.InvoiceCounterCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvitationsInput = {
@@ -1610,6 +1784,7 @@ export type OrganizationUncheckedCreateWithoutInvitationsInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedCreateNestedManyWithoutOrganizationInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrganizationInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedCreateNestedManyWithoutOrganizationInput
+  gateways?: Prisma.GatewayUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvitationsInput = {
@@ -1652,6 +1827,7 @@ export type OrganizationUpdateWithoutInvitationsInput = {
   invoiceCounters?: Prisma.InvoiceCounterUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
@@ -1678,6 +1854,7 @@ export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
   invoiceCounters?: Prisma.InvoiceCounterUncheckedUpdateManyWithoutOrganizationNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrganizationNestedInput
   invoiceReciepts?: Prisma.invoiceRecieptUncheckedUpdateManyWithoutOrganizationNestedInput
+  gateways?: Prisma.GatewayUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 
@@ -1694,6 +1871,7 @@ export type OrganizationCountOutputType = {
   invoiceCounters: number
   payments: number
   invoiceReciepts: number
+  gateways: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1705,6 +1883,7 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   invoiceCounters?: boolean | OrganizationCountOutputTypeCountInvoiceCountersArgs
   payments?: boolean | OrganizationCountOutputTypeCountPaymentsArgs
   invoiceReciepts?: boolean | OrganizationCountOutputTypeCountInvoiceRecieptsArgs
+  gateways?: boolean | OrganizationCountOutputTypeCountGatewaysArgs
 }
 
 /**
@@ -1773,6 +1952,13 @@ export type OrganizationCountOutputTypeCountInvoiceRecieptsArgs<ExtArgs extends 
   where?: Prisma.invoiceRecieptWhereInput
 }
 
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountGatewaysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GatewayWhereInput
+}
+
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1799,6 +1985,7 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   invoiceCounters?: boolean | Prisma.Organization$invoiceCountersArgs<ExtArgs>
   payments?: boolean | Prisma.Organization$paymentsArgs<ExtArgs>
   invoiceReciepts?: boolean | Prisma.Organization$invoiceRecieptsArgs<ExtArgs>
+  gateways?: boolean | Prisma.Organization$gatewaysArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -1869,6 +2056,7 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   invoiceCounters?: boolean | Prisma.Organization$invoiceCountersArgs<ExtArgs>
   payments?: boolean | Prisma.Organization$paymentsArgs<ExtArgs>
   invoiceReciepts?: boolean | Prisma.Organization$invoiceRecieptsArgs<ExtArgs>
+  gateways?: boolean | Prisma.Organization$gatewaysArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1885,6 +2073,7 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     invoiceCounters: Prisma.$InvoiceCounterPayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
     invoiceReciepts: Prisma.$invoiceRecieptPayload<ExtArgs>[]
+    gateways: Prisma.$GatewayPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2305,6 +2494,7 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   invoiceCounters<T extends Prisma.Organization$invoiceCountersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$invoiceCountersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceCounterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.Organization$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invoiceReciepts<T extends Prisma.Organization$invoiceRecieptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$invoiceRecieptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$invoiceRecieptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  gateways<T extends Prisma.Organization$gatewaysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$gatewaysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GatewayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2932,6 +3122,30 @@ export type Organization$invoiceRecieptsArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.InvoiceRecieptScalarFieldEnum | Prisma.InvoiceRecieptScalarFieldEnum[]
+}
+
+/**
+ * Organization.gateways
+ */
+export type Organization$gatewaysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Gateway
+   */
+  select?: Prisma.GatewaySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Gateway
+   */
+  omit?: Prisma.GatewayOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GatewayInclude<ExtArgs> | null
+  where?: Prisma.GatewayWhereInput
+  orderBy?: Prisma.GatewayOrderByWithRelationInput | Prisma.GatewayOrderByWithRelationInput[]
+  cursor?: Prisma.GatewayWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GatewayScalarFieldEnum | Prisma.GatewayScalarFieldEnum[]
 }
 
 /**

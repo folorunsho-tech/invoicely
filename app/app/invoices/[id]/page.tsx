@@ -101,7 +101,7 @@ const Page = () => {
 							Go back
 						</Link>
 					</Button>
-					{invoice?.status !== "DRAFT" && (
+					{!(invoice?.status == "PAID" || invoice?.status == "DRAFT") && (
 						<Button
 							onClick={async (e) => {
 								e.preventDefault();

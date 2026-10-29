@@ -31,8 +31,8 @@ model User {
   displayUsername String?
 
   @@unique([email])
-  @@map("user")
   @@unique([username])
+  @@map("user")
 }
 
 model Session {
@@ -159,6 +159,22 @@ model Payment {
   receipts     invoiceReciept[]
 }
 
+model Gateway {
+  id            String       @id @default(uuid())
+  provider      String
+  isEnabled     Boolean      @default(true)
+  description   String?
+  publicKey     String?
+  secretKey     String?
+  webhookSecret String?
+  orgId         String
+  organization  Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([orgId])
+}
+
 model Item {
   id        String   @id @default(uuid())
   name      String
@@ -226,6 +242,7 @@ model Organization {
   payments        Payment[]
   currencySymbol  String
   invoiceReciepts invoiceReciept[]
+  gateways        Gateway[]
 
   @@unique([slug])
   @@index([code, country])
@@ -264,10 +281,10 @@ model Invitation {
 }
 
 enum InvoiceStatus {
-  PENDING @map("pending")
-  DRAFT @map("draft")
-  OVERDUE @map("overdue")
-  PAID @map("paid")
+  PENDING   @map("pending")
+  DRAFT     @map("draft")
+  OVERDUE   @map("overdue")
+  PAID      @map("paid")
   CANCELLED @map("cancelled")
 }
 

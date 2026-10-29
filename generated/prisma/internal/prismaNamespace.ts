@@ -392,6 +392,7 @@ export const ModelName = {
   invoiceReciept: 'invoiceReciept',
   InvoiceCounter: 'InvoiceCounter',
   Payment: 'Payment',
+  Gateway: 'Gateway',
   Item: 'Item',
   Category: 'Category',
   Client: 'Client',
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "invoice" | "invoiceReciept" | "invoiceCounter" | "payment" | "item" | "category" | "client" | "organization" | "member" | "invitation" | "notification"
+    modelProps: "user" | "session" | "account" | "verification" | "invoice" | "invoiceReciept" | "invoiceCounter" | "payment" | "gateway" | "item" | "category" | "client" | "organization" | "member" | "invitation" | "notification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1007,6 +1008,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.PaymentCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.PaymentCountAggregateOutputType> | number
+        }
+      }
+    }
+    Gateway: {
+      payload: Prisma.$GatewayPayload<ExtArgs>
+      fields: Prisma.GatewayFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GatewayFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GatewayFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>
+        }
+        findFirst: {
+          args: Prisma.GatewayFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GatewayFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>
+        }
+        findMany: {
+          args: Prisma.GatewayFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>[]
+        }
+        create: {
+          args: Prisma.GatewayCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>
+        }
+        createMany: {
+          args: Prisma.GatewayCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GatewayCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>[]
+        }
+        delete: {
+          args: Prisma.GatewayDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>
+        }
+        update: {
+          args: Prisma.GatewayUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>
+        }
+        deleteMany: {
+          args: Prisma.GatewayDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GatewayUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GatewayUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>[]
+        }
+        upsert: {
+          args: Prisma.GatewayUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GatewayPayload>
+        }
+        aggregate: {
+          args: Prisma.GatewayAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGateway>
+        }
+        groupBy: {
+          args: Prisma.GatewayGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GatewayGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GatewayCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GatewayCountAggregateOutputType> | number
         }
       }
     }
@@ -1694,6 +1769,22 @@ export const PaymentScalarFieldEnum = {
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
 
 
+export const GatewayScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  isEnabled: 'isEnabled',
+  description: 'description',
+  publicKey: 'publicKey',
+  secretKey: 'secretKey',
+  webhookSecret: 'webhookSecret',
+  orgId: 'orgId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GatewayScalarFieldEnum = (typeof GatewayScalarFieldEnum)[keyof typeof GatewayScalarFieldEnum]
+
+
 export const ItemScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -2072,6 +2163,7 @@ export type GlobalOmitConfig = {
   invoiceReciept?: Prisma.invoiceRecieptOmit
   invoiceCounter?: Prisma.InvoiceCounterOmit
   payment?: Prisma.PaymentOmit
+  gateway?: Prisma.GatewayOmit
   item?: Prisma.ItemOmit
   category?: Prisma.CategoryOmit
   client?: Prisma.ClientOmit

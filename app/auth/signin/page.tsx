@@ -80,8 +80,8 @@ export default function Page() {
 		<div className='flex min-h-svh w-full items-center justify-center p-6 md:p-10'>
 			<div className='w-full max-w-sm'>
 				<div className={"flex flex-col gap-6"}>
-					<h2 className='text-center font-bold'>Invoicely</h2>
-					<p>Login with username: demo, password: demo12345</p>
+					<h2 className='text-center font-bold text-lg'>Invoicely</h2>
+					{/* <p>Login with username: demo, password: demo12345</p> */}
 					<Card>
 						<CardHeader>
 							<CardTitle>Login to your account</CardTitle>

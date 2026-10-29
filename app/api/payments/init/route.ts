@@ -2,6 +2,8 @@ import { initTnx } from "@/lib/paykit";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { getRedisClient } from "@/lib/redis";
+import { createFallbackClient } from "@siyegs/pay-kit";
+import { decrypt } from "@/lib/utils";
 const client = await getRedisClient();
 export async function POST(request: NextRequest) {
 	const { invoiceId }: { invoiceId: string } = await request.json();
@@ -37,11 +39,29 @@ export async function POST(request: NextRequest) {
 				},
 			);
 		} else if (invoice?.status == "PENDING") {
+			const gateways = await prisma.gateway.findMany({
+				where: {
+					orgId: invoice.organizationId,
+					isEnabled: true,
+				},
+			});
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const providers: any[] = gateways.map((gateway) => ({
+				provider: gateway.provider,
+				secretKey: gateway?.secretKey ? decrypt(gateway?.secretKey) : "",
+				webhookSecret: gateway?.webhookSecret
+					? decrypt(gateway?.webhookSecret)
+					: "",
+			}));
+			const pay = createFallbackClient({
+				providers,
+			});
 			const res = await initTnx({
 				amount: Number(invoice.total),
 				email: invoice.client.email,
 				invoiceId: invoice.id,
 				currency: invoice.currency,
+				pay,
 			});
 			if (res.authorizationUrl && res.reference) {
 				await client.set(

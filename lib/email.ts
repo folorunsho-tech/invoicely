@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { invoice as Invoice, Reciept } from "./types";
 import nodemailer from "nodemailer";
+import "dotenv/config";
 import {
 	invoiceCancellationTemplate,
 	invoiceOverdueTemplate,
@@ -42,6 +43,7 @@ export async function sendEmail(options: {
 	} catch (err: any) {
 		switch (err.code) {
 			case "ECONNECTION":
+				console.error("Connection to SMTP Server:", err.message);
 			case "ETIMEDOUT":
 				console.error("Network error - retry later:", err.message);
 				return { success: false, error: err.message };

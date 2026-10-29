@@ -1,20 +1,9 @@
-import { createFallbackClient, ProviderName } from "@siyegs/pay-kit";
+import { FallbackClient, ProviderName } from "@siyegs/pay-kit";
 
 const app_url = process.env.APP_URL;
-const pay = createFallbackClient({
-	providers: [
-		{
-			provider: "flutterwave",
-			secretKey: process.env.FLUTTERWAVE_SECRET_KEY!,
-			webhookSecret: process.env.FLUTTERWAVE_WEBHOOK_SECRET!,
-		},
-		{
-			provider: "paystack",
-			secretKey: process.env.PAYSTACK_SECRET_KEY!,
-		},
-	],
-});
+
 export const initTnx = async ({
+	pay,
 	amount,
 	email,
 	invoiceId,
@@ -24,6 +13,7 @@ export const initTnx = async ({
 	email: string;
 	invoiceId: string;
 	currency: string;
+	pay: FallbackClient;
 }) => {
 	const subunits = Number(amount) * 100;
 	const { reference, authorizationUrl, accessCode, provider } =
@@ -40,7 +30,12 @@ export const initTnx = async ({
 	return { reference, authorizationUrl, accessCode, provider };
 };
 
-export const verifyTnx = async (refrence: string, provider: ProviderName) => {
+export const verifyTnx = async (
+	pay: FallbackClient,
+	refrence: string,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	provider: ProviderName | any,
+) => {
 	const result = await pay.verify(provider, refrence);
 	return result;
 };
